@@ -1,0 +1,4910 @@
+[
+  {
+    "prod": {
+      "cpp": {
+        "ProxyURL": "http://ibpm.cisco.com/cpp/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-21:7035",
+          "brms-prd1-22:7035",
+          "brms-prd1-23:7006",
+          "brms-prd1-24:7006",
+          "brms-prd1-25:7006",
+          "brms-prd4-13:7005",
+          "brms-prd4-14:7005",
+          "brms-prd4-15:7005",
+          "brms-prd4-11:7035",
+          "brms-prd4-12:7035"
+        ]
+      },
+      "gssc": {
+        "ProxyURL": "http://ibpm.cisco.com/gssc/brmsadmin/eman",
+        "APPS": {
+          "rma": {
+            "ProxyURL": "http://ibpm.cisco.com/gssc/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-04:7005",
+              "brms-prd1-05:7005",
+              "brms-prd1-11:7032",
+              "brms-prd4-01:7005",
+              "brms-prd4-02:7005",
+              "brms-prd4-03:7005",
+              "brms-prd4-09:7005"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm.cisco.com/gssc/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-04:7005",
+              "brms-prd1-05:7005",
+              "brms-prd1-11:7032",
+              "brms-prd4-01:7005",
+              "brms-prd4-02:7005",
+              "brms-prd4-03:7005",
+              "brms-prd4-09:7005"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm.cisco.com/gssc/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-07:7031",
+              "brms-prd1-08:7031",
+              "brms-prd1-09:7031",
+              "brms-prd4-11:7006",
+              "brms-prd4-12:7006",
+              "brms-prd4-13:7006"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-02:7005",
+          "brms-prd1-03:7005",
+          "brms-prd1-24:7008",
+          "brms-prd1-25:7008",
+          "brms-prd4-04:7005",
+          "brms-prd4-08:7005",
+          "brms-prd4-14:7007",
+          "brms-prd4-15:7007"
+        ]
+      },
+      "aes": {
+        "ProxyURL": "http://ibpm.cisco.com/aes/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-14:7031",
+          "brms-prd1-15:7005",
+          "brms-prd1-03:7031",
+          "brms-prd4-22:7031",
+          "brms-prd4-23:7031",
+          "brms-prd4-04:7032"
+        ]
+      },
+      "fines": {
+        "ProxyURL": "http://ibpm.cisco.com/csc/brmsadmin/eman",
+        "APPS": {
+          "tov": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/tov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-16:7006",
+              "brms-prd1-17:7006",
+              "brms-prd4-06:7006"
+            ]
+          },
+          "scrd": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/scrd/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          },
+          "uov": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/uov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-16:7007",
+              "brms-prd1-17:7007",
+              "brms-prd4-06:7008",
+              "brms-prd4-07:7008"
+            ]
+          },
+          "gsm": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/gsm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          },
+          "sam": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/sam/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-18:7007",
+          "brms-prd1-02:7031",
+          "brms-prd4-05:7006",
+          "brms-prd4-05:7032"
+        ]
+      },
+      "cvc": {
+        "ProxyURL": "http://ibpm.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-21:7034",
+              "brms-prd1-22:7034",
+              "brms-prd4-21:7034",
+              "brms-prd4-22:7034"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-08:7005",
+              "brms-prd1-09:7005",
+              "brms-prd4-01:7006",
+              "brms-prd4-02:7006"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-11:7005",
+              "brms-prd1-12:7005",
+              "brms-prd1-13:7005",
+              "brms-prd1-11:7006",
+              "brms-prd1-12:7006",
+              "brms-prd1-13:7006",
+              "brms-prd4-01:7007",
+              "brms-prd4-02:7007",
+              "brms-prd4-18:7034",
+              "brms-prd4-19:7034",
+              "brms-prd4-20:7034",
+              "brms-prd4-23:7034",
+              "brms-prd4-26:7030",
+              "brms-prd4-27:7030",
+              "brms-prd4-28:7030",
+              "brms-prd4-29:7030",
+              "brms-prd4-30:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-06:7005",
+          "brms-prd1-07:7005",
+          "brms-prd1-23:7005",
+          "brms-prd4-04:7006",
+          "brms-prd4-24:7034",
+          "brms-prd4-25:7034"
+        ]
+      },
+      "fin": {
+        "ProxyURL": "http://ibpm.cisco.com/fin/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm.cisco.com/fin/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-10:7032",
+              "brms-prd1-14:7032",
+              "brms-prd4-16:7032",
+              "brms-prd4-17:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm.cisco.com/fin/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-16:7005",
+              "brms-prd1-17:7005",
+              "brms-prd4-06:7005",
+              "brms-prd4-07:7005"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-18:7005",
+          "brms-prd1-19:7005",
+          "brms-prd1-20:7005",
+          "brms-prd1-15:7007",
+          "brms-prd4-05:7005",
+          "brms-prd4-10:7005",
+          "brms-prd4-11:7007"
+        ]
+      },
+      "ermo": {
+        "ProxyURL": "http://ibpm.cisco.com/ermo/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-07:7032",
+          "brms-prd1-08:7032",
+          "brms-prd1-21:7032",
+          "brms-prd1-22:7032",
+          "brms-prd4-07:7032",
+          "brms-prd4-08:7032",
+          "brms-prd4-20:7030",
+          "brms-prd4-21:7030"
+        ]
+      },
+      "ea": {
+        "ProxyURL": "http://ibpm.cisco.com/ea/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-01:7005",
+          "brms-prd1-01:7006",
+          "brms-prd1-10:7031",
+          "brms-prd4-08:7004",
+          "brms-prd4-09:7031"
+        ]
+      },
+      "icm": {
+        "ProxyURL": "http://ibpm.cisco.com/icm/brmsadmin/eman",
+        "APPS": {
+          "sc": {
+            "ProxyURL": "http://ibpm.cisco.com/icm/sc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-14:7030",
+              "brms-prd1-21:7030",
+              "brms-prd1-22:7030",
+              "brms-prd4-17:7030",
+              "brms-prd4-18:7030",
+              "brms-prd4-19:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-10:7030",
+          "brms-prd4-16:7030"
+        ]
+      },
+      "bp": {
+        "ProxyURL": "http://ibpm.cisco.com/bp/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-19:7006",
+          "brms-prd1-20:7006",
+          "brms-prd4-11:7004",
+          "brms-prd4-12:7004",
+          "brms-prd4-13:7004"
+        ]
+      },
+      "isom": {
+        "ProxyURL": "http://ibpm.cisco.com/isom/brmsadmin/eman",
+        "APPS": {
+          "pnprq": {
+            "ProxyURL": "http://ibpm.cisco.com/isom/pnprq/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-04:7032",
+              "brms-prd1-05:7031",
+              "brms-prd4-24:7030",
+              "brms-prd4-25:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-06:7031",
+          "brms-prd4-10:7031"
+        ]
+      },
+      "pqc": {
+        "ProxyURL": "http://ibpm.cisco.com/pqc/brmsadmin/eman",
+        "APPS": {
+          "targa": {
+            "ProxyURL": "http://ibpm.cisco.com/pqc/targa/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-24:7007",
+              "brms-prd1-25:7007",
+              "brms-prd4-14:7006",
+              "brms-prd4-15:7006"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-23:7007",
+          "brms-prd4-13:7007"
+        ]
+      },
+      "csc": {
+        "ProxyURL": "http://ibpm.cisco.com/csc/brmsadmin/eman",
+        "APPS": {
+          "tov": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/tov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-16:7006",
+              "brms-prd1-17:7006",
+              "brms-prd4-06:7006"
+            ]
+          },
+          "scrd": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/scrd/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          },
+          "uov": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/uov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-16:7007",
+              "brms-prd1-17:7007",
+              "brms-prd4-06:7008",
+              "brms-prd4-07:7008"
+            ]
+          },
+          "gsm": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/gsm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          },
+          "sam": {
+            "ProxyURL": "http://ibpm.cisco.com/csc/sam/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-09:7033",
+              "brms-prd1-10:7033",
+              "brms-prd4-16:7033",
+              "brms-prd4-17:7033"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-18:7007",
+          "brms-prd1-02:7031",
+          "brms-prd4-05:7006",
+          "brms-prd4-05:7032"
+        ]
+      },
+      "sccc": {
+        "ProxyURL": "http://ibpm.cisco.com/sccc/brmsadmin/eman",
+        "APPS": {
+          "mpal": {
+            "ProxyURL": "http://ibpm.cisco.com/sccc/mpal/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-20:7007",
+              "brms-prd1-06:7032",
+              "brms-prd4-12:7005",
+              "brms-prd4-03:7031"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-20:7007",
+              "brms-prd1-06:7032",
+              "brms-prd4-12:7005",
+              "brms-prd4-03:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-19:7007",
+          "brms-prd4-11:7005"
+        ]
+      },
+      "cpe": {
+        "ProxyURL": "http://ibpm.cisco.com/cpe/brmsadmin/eman",
+        "APPS": {
+          "dmo": {
+            "ProxyURL": "http://ibpm.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-12:7032",
+              "brms-prd4-28:7031"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-12:7032",
+              "brms-prd4-28:7031"
+            ]
+          },
+          "vr": {
+            "ProxyURL": "http://ibpm.cisco.com/cpe/vr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-12:7032",
+              "brms-prd4-28:7031"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-04:7031",
+              "brms-prd1-05:7032",
+              "brms-prd4-26:7031",
+              "brms-prd4-27:7031"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-prd1-02:7024",
+              "brms-prd1-03:7024",
+              "brms-prd4-02:7024",
+              "brms-prd4-03:7024"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-prd1-01:7024",
+          "brms-prd1-13:7032",
+          "brms-prd4-29:7031",
+          "brms-prd4-01:7024"
+        ]
+      }
+    }
+  },
+  {
+    "stage": {
+      "cpp-qa1": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "fin": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/fin/brmsadmin/eman",
+        "APPS": {
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7030",
+              "brms-nprd2-stg13:7030",
+              "brms-nprd2-stg14:7030",
+              "brms-nprd2-stg15:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7030",
+          "brms-nprd2-stg4:7030",
+          "brms-nprd2-stg3:7030"
+        ]
+      },
+      "ea": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/ea/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7023",
+          "brms-nprd2-stg12:7023",
+          "brms-nprd2-stg13:7023",
+          "brms-nprd2-stg14:7023",
+          "brms-nprd2-stg15:7023",
+          "brms-nprd1-stg10:7030",
+          "brms-nprd1-stg11:7030"
+        ]
+      },
+      "icm": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/icm/brmsadmin/eman",
+        "APPS": {
+          "sc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/icm/sc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7031",
+              "brms-nprd2-stg5:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg3:7031",
+          "brms-nprd2-stg2:7031"
+        ]
+      },
+      "isom": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/isom/brmsadmin/eman",
+        "APPS": {
+          "pnprq": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/isom/pnprq/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7034",
+              "brms-nprd2-stg13:7034",
+              "brms-nprd2-stg14:7034",
+              "brms-nprd2-stg15:7034"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7034"
+        ]
+      },
+      "bp": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/bp/brmsadmin/eman",
+        "APPS": {
+          "bost": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp/bost/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7024",
+              "brms-nprd2-stg13:7024",
+              "brms-nprd2-stg14:7024",
+              "brms-nprd2-stg15:7024"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7024",
+              "brms-nprd2-stg13:7024",
+              "brms-nprd2-stg14:7024",
+              "brms-nprd2-stg15:7024"
+            ]
+          },
+          "profiler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp/profiler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7024",
+              "brms-nprd2-stg13:7024",
+              "brms-nprd2-stg14:7024",
+              "brms-nprd2-stg15:7024"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7024"
+        ]
+      },
+      "pqc": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/pqc/brmsadmin/eman",
+        "APPS": {
+          "targa": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/pqc/targa/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7035",
+              "brms-nprd2-stg9:7035",
+              "brms-nprd2-stg8:7035",
+              "brms-nprd2-stg6:7035"
+            ]
+          },
+          "erat": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/pqc/erat/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7035",
+              "brms-nprd2-stg9:7035",
+              "brms-nprd2-stg8:7035",
+              "brms-nprd2-stg6:7035"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7035"
+        ]
+      },
+      "cvc-qa1": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa1/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa1/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7042",
+              "brms-nprd2-stg8:7042",
+              "brms-nprd2-stg6:7042"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa1/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7042",
+              "brms-nprd2-stg8:7042",
+              "brms-nprd2-stg6:7042"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa1/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7042",
+              "brms-nprd2-stg8:7042",
+              "brms-nprd2-stg6:7042"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7042",
+          "brms-nprd2-stg10:7042"
+        ]
+      },
+      "cvc-qa2": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa2/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa2/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg1:7047",
+              "brms-nprd2-stg8:7047",
+              "brms-nprd2-stg3:7047"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa2/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg1:7047",
+              "brms-nprd2-stg8:7047",
+              "brms-nprd2-stg3:7047"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc-qa2/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg1:7047",
+              "brms-nprd2-stg8:7047",
+              "brms-nprd2-stg3:7047"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg10:7047",
+          "brms-nprd2-stg16:7047"
+        ]
+      },
+      "fin-qa4": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "eds": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/eds/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/eds/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg16:7030",
+              "brms-nprd2-stg2:7036"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7035"
+        ]
+      },
+      "cpe-dnode": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cpe-dnode/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-stg16:7031",
+          "brms-nprd2-stg5:7030"
+        ]
+      },
+      "fin-qa2": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa2/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa2/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7046",
+              "brms-nprd2-stg8:7046"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa2/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7046",
+              "brms-nprd2-stg8:7046"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg1:7046",
+          "brms-nprd2-stg10:7046",
+          "brms-nprd2-stg16:7046"
+        ]
+      },
+      "cpe": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "fin-qa3": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa3/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa3/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg5:7048",
+              "brms-nprd2-stg8:7048"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa3/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg5:7048",
+              "brms-nprd2-stg8:7048"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg4:7048",
+          "brms-nprd2-stg9:7048"
+        ]
+      },
+      "gssc-qa3": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa3/brmsadmin/eman",
+        "APPS": {
+          "npi": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa3/npi/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7044",
+              "brms-nprd2-stg2:7044",
+              "brms-nprd2-stg1:7044",
+              "brms-nprd2-stg9:7044",
+              "brms-nprd2-stg11:7037"
+            ]
+          },
+          "rma": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa3/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7044",
+              "brms-nprd2-stg2:7044",
+              "brms-nprd2-stg1:7044",
+              "brms-nprd2-stg9:7044",
+              "brms-nprd2-stg11:7037"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa3/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7044",
+              "brms-nprd2-stg2:7044",
+              "brms-nprd2-stg1:7044",
+              "brms-nprd2-stg9:7044",
+              "brms-nprd2-stg11:7037"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa3/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7044",
+              "brms-nprd2-stg2:7044",
+              "brms-nprd2-stg1:7044",
+              "brms-nprd2-stg9:7044",
+              "brms-nprd2-stg11:7037"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg6:7044",
+          "brms-nprd2-stg5:7044",
+          "brms-nprd2-stg4:7044",
+          "brms-nprd2-stg16:7032",
+          "brms-nprd2-stg8:7031",
+          "brms-nprd2-stg10:7036"
+        ]
+      },
+      "gssc-qa4": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa4/brmsadmin/eman",
+        "APPS": {
+          "npi": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa4/npi/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7045",
+              "brms-nprd2-stg2:7045",
+              "brms-nprd2-stg1:7045",
+              "brms-nprd2-stg8:7045"
+            ]
+          },
+          "rma": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa4/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7045",
+              "brms-nprd2-stg2:7045",
+              "brms-nprd2-stg1:7045",
+              "brms-nprd2-stg8:7045"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa4/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7045",
+              "brms-nprd2-stg2:7045",
+              "brms-nprd2-stg1:7045",
+              "brms-nprd2-stg8:7045"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa4/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg3:7045",
+              "brms-nprd2-stg2:7045",
+              "brms-nprd2-stg1:7045",
+              "brms-nprd2-stg8:7045"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg6:7045",
+          "brms-nprd2-stg5:7045",
+          "brms-nprd2-stg9:7045"
+        ]
+      },
+      "gssc-qa1": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa1/brmsadmin/eman",
+        "APPS": {
+          "npi": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa1/npi/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7040",
+              "brms-nprd2-stg8:7040",
+              "brms-nprd2-stg5:7040",
+              "brms-nprd2-stg3:7040",
+              "brms-nprd2-stg14:7033"
+            ]
+          },
+          "rma": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa1/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7040",
+              "brms-nprd2-stg8:7040",
+              "brms-nprd2-stg5:7040",
+              "brms-nprd2-stg3:7040",
+              "brms-nprd2-stg14:7033"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa1/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7040",
+              "brms-nprd2-stg8:7040",
+              "brms-nprd2-stg5:7040",
+              "brms-nprd2-stg3:7040",
+              "brms-nprd2-stg14:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa1/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg9:7040",
+              "brms-nprd2-stg8:7040",
+              "brms-nprd2-stg5:7040",
+              "brms-nprd2-stg3:7040",
+              "brms-nprd2-stg14:7033"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg4:7040",
+          "brms-nprd2-stg10:7040",
+          "brms-nprd2-stg1:7040",
+          "brms-nprd2-stg11:7036",
+          "brms-nprd2-stg12:7033",
+          "brms-nprd2-stg13:7033"
+        ]
+      },
+      "gssc-qa2": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa2/brmsadmin/eman",
+        "APPS": {
+          "npi": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa2/npi/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg3:7041",
+              "brms-nprd2-stg2:7041",
+              "brms-nprd2-stg1:7041",
+              "brms-nprd2-stg8:7041"
+            ]
+          },
+          "rma": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa2/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg3:7041",
+              "brms-nprd2-stg2:7041",
+              "brms-nprd2-stg1:7041",
+              "brms-nprd2-stg8:7041"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa2/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg3:7041",
+              "brms-nprd2-stg2:7041",
+              "brms-nprd2-stg1:7041",
+              "brms-nprd2-stg8:7041"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc-qa2/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg3:7041",
+              "brms-nprd2-stg2:7041",
+              "brms-nprd2-stg1:7041",
+              "brms-nprd2-stg8:7041"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg6:7041",
+          "brms-nprd2-stg5:7041",
+          "brms-nprd2-stg4:7041"
+        ]
+      },
+      "cpp": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "bp-test": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "gssc": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/gssc/brmsadmin/eman",
+        "APPS": {
+          "npi": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc/npi/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg2:7025",
+              "brms-nprd2-stg3:7025",
+              "brms-nprd2-stg4:7025",
+              "brms-nprd2-stg5:7025",
+              "brms-nprd2-stg6:7025"
+            ]
+          },
+          "rma": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg2:7025",
+              "brms-nprd2-stg3:7025",
+              "brms-nprd2-stg4:7025",
+              "brms-nprd2-stg5:7025",
+              "brms-nprd2-stg6:7025"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg2:7025",
+              "brms-nprd2-stg3:7025",
+              "brms-nprd2-stg4:7025",
+              "brms-nprd2-stg5:7025",
+              "brms-nprd2-stg6:7025"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/gssc/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg2:7025",
+              "brms-nprd2-stg3:7025",
+              "brms-nprd2-stg4:7025",
+              "brms-nprd2-stg5:7025",
+              "brms-nprd2-stg6:7025"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg1:7025"
+        ]
+      },
+      "aes": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/aes/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg5:7034",
+          "brms-nprd2-stg11:7033",
+          "brms-nprd2-stg10:7034",
+          "brms-nprd1-stg12:7030",
+          "brms-nprd1-stg3:7030"
+        ]
+      },
+      "fin-qa1": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "fines": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "cvc": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "ermo": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/ermo/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg2:7032",
+          "brms-nprd2-stg3:7032",
+          "brms-nprd2-stg4:7032",
+          "brms-nprd2-stg5:7032"
+        ]
+      },
+      "fines-qa1": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/fines-qa1/brmsadmin/eman",
+        "APPS": {
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines-qa1/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7031",
+              "brms-nprd2-stg13:7031",
+              "brms-nprd2-stg14:7031",
+              "brms-nprd2-stg15:7031"
+            ]
+          },
+          "sct": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines-qa1/sct/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7031",
+              "brms-nprd2-stg13:7031",
+              "brms-nprd2-stg14:7031",
+              "brms-nprd2-stg15:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7031"
+        ]
+      },
+      "cpe-qa1": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cpe-qa1/brmsadmin/eman",
+        "APPS": {
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe-qa1/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7030",
+              "brms-nprd2-stg9:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-stg1:7030"
+        ]
+      },
+      "wpr": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      },
+      "csc": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/csc/brmsadmin/eman",
+        "APPS": {
+          "tov": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/csc/tov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7029",
+              "brms-nprd2-stg13:7029",
+              "brms-nprd2-stg14:7029",
+              "brms-nprd2-stg15:7029"
+            ]
+          },
+          "scrd": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/csc/scrd/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7029",
+              "brms-nprd2-stg13:7029",
+              "brms-nprd2-stg14:7029",
+              "brms-nprd2-stg15:7029"
+            ]
+          },
+          "uov": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/csc/uov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7029",
+              "brms-nprd2-stg13:7029",
+              "brms-nprd2-stg14:7029",
+              "brms-nprd2-stg15:7029"
+            ]
+          },
+          "gsm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/csc/gsm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7029",
+              "brms-nprd2-stg13:7029",
+              "brms-nprd2-stg14:7029",
+              "brms-nprd2-stg15:7029"
+            ]
+          },
+          "sam": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/csc/sam/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7029",
+              "brms-nprd2-stg13:7029",
+              "brms-nprd2-stg14:7029",
+              "brms-nprd2-stg15:7029"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg11:7029"
+        ]
+      },
+      "sccc": {
+        "ProxyURL": "http://ibpm-stage.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa1/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg4:7043",
+              "brms-nprd2-stg6:7043"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/bp-test/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg1:7034",
+              "brms-nprd2-stg2:7034",
+              "brms-nprd2-stg16:7034"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "loc": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg10:7032",
+              "brms-nprd2-stg15:7033"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "-": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/-/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-stg11:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7026",
+              "brms-nprd2-stg13:7026",
+              "brms-nprd2-stg14:7026",
+              "brms-nprd2-stg15:7026"
+            ]
+          },
+          "par": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "cepm": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "gte": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7028",
+              "brms-nprd2-stg13:7028",
+              "brms-nprd2-stg14:7028",
+              "brms-nprd2-stg15:7028"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg10:7031",
+              "brms-nprd2-stg2:7030",
+              "brms-nprd2-stg3:7033",
+              "brms-nprd2-stg4:7033",
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg6:7033",
+              "brms-nprd2-stg8:7033",
+              "brms-nprd2-stg9:7033",
+              "brms-nprd2-stg10:7033",
+              "brms-nprd1-stg2:7030"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7027",
+              "brms-nprd2-stg13:7027",
+              "brms-nprd2-stg14:7027",
+              "brms-nprd2-stg15:7027"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-stg12:7032",
+              "brms-nprd2-stg13:7032",
+              "brms-nprd2-stg14:7032",
+              "brms-nprd2-stg15:7032"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-stage.cisco.com/fin-qa4/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-stg8:7030",
+              "brms-nprd2-stg9:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-stg16:7027",
+          "brms-nprd2-stg16:7028",
+          "brms-nprd2-stg1:7031",
+          "brms-nprd2-stg2:7033",
+          "brms-nprd2-stg9:7043",
+          "brms-nprd2-stg10:7043",
+          "brms-nprd2-stg16:7043",
+          "brms-nprd2-stg6:7030",
+          "brms-nprd2-stg11:7026",
+          "brms-nprd2-stg1:7032",
+          "brms-nprd1-stg1:7030"
+        ]
+      }
+    }
+  },
+  {
+    "dev": {
+      "demo": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/demo/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-test-4:7030"
+        ]
+      },
+      "fin-dv7": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/fin-dv7/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fin-dv7/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev8:7037",
+              "brms-nprd2-dev9:7037",
+              "brms-nprd2-dev10:7037"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fin-dv7/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev8:7037",
+              "brms-nprd2-dev9:7037",
+              "brms-nprd2-dev10:7037"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev6:7037",
+          "brms-nprd2-dev7:7037"
+        ]
+      },
+      "test": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/test/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "localhost-nprd1-local:7030",
+          "brms-localhost-dev01:7030"
+        ]
+      },
+      "testdomain": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/testdomain/brmsadmin/eman",
+        "APPS": {
+          "testapp": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/testdomain/testapp/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd1-dev6:7030",
+              "brms-nprd1-dev7:7030",
+              "brms-nprd1-dev8:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd1-dev4:7030",
+          "brms-nprd1-dev5:7030"
+        ]
+      },
+      "sum": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/sccc/brmsadmin/eman",
+        "APPS": {
+          "APP": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/APP/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "PRE": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/PRE/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "bost": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/bost/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "profiler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/profiler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7026",
+              "brms-nprd2-dev13:7026",
+              "brms-nprd2-dev14:7026",
+              "brms-nprd2-dev15:7026"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev11:7026",
+          "brms-nprd2-dev11:7024",
+          "brms-nprd2-dev6:7033",
+          "brms-nprd2-dev8:7030"
+        ]
+      },
+      "gssc-dv7": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv7/brmsadmin/eman",
+        "APPS": {
+          "rma": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv7/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev3:7038",
+              "brms-nprd2-dev4:7038",
+              "brms-nprd2-dev6:7038",
+              "brms-nprd2-dev5:7038"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv7/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev3:7038",
+              "brms-nprd2-dev4:7038",
+              "brms-nprd2-dev6:7038",
+              "brms-nprd2-dev5:7038"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv7/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev3:7038",
+              "brms-nprd2-dev4:7038",
+              "brms-nprd2-dev6:7038",
+              "brms-nprd2-dev5:7038"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev1:7038",
+          "brms-nprd2-dev2:7038"
+        ]
+      },
+      "fin": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/fin/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fin/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev13:7030",
+              "brms-nprd2-dev14:7030",
+              "brms-nprd2-dev15:7030"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fin/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev13:7030",
+              "brms-nprd2-dev14:7030",
+              "brms-nprd2-dev15:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev11:7030",
+          "brms-nprd2-dev12:7030"
+        ]
+      },
+      "ktdemo": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/ktdemo/brmsadmin/eman",
+        "APPS": {
+          "ktapp2": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/ktdemo/ktapp2/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev4:7032"
+            ]
+          },
+          "ktapp3": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/ktdemo/ktapp3/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev5:7032"
+            ]
+          },
+          "ktapp1": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/ktdemo/ktapp1/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev4:7032"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev3:7032"
+        ]
+      },
+      "ea": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/ea/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev11:7023",
+          "brms-nprd2-dev12:7023",
+          "brms-nprd2-dev13:7023",
+          "brms-nprd1-dev1:7005"
+        ]
+      },
+      "icm": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/icm/brmsadmin/eman",
+        "APPS": {
+          "sc": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/icm/sc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev9:7031",
+              "brms-nprd2-dev10:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev7:7031",
+          "brms-nprd2-dev8:7031"
+        ]
+      },
+      "gssc-dv2": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv2/brmsadmin/eman",
+        "APPS": {
+          "rma": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv2/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev3:7036",
+              "brms-nprd2-dev4:7036",
+              "brms-nprd2-dev5:7036",
+              "brms-nprd2-dev6:7036"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv2/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev3:7036",
+              "brms-nprd2-dev4:7036",
+              "brms-nprd2-dev5:7036",
+              "brms-nprd2-dev6:7036"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc-dv2/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev3:7036",
+              "brms-nprd2-dev4:7036",
+              "brms-nprd2-dev5:7036",
+              "brms-nprd2-dev6:7036"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd2-dev2:7036",
+          "brms-nprd2-dev1:7036"
+        ]
+      },
+      "bp": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/sccc/brmsadmin/eman",
+        "APPS": {
+          "APP": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/APP/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "PRE": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/PRE/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "bost": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/bost/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "profiler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/profiler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7026",
+              "brms-nprd2-dev13:7026",
+              "brms-nprd2-dev14:7026",
+              "brms-nprd2-dev15:7026"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev11:7026",
+          "brms-nprd2-dev11:7024",
+          "brms-nprd2-dev6:7033",
+          "brms-nprd2-dev8:7030"
+        ]
+      },
+      "isom": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/isom/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev11:7034",
+          "brms-nprd2-dev12:7034",
+          "brms-nprd2-dev13:7034",
+          "brms-nprd2-dev14:7034"
+        ]
+      },
+      "pqc": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/pqc/brmsadmin/eman",
+        "APPS": {
+          "targa": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/pqc/targa/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7035",
+              "brms-nprd2-dev8:7035",
+              "brms-nprd2-dev9:7035",
+              "brms-nprd2-dev10:7035"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev6:7035"
+        ]
+      },
+      "eds": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/eds/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/eds/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev2:7031",
+              "brms-nprd2-dev3:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev1:7031"
+        ]
+      },
+      "testskdemo": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/testskdemo/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev1:7033"
+        ]
+      },
+      "cpe": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/cpe/brmsadmin/eman",
+        "APPS": {
+          "par": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpe/par/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7032",
+              "brms-nprd2-dev13:7032",
+              "brms-nprd2-dev14:7032",
+              "brms-nprd2-dev15:7032"
+            ]
+          },
+          "dmo": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpe/dmo/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7032",
+              "brms-nprd2-dev13:7032",
+              "brms-nprd2-dev14:7032",
+              "brms-nprd2-dev15:7032"
+            ]
+          },
+          "sr": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpe/sr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7032",
+              "brms-nprd2-dev13:7032",
+              "brms-nprd2-dev14:7032",
+              "brms-nprd2-dev15:7032"
+            ]
+          },
+          "om": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7032",
+              "brms-nprd2-dev13:7032",
+              "brms-nprd2-dev14:7032",
+              "brms-nprd2-dev15:7032"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpe/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7032",
+              "brms-nprd2-dev13:7032",
+              "brms-nprd2-dev14:7032",
+              "brms-nprd2-dev15:7032"
+            ]
+          },
+          "cs": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpe/cs/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7032",
+              "brms-nprd2-dev13:7032",
+              "brms-nprd2-dev14:7032",
+              "brms-nprd2-dev15:7032"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev11:7032"
+        ]
+      },
+      "gssc": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/gssc/brmsadmin/eman",
+        "APPS": {
+          "rma": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-dev3:7025",
+              "brms-nprd2-dev4:7025",
+              "brms-nprd2-dev5:7025",
+              "brms-nprd2-dev6:7025"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-dev3:7025",
+              "brms-nprd2-dev4:7025",
+              "brms-nprd2-dev5:7025",
+              "brms-nprd2-dev6:7025"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/gssc/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd2-dev3:7025",
+              "brms-nprd2-dev4:7025",
+              "brms-nprd2-dev5:7025",
+              "brms-nprd2-dev6:7025"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd2-dev1:7025",
+          "brms-nprd2-dev2:7025"
+        ]
+      },
+      "cpp": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/sccc/brmsadmin/eman",
+        "APPS": {
+          "APP": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/APP/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "PRE": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/PRE/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "bost": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/bost/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "profiler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/profiler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7026",
+              "brms-nprd2-dev13:7026",
+              "brms-nprd2-dev14:7026",
+              "brms-nprd2-dev15:7026"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev11:7026",
+          "brms-nprd2-dev11:7024",
+          "brms-nprd2-dev6:7033",
+          "brms-nprd2-dev8:7030"
+        ]
+      },
+      "fines": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/fines/brmsadmin/eman",
+        "APPS": {
+          "gte": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7028",
+              "brms-nprd2-dev13:7028",
+              "brms-nprd2-dev14:7028",
+              "brms-nprd2-dev15:7028"
+            ]
+          },
+          "sct": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fines/sct/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7028",
+              "brms-nprd2-dev13:7028",
+              "brms-nprd2-dev14:7028",
+              "brms-nprd2-dev15:7028"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev11:7028"
+        ]
+      },
+      "cvc": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7027",
+              "brms-nprd2-dev13:7027",
+              "brms-nprd2-dev15:7027",
+              "brms-nprd2-dev4:7030",
+              "brms-nprd2-dev5:7030",
+              "brms-nprd2-dev14:7027"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7027",
+              "brms-nprd2-dev13:7027",
+              "brms-nprd2-dev15:7027",
+              "brms-nprd2-dev4:7030",
+              "brms-nprd2-dev14:7027"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7027",
+              "brms-nprd2-dev13:7027",
+              "brms-nprd2-dev15:7027",
+              "brms-nprd2-dev4:7030",
+              "brms-nprd2-dev14:7027"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev11:7027"
+        ]
+      },
+      "ermo": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/ermo/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev7:7032",
+          "brms-nprd2-dev8:7032",
+          "brms-nprd2-dev9:7032",
+          "brms-nprd2-dev10:7032"
+        ]
+      },
+      "cvc-test": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/cvc-test/brmsadmin/eman",
+        "APPS": {
+          "test": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc-test/test/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd1-dev3:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd1-dev2:7030"
+        ]
+      },
+      "csa": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/csa/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd1-dev9:7030",
+          "brms-nprd1-dev1:7030"
+        ]
+      },
+      "cpp-dv1": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/cpp-dv1/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev1:7032"
+        ]
+      },
+      "sibnaray": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/sibnaray/brmsadmin/eman",
+        "APPS": {
+          "test123": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sibnaray/test123/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-test-4:7032"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-test-1:7032"
+        ]
+      },
+      "csc": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/csc/brmsadmin/eman",
+        "APPS": {
+          "tov": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/csc/tov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev12:7029",
+              "brms-nprd2-dev13:7029",
+              "brms-nprd2-dev14:7029",
+              "brms-nprd2-dev15:7029"
+            ]
+          },
+          "scrd": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/csc/scrd/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev12:7029",
+              "brms-nprd2-dev13:7029",
+              "brms-nprd2-dev14:7029",
+              "brms-nprd2-dev15:7029"
+            ]
+          },
+          "uov": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/csc/uov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev12:7029",
+              "brms-nprd2-dev13:7029",
+              "brms-nprd2-dev14:7029",
+              "brms-nprd2-dev15:7029"
+            ]
+          },
+          "gsm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/csc/gsm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev12:7029",
+              "brms-nprd2-dev13:7029",
+              "brms-nprd2-dev14:7029",
+              "brms-nprd2-dev15:7029"
+            ]
+          },
+          "sam": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/csc/sam/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev12:7029",
+              "brms-nprd2-dev13:7029",
+              "brms-nprd2-dev14:7029",
+              "brms-nprd2-dev15:7029"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev11:7029"
+        ]
+      },
+      "wpr": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/wpr/brmsadmin/eman",
+        "APPS": {
+          "loc": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/wpr/loc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev5:7031",
+              "brms-nprd2-dev2:7032"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev4:7031"
+        ]
+      },
+      "cpp-dv2": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/cpp-dv2/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev5:7033"
+        ]
+      },
+      "cvc-dv7": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/cvc-dv7/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc-dv7/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev7:7039",
+              "brms-nprd2-dev8:7039",
+              "brms-nprd2-dev9:7039",
+              "brms-nprd2-dev10:7039"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc-dv7/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev7:7039",
+              "brms-nprd2-dev8:7039",
+              "brms-nprd2-dev9:7039",
+              "brms-nprd2-dev10:7039"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cvc-dv7/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev7:7039",
+              "brms-nprd2-dev8:7039",
+              "brms-nprd2-dev9:7039",
+              "brms-nprd2-dev10:7039"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd2-dev6:7039"
+        ]
+      },
+      "nprd2": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/nprd2/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-test-1:7030"
+        ]
+      },
+      "csw": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/csw/brmsadmin/eman",
+        "APPS": {
+          "swpub": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/csw/swpub/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev3:7033",
+              "brms-nprd2-dev4:7033"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev2:7033"
+        ]
+      },
+      "sccc": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/sccc/brmsadmin/eman",
+        "APPS": {
+          "APP": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/APP/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "PRE": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sum/PRE/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7030",
+              "brms-nprd2-dev9:7030"
+            ]
+          },
+          "bost": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/bost/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "modeler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/modeler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "pre": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev7:7033",
+              "brms-nprd2-dev9:7033",
+              "brms-nprd2-dev10:7033",
+              "brms-nprd2-dev8:7033"
+            ]
+          },
+          "profiler": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/bp/profiler/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev15:7024",
+              "brms-nprd2-dev13:7024",
+              "brms-nprd2-dev12:7024",
+              "brms-nprd2-dev14:7024"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Up",
+            "HOSTS": [
+              "brms-nprd2-dev12:7026",
+              "brms-nprd2-dev13:7026",
+              "brms-nprd2-dev14:7026",
+              "brms-nprd2-dev15:7026"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev11:7026",
+          "brms-nprd2-dev11:7024",
+          "brms-nprd2-dev6:7033",
+          "brms-nprd2-dev8:7030"
+        ]
+      },
+      "fin-dv2": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/fin-dv2/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fin-dv2/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev2:7030",
+              "brms-nprd2-dev3:7030"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/fin-dv2/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-nprd2-dev2:7030",
+              "brms-nprd2-dev3:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-nprd2-dev1:7030"
+        ]
+      },
+      "dipsharm": {
+        "ProxyURL": "http://ibpm-dev.cisco.com/dipsharm/brmsadmin/eman",
+        "APPS": {
+          "app2": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/dipsharm/app2/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-test-4:7031"
+            ]
+          },
+          "app1": {
+            "ProxyURL": "http://ibpm-dev.cisco.com/dipsharm/app1/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "HOSTS": [
+              "brms-test-4:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "HOSTS": [
+          "brms-test-1:7031"
+        ]
+      }
+    }
+  },
+  {
+    "lt": {
+      "isom": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/isom/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt1:7030",
+          "brms-nprd1-lt4:7030",
+          "brms-nprd1-lt7:7030"
+        ]
+      },
+      "gssc": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/gssc/brmsadmin/eman",
+        "APPS": {
+          "npi": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/gssc/npi/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt9:7030",
+              "brms-nprd1-lt6:7030"
+            ]
+          },
+          "rma": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/gssc/rma/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt9:7030",
+              "brms-nprd1-lt6:7030"
+            ]
+          },
+          "sscvm": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/gssc/sscvm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt9:7030",
+              "brms-nprd1-lt6:7030"
+            ]
+          },
+          "ws": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/gssc/ws/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt9:7030",
+              "brms-nprd1-lt6:7030"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt8:7030"
+        ]
+      },
+      "cpp": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/cpp/brmsadmin/eman",
+        "APPS": {
+          "pre": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cpp/pre/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt8:7033",
+              "brms-nprd1-lt9:7033"
+            ]
+          },
+          "apps": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cpp/apps/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt8:7033",
+              "brms-nprd1-lt9:7033"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt7:7033"
+        ]
+      },
+      "csc": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/csc/brmsadmin/eman",
+        "APPS": {
+          "uov": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/csc/uov/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt5:7027",
+              "brms-nprd1-lt6:7027"
+            ]
+          },
+          "gsm": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/csc/gsm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt5:7027",
+              "brms-nprd1-lt6:7027"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt4:7027"
+        ]
+      },
+      "fines": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/fines/brmsadmin/eman",
+        "APPS": {
+          "gte": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/fines/gte/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt2:7026",
+              "brms-nprd1-lt3:7026"
+            ]
+          },
+          "sct": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/fines/sct/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt2:7026",
+              "brms-nprd1-lt3:7026"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt1:7026"
+        ]
+      },
+      "cvc": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7026",
+              "brms-nprd1-lt5:7026"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7026",
+              "brms-nprd1-lt5:7026"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7026",
+              "brms-nprd1-lt5:7026"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7029",
+              "brms-nprd1-lt7:7029"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt4:7026",
+          "brms-nprd1-lt5:7029"
+        ]
+      },
+      "eds": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/eds/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/eds/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt9:7031",
+              "brms-nprd1-lt1:7031"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt8:7031"
+        ]
+      },
+      "sccc": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/cvc/brmsadmin/eman",
+        "APPS": {
+          "cepm": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cvc/cepm/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7026",
+              "brms-nprd1-lt5:7026"
+            ]
+          },
+          "sdg": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cvc/sdg/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7026",
+              "brms-nprd1-lt5:7026"
+            ]
+          },
+          "score": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cvc/score/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7026",
+              "brms-nprd1-lt5:7026"
+            ]
+          },
+          "tsl": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/sccc/tsl/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt6:7029",
+              "brms-nprd1-lt7:7029"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt4:7026",
+          "brms-nprd1-lt5:7029"
+        ]
+      },
+      "fin": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/fin/brmsadmin/eman",
+        "APPS": {
+          "rdr": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/fin/rdr/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt3:7029",
+              "brms-nprd1-lt4:7029"
+            ]
+          },
+          "icms": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/fin/icms/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt3:7029",
+              "brms-nprd1-lt4:7029"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt2:7029"
+        ]
+      },
+      "ermo": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/ermo/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt7:7032",
+          "brms-nprd1-lt8:7032",
+          "brms-nprd1-lt9:7032"
+        ]
+      },
+      "cpe": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/cpe/brmsadmin/eman",
+        "APPS": {
+          "om": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/cpe/om/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt2:7027",
+              "brms-nprd1-lt3:7027"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt1:7027"
+        ]
+      },
+      "ea": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/ea/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt2:7028",
+          "brms-nprd1-lt3:7028",
+          "brms-nprd1-lt1:7028"
+        ]
+      },
+      "icm": {
+        "ProxyURL": "http://ibpm-lt.cisco.com/icm/brmsadmin/eman",
+        "APPS": {
+          "sc": {
+            "ProxyURL": "http://ibpm-lt.cisco.com/icm/sc/brmsadmin/eman",
+            "DateTime": "Oct 18, 2016 5:55:37 PM",
+            "STATUS": "Down",
+            "HOSTS": [
+              "brms-nprd1-lt4:7035",
+              "brms-nprd1-lt5:7035"
+            ]
+          }
+        },
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-lt2:7035",
+          "brms-nprd1-lt3:7035"
+        ]
+      }
+    }
+  },
+  {
+    "poc": {
+      "dsm": {
+        "ProxyURL": "http://ibpm-poc.cisco.com/dsm/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Up",
+        "HOSTS": [
+          "brms-nprd1-poc1:7030",
+          "brms-nprd1-poc2:7030"
+        ]
+      },
+      "dsm-dnode": {
+        "ProxyURL": "http://ibpm-poc.cisco.com/dsm-dnode/brmsadmin/eman",
+        "DateTime": "Oct 18, 2016 5:55:37 PM",
+        "STATUS": "Down",
+        "HOSTS": [
+          "brms-nprd1-poc1:7031",
+          "brms-nprd1-poc2:7031"
+        ]
+      }
+    }
+  }
+]

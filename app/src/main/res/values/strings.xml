@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_title">Pega Server Status Client</string>
+    <string name="app_name">PegaServerStatusClient</string>
+    <string name="title_activity_pega_server_data">PegaServerDataActivity</string>
+    <string name="app_binder_data_bundle_key">app_binder_data</string>
+    <string name="status_json_filename">status.json</string>
+    <string name="authorization_url">https://api.instagram.com</string>
+</resources>
