@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/hostname"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <ListView
+            android:id="@+id/hostname_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ip_address"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <ListView
+            android:id="@+id/ip_address_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/application_name"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <ListView
+            android:id="@+id/application_name_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/host_up_down"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <ListView
+            android:id="@+id/host_upd_down_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+    </LinearLayout>
+
+</LinearLayout>

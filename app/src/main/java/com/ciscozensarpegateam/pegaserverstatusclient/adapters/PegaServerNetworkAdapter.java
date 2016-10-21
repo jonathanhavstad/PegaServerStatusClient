@@ -21,50 +21,48 @@ import butterknife.ButterKnife;
 
 public class PegaServerNetworkAdapter extends
         RecyclerView.Adapter<PegaServerNetworkAdapter.ViewHolder> {
-    private Map<String, Object> restData;
+    private Object appData;
     private List<String[]> viewHolderData = new ArrayList<>();
     private OnItemSelectedListener onItemSelectedListener;
+    private int itemCount;
 
     public interface OnItemSelectedListener {
-        void sendData(Map<String, Object> data);
-        void sendData(List<String> data);
+        void sendData(Object data);
     }
 
     public PegaServerNetworkAdapter(
             OnItemSelectedListener onItemSelectedListener,
-            Map<String, Object> restData) {
+            Object appData) {
         this.onItemSelectedListener = onItemSelectedListener;
-        this.restData = restData;
+        this.appData = appData;
+        this.itemCount = 0;
         populateViewHolderDataFromMap();
     }
 
-    public PegaServerNetworkAdapter(
-            OnItemSelectedListener onItemSelectedListener,
-            List<String> restArrayData) {
-        this.onItemSelectedListener = onItemSelectedListener;
-        populateViewHolderDataFromList(restArrayData);
-    }
-
     private void populateViewHolderDataFromMap() {
-        for (String key : restData.keySet()) {
-            if (restData.get(key) instanceof String) {
-                String[] value = new String[2];
-                value[0] = key;
-                value[1] = (String) restData.get(key);
-                viewHolderData.add(value);
-            } else {
+        if (appData instanceof Map<?,?>) {
+            Map<String, Object> mapData = (Map<String, Object>) appData;
+            itemCount = mapData.size();
+            for (String key : mapData.keySet()) {
+                if (mapData.get(key) instanceof String) {
+                    String[] value = new String[2];
+                    value[0] = key;
+                    value[1] = (String) mapData.get(key);
+                    viewHolderData.add(value);
+                } else {
+                    String[] value = new String[1];
+                    value[0] = key;
+                    viewHolderData.add(value);
+                }
+            }
+        } else if (appData instanceof List<?>) {
+            List<String> listData = (List<String>) appData;
+            itemCount = listData.size();
+            for (String datum : listData) {
                 String[] value = new String[1];
-                value[0] = key;
+                value[0] = datum;
                 viewHolderData.add(value);
             }
-        }
-    }
-
-    private void populateViewHolderDataFromList(List<String> arrayData) {
-        for (String datum : arrayData) {
-            String[] value = new String[1];
-            value[0] = datum;
-            viewHolderData.add(value);
         }
     }
 
@@ -82,38 +80,37 @@ public class PegaServerNetworkAdapter extends
         String[] value = viewHolderData.get(position);
         if (value.length == 1) {
             key = value[0];
-            holder.objectItemKeyView.setText(value[0]);
+            holder.objectItemValueView.setText(value[0]);
         } else if (value.length == 2) {
             key = value[0];
             holder.objectItemKeyView.setText(value[0]);
             holder.objectItemKeyView.setTypeface(holder.objectItemKeyView.getTypeface(), 1);
             holder.objectItemValueView.setText(value[1]);
         }
-        if (key != null && restData.containsKey(key)) {
-            final Object mapValue = restData.get(key);
-            if (mapValue instanceof List<?> || mapValue instanceof Map<?,?>) {
-                holder.itemView.setClickable(true);
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (onItemSelectedListener != null) {
-                            if (mapValue instanceof Map<?,?>) {
-                                onItemSelectedListener.sendData((Map<String, Object>) mapValue);
-                            } else if (mapValue instanceof List<?>) {
-                                onItemSelectedListener.sendData((List<String>) mapValue);
+        if (appData instanceof Map<?,?>) {
+            Map<String, Object> mapData = (Map<String, Object>) appData;
+            if (key != null && mapData.containsKey(key)) {
+                final Object mapValue = mapData.get(key);
+                if (mapValue instanceof Map<?, ?> || mapValue instanceof List<?>) {
+                    holder.itemView.setClickable(true);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onItemSelectedListener != null) {
+                                onItemSelectedListener.sendData(mapValue);
                             }
                         }
-                    }
-                });
-            } else {
-                holder.itemView.setClickable(false);
+                    });
+                } else {
+                    holder.itemView.setClickable(false);
+                }
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return (restData != null ? restData.size() : 0);
+        return itemCount;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

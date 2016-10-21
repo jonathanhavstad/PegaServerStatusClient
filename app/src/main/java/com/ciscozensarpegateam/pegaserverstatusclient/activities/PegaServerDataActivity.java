@@ -11,9 +11,6 @@ import com.ciscozensarpegateam.pegaserverstatusclient.adapters.PegaServerNetwork
 import com.ciscozensarpegateam.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 import com.ciscozensarpegateam.pegaserverstatusclient.data.PegaServerNetworkData;
 
-import java.util.List;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -37,29 +34,17 @@ public class PegaServerDataActivity extends AppCompatActivity {
         PegaServerNetworkData pegaData =
                 intent.getParcelableExtra(getString(R.string.app_binder_data_bundle_key));
         PegaServerNetworkBinder binder = pegaData.getBinder();
-        Map<String, Object> appMapData = binder.getAppData();
+        Object appData = binder.getAppData();
         PegaServerNetworkAdapter.OnItemSelectedListener onItemSelectedListener =
                 new PegaServerNetworkAdapter.OnItemSelectedListener() {
             @Override
-            public void sendData(Map<String, Object> data) {
+            public void sendData(Object data) {
                 PegaServerNetworkBinder childBinder = new PegaServerNetworkBinder();
                 childBinder.setAppData(data);
                 launchPegaServerDataActivity(childBinder);
             }
-
-            @Override
-            public void sendData(List<String> data) {
-                PegaServerNetworkBinder childBinder = new PegaServerNetworkBinder();
-                childBinder.setAppArrayData(data);
-                launchPegaServerDataActivity(childBinder);
-            }
         };
-        if (appMapData == null) {
-            List<String> appArrayData = binder.getAppArrayData();
-            adapter = new PegaServerNetworkAdapter(onItemSelectedListener, appArrayData);
-        } else {
-            adapter = new PegaServerNetworkAdapter(onItemSelectedListener, appMapData);
-        }
+        adapter = new PegaServerNetworkAdapter(onItemSelectedListener, appData);
         restDataList.setAdapter(adapter);
     }
 

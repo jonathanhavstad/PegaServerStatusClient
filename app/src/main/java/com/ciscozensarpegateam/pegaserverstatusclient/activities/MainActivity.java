@@ -22,7 +22,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,6 +1,5 @@
 package com.ciscozensarpegateam.pegaserverstatusclient.background.tasks;
 
-import android.app.IntentService;
 import android.content.Context;
 import android.util.Log;
 
