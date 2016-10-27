@@ -61,8 +61,7 @@ public class PegaParentFragment extends PegaBaseFragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.pega_server_root_list_item,
+        View rootView = inflater.inflate(R.layout.pega_server_root_list_item,
                 container,
                 false);
 
@@ -98,8 +97,5 @@ public class PegaParentFragment extends PegaBaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (onSendDataListener != null) {
-            onSendDataListener.setCurrentPageTitle();
-        }
     }
 }

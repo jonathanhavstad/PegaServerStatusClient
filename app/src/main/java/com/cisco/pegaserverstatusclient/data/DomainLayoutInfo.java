@@ -3,9 +3,6 @@ package com.cisco.pegaserverstatusclient.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by jonathanhavstad on 10/25/16.
  */

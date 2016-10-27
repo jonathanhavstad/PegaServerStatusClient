@@ -9,6 +9,7 @@ import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.DomainLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.ServerLayoutInfo;
+import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
 import com.cisco.pegaserverstatusclient.rest.services.OauthAccessService;
 import com.cisco.pegaserverstatusclient.rest.services.OauthRedirectService;
 import com.google.gson.Gson;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,6 +49,7 @@ public class PegaServerRestTask {
     public static final int AUTH_FAILURE = 0;
     public static final int AUTH_SUCCESS = 1;
     public static final int DATA_LOAD_SUCCESS = 2;
+    public static final int DATA_LOAD_FAILURE = 3;
     public static final int ACCESS_TOKEN_FAILURE = -1;
 
     private static final String TAG = "PegaServerRestTask";
@@ -291,14 +295,64 @@ public class PegaServerRestTask {
         return null;
     }
 
-    public void loadFromNetwork(String restUrl,
-                                String authUrl,
-                                String username,
-                                String password,
-                                Action1<Integer> dataSubscriber) {
+    public void loadStatusFromFile(Action1<Integer> dataSubscriber) {
 
         this.dataSubscriber = dataSubscriber;
         loadFromFile(context, context.getString(R.string.status_json_filename));
+    }
+
+    public void loadStatusFromNetwork(String url, Action1<Integer> dataSubscriber) {
+        this.dataSubscriber = dataSubscriber;
+        if (url != null) {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(extractBaseUrl(url)).build();
+            IBPMStatusService ibpmStatusService = retrofit.create(IBPMStatusService.class);
+            ibpmStatusService.getStatus(extractPathUrl(url)).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    JSONArray jsonArray = null;
+                    try {
+                        jsonArray = new JSONArray(response.body().string());
+                        parseJsonArray(appData, null, jsonArray);
+                        sendAuthStatus(DATA_LOAD_SUCCESS);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        sendAuthStatus(DATA_LOAD_FAILURE);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        sendAuthStatus(DATA_LOAD_FAILURE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    sendAuthStatus(DATA_LOAD_FAILURE);
+                }
+            });
+        }
+    }
+
+    private String extractBaseUrl(String url) {
+        if (url != null) {
+            try {
+                URI uri = new URI(url);
+                return uri.getScheme() + "://" + uri.getHost();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        return url;
+    }
+
+    private String extractPathUrl(String url) {
+        if (url != null) {
+            try {
+                URI uri = new URI(url);
+                return uri.getPath();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        return url;
     }
 
     private void subscribeToAuthObservable() {

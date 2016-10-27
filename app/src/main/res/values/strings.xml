@@ -22,4 +22,8 @@
     <string name="default_password">defaultPassword</string>
     <string name="login_activity_label">Cisco Login</string>
     <string name="main_activity_label">Cisco Pega Server Status</string>
+    <string name="status_url_bundle_key">url</string>
+    <string name="load_from_url_bundle_key">load_from_url</string>
+    <string name="data_load_failure_alert_title">Data Load Failure</string>
+    <string name="data_load_failure_alert_body">"Failed to load data from: "</string>
 </resources>

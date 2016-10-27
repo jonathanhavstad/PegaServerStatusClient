@@ -34,29 +34,27 @@ import io.fabric.sdk.android.Fabric;
 
 public class PegaServerDataActivity extends AppCompatActivity
         implements PegaParentFragment.OnSendDataListener {
+
+    private static final String TAG = "PegaDataActivity";
+
     private TabViewAdapter tabViewAdapter;
     private String friendlyName;
+    private PegaServerRestTask task;
+    private ViewPager.OnPageChangeListener onPageChangeListener;
 
     @BindView(R.id.pega_data_pager)
     ViewPager pegaDataPager;
-
     @BindView(R.id.domain_toolbar)
     Toolbar pegaToolbar;
 
-    private PegaServerRestTask task;
-
     @State
     PegaServerNetworkParcelable appParcelable;
-
     @State
     BaseInfoParcelable layoutParcelable;
-
     @State
     int pageNum;
-
     @State
     int tabIndex;
-
     @State
     String title;
 
@@ -88,7 +86,8 @@ public class PegaServerDataActivity extends AppCompatActivity
         tabViewAdapter = new TabViewAdapter(getSupportFragmentManager());
 
         if (layoutParcelable != null) {
-            BaseLayoutInfoBinder baseLayoutInfoBinder = layoutParcelable.getBaseLayoutInfoBinder();
+            BaseLayoutInfoBinder baseLayoutInfoBinder =
+                    layoutParcelable.getBaseLayoutInfoBinder();
             BaseLayoutInfo baseLayoutInfo = baseLayoutInfoBinder.getBaseLayoutInfo();
             if (pageNum == 1) {
                 if (appData instanceof Map<?, ?>) {
@@ -135,32 +134,23 @@ public class PegaServerDataActivity extends AppCompatActivity
             }
         }
 
+        onPageChangeListener = createPageChangeListener();
+
+        pegaDataPager.addOnPageChangeListener(onPageChangeListener);
+
         pegaDataPager.setAdapter(tabViewAdapter);
 
-        pegaDataPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        if (title == null) {
+            if (friendlyName == null) {
+                friendlyName = LifecycleLayoutInfo.LC_MAPPING.get(LifecycleLayoutInfo.PROD_KEY);
             }
-
-            @Override
-            public void onPageSelected(int position) {
-                PegaBaseFragment fragment = (PegaBaseFragment) tabViewAdapter.getItem(position);
-                setPageTitle(fragment.getFriendlyName());
-                tabIndex = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+            setPageTitle(friendlyName);
+        }
     }
 
     private void launchPegaServerDataActivity(final PegaServerNetworkBinder appBinder,
                                                           BaseLayoutInfo baseLayoutInfo) {
-        Intent intent = new Intent(
-                this,
+        Intent intent = new Intent(this,
                 PegaServerDataActivity.class);
         PegaServerNetworkParcelable restData = new PegaServerNetworkParcelable();
         restData.setBinder(appBinder);
@@ -178,20 +168,10 @@ public class PegaServerDataActivity extends AppCompatActivity
     }
 
     @Override
-    public void setCurrentPageTitle() {
-        if (pegaDataPager != null && tabViewAdapter != null) {
-            PegaBaseFragment fragment =
-                    (PegaBaseFragment) tabViewAdapter.getItem(pegaDataPager.getCurrentItem());
-            setPageTitle(fragment.getFriendlyName());
-        }
-    }
-
-    @Override
     public void setPageTitle(String title) {
         this.title = title;
+        this.friendlyName = title;
         pegaToolbar.setTitle(title);
-        tabViewAdapter.notifyDataSetChanged();
-        pegaToolbar.requestLayout();
     }
 
     @Override
@@ -219,7 +199,6 @@ public class PegaServerDataActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
-        pegaDataPager.clearOnPageChangeListeners();
     }
 
     @Override
@@ -227,5 +206,29 @@ public class PegaServerDataActivity extends AppCompatActivity
         super.onRestoreInstanceState(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
         setPageTitle(this.title);
+    }
+
+    private ViewPager.OnPageChangeListener createPageChangeListener() {
+        return new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                PegaBaseFragment fragment =
+                        (PegaBaseFragment) tabViewAdapter.getItem(position);
+                setPageTitle(fragment.getFriendlyName());
+                tabIndex = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
     }
 }

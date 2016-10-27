@@ -50,8 +50,8 @@ public class PegaChildFragment extends PegaBaseFragment {
         if (args != null) {
             friendlyName = args.getString(getString(R.string.app_domain_data_bundle_key));
 
-            PegaServerNetworkBinder binder = (PegaServerNetworkBinder)
-                    args.getBinder(getString(R.string.app_binder_data_bundle_key));
+            PegaServerNetworkBinder binder =
+                    (PegaServerNetworkBinder) args.getBinder(getString(R.string.app_binder_data_bundle_key));
             if (binder != null) {
                 appData = binder.getAppData();
             }
@@ -63,8 +63,7 @@ public class PegaChildFragment extends PegaBaseFragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.fragment_pega_server_data,
+        View rootView = inflater.inflate(R.layout.fragment_pega_server_data,
                 container,
                 false);
 
@@ -102,8 +101,5 @@ public class PegaChildFragment extends PegaBaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (onSendDataListener != null) {
-            onSendDataListener.setCurrentPageTitle();
-        }
     }
 }

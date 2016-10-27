@@ -17,12 +17,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.crashlytics.android.Crashlytics;
+
+import java.util.Set;
+
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String HOME_PAGE = "http://www.cisco.com/";
-    private static final String LOGIN_URL = "http://www.cisco.com/c/login/index.html?referer=/c/en/us/index.html";
+    private static final String LOGIN_URL = "https://www.cisco.com/c/login/index.html?referer=/c/en/us/index.html";
+//    private static final String LOGIN_URL = "https://ibpm.cisco.com/eabv/demo/login";
+    private static final String LOGIN_FINISHED_URL = "http://www.cisco.com/c/en/us/index.html";
+//    private static final String LOGIN_FINISHED_URL = "https://ibpm.cisco.com/eabv/status";
     private static final String SSO_LOGIN_URL = "https://sso.cisco.com/autho/forms/CDClogin.html";
+    private static final String LOGIN_ACTION = "https://ibpm.cisco.com/eabv/demo/login";
     private static final String CGI_LOGIN_URL = "https://www.cisco.com/cgi-bin/login";
     private static final String LOGIN_REDIRECT_URL = "http://www.cisco.com/c/en/us/index.html";
     private static final String LOGIN_REFERER_URL = "http://www.cisco.com/c/login/index.html?referer=/c/en/us/index.html";
@@ -32,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String EVIL_COOKIE_URL = "https://sso.cisco.com/oberr.cgi?status%3D400%20errmsg%3DErrEvilFormLoginCookie%20p1%3D";
     private static final String LOGIN_ACTION_URL = "https://sso.cisco.com/autho/login/loginaction.html";
     private static final String SSO_COOKIE_KEY = "SSOCookie";
+    private static final String INVALID_SSO_COOKIE = "loggedout";
 
     private static final int HTTP_NOT_FOUND_CODE = 404;
     private static final int ACCESS_DATA_REQUEST_CODE = 1000;
@@ -41,6 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     WebView webView;
 
     private boolean beginLogin;
+    private boolean beginAuthentication;
+    private boolean loadUrlFromIntent;
+    private String statusUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Loading URL: " + url);
                 Log.d(TAG, "Site cookie: " + CookieManager.getInstance().getCookie(url));
                 Log.d(TAG, "SSO Cookie: " + getSSOCookie(CookieManager.getInstance().getCookie(url)));
+                String ssoCookie = getSSOCookie(CookieManager.getInstance().getCookie(url));
 
                 CookieManager.getInstance().setAcceptCookie(true);
 
@@ -69,11 +81,18 @@ public class LoginActivity extends AppCompatActivity {
                     newUrl = LOGIN_URL;
                 } else if (url.equals(SSO_LOGIN_URL)) {
                     beginLogin = true;
+                    beginAuthentication = false;
                     view.setVisibility(View.VISIBLE);
                 } else if (beginLogin) {
-                    view.setVisibility(View.INVISIBLE);
+                    beginAuthentication = true;
                     beginLogin = false;
-                    launchMainActivity();
+                } else if (beginAuthentication && url.equals(LOGIN_FINISHED_URL)) {
+                    view.setVisibility(View.INVISIBLE);
+                    beginAuthentication = false;
+                    if (!loadUrlFromIntent) {
+                        statusUrl = url;
+                    }
+                    launchMainActivity(statusUrl);
                 }
 
                 if (newUrl != null) {
@@ -97,7 +116,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        parseIntent(getIntent());
+
         beginLogin = false;
+        beginAuthentication = false;
 
         webView.setVisibility(View.INVISIBLE);
         webView.loadUrl(LOGOUT_URL);
@@ -112,8 +134,9 @@ public class LoginActivity extends AppCompatActivity {
         CookieManager.getInstance().setAcceptCookie(true);
     }
 
-    private void launchMainActivity() {
+    private void launchMainActivity(String url) {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(getString(R.string.status_url_bundle_key), url);
         startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
     }
 
@@ -121,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACCESS_DATA_REQUEST_CODE) {
             beginLogin = false;
+            beginAuthentication = false;
             webView.clearCache(true);
             webView.setVisibility(View.INVISIBLE);
             webView.loadUrl(LOGOUT_URL);
@@ -166,5 +190,18 @@ public class LoginActivity extends AppCompatActivity {
             return cookie + SSO_COOKIE_KEY + "=" + newSSOCookie;
         }
         return null;
+    }
+
+    private void parseIntent(Intent intent) {
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                Set<String> extraKeys = extras.keySet();
+                if (extraKeys.contains("url")) {
+                    loadUrlFromIntent = true;
+                    statusUrl = extras.getString("url");
+                }
+            }
+        }
     }
 }

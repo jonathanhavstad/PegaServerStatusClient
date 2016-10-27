@@ -10,7 +10,7 @@ import com.google.android.gms.iid.InstanceIDListenerService;
  */
 
 public class PegaInstanceIDListenerService extends InstanceIDListenerService {
-    private static final String TAG = "JJH";
+    private static final String TAG = "PegaListenerService";
 
     @Override
     public void onTokenRefresh() {

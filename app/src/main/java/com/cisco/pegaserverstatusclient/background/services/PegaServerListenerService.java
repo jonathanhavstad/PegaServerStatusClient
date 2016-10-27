@@ -3,20 +3,13 @@ package com.cisco.pegaserverstatusclient.background.services;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.activities.LoginActivity;
-import com.cisco.pegaserverstatusclient.activities.MainActivity;
-import com.cisco.pegaserverstatusclient.data.NotificationMessage;
 import com.google.android.gms.gcm.GcmListenerService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Created by jonathanhavstad on 10/21/16.
@@ -33,23 +26,27 @@ public class PegaServerListenerService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String s, Bundle bundle) {
+        Log.d(TAG, "Received message: " + s);
         Bundle notificationBundle = bundle.getBundle("notification");
         if (notificationBundle != null) {
             String title = notificationBundle.getString("title");
             String body = notificationBundle.getString("body");
             String icon = notificationBundle.getString("icon");
-            sendNotification(title, body);
+            String url = bundle.getString("url");
+            sendNotification(title, body, url);
         }
     }
 
-    private void sendNotification(String title, String body) {
-        Log.d(TAG, "Received a notification");
+    private void sendNotification(String title, String body, String url) {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_add_alert_black_24dp)
                         .setContentTitle(title)
                         .setContentText(body);
-        Intent activityIntent = new Intent(this, LoginActivity.class);
+        Intent activityIntent = new Intent();
+        activityIntent.setAction("android.app.action.MAIN");
+        activityIntent.addCategory("android.intent.category.LAUNCHER");
+        activityIntent.putExtra(getString(R.string.status_url_bundle_key), url);
         activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,

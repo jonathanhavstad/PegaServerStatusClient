@@ -19,6 +19,7 @@ import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
 import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
 import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.LifecycleLayoutInfo;
 import com.cisco.pegaserverstatusclient.parcelables.BaseInfoParcelable;
 import com.cisco.pegaserverstatusclient.parcelables.PegaServerNetworkParcelable;
 import com.google.android.gms.common.ConnectionResult;
@@ -26,6 +27,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
     private PegaServerRestTask task;
 
+    private String statusUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,16 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
         verifyGooglePlayServices();
         startInstanceIDService();
-
-        getData(getString(R.string.authorization_url),
-                getString(R.string.default_user),
-                getString(R.string.default_password));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         parseIntent();
+        getData(statusUrl);
     }
 
     @Override
@@ -123,46 +124,24 @@ public class MainActivity extends AppCompatActivity {
     private void parseIntent() {
         Intent intent = getIntent();
         if (intent != null) {
-            Log.d(TAG, "Intent action: " + intent.getAction());
-            Log.d(TAG, "Displaying categories");
-
-            if (intent.getData() != null) {
-                Log.d(TAG, "Intent data UR: " + intent.getData().toString());
-            }
+            statusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
         }
     }
 
-    private void getData(String restUrl, String username, String password) {
+    private void getData(String restUrl) {
         startLoading();
         appData.clear();
-        if (!restUrl.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
-            task = new PegaServerRestTask(this, appData);
-
-            Action1<Integer> subscriber = new Action1<Integer>() {
-                @Override
-                public void call(Integer authSuccessful) {
-                    evaluateAuthResult(authSuccessful);
-                }
-            };
-
-            task.loadFromNetwork(restUrl,
-                    getString(R.string.authorization_url),
-                    username,
-                    password,
-                    subscriber);
+        Action1<Integer> subscriber = new Action1<Integer>() {
+            @Override
+            public void call(Integer authSuccessful) {
+                evaluateAuthResult(authSuccessful);
+            }
+        };
+        task = new PegaServerRestTask(this, appData);
+        if (restUrl != null && !restUrl.isEmpty()) {
+            task.loadStatusFromNetwork(restUrl, subscriber);
         } else {
-            stopLoading();
-            StringBuffer sb = new StringBuffer();
-            if (restUrl.isEmpty()) {
-                sb.append(getString(R.string.url_empty_alert_message));
-            }
-            if (username.isEmpty()) {
-                sb.append(getString(R.string.username_empty_alert_message));
-            }
-            if (password.isEmpty()) {
-                sb.append(getString(R.string.email_empty_alert_message));
-            }
-            showAlert(getString(R.string.input_entry_error_alert_title), sb.toString());
+            task.loadStatusFromFile(subscriber);
         }
     }
 
@@ -216,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        setResult(RESULT_CANCELED);
+                        finish();
                     }
                 })
                 .create();
@@ -225,15 +206,23 @@ public class MainActivity extends AppCompatActivity {
     private void evaluateAuthResult(int authResult) {
         stopLoading();
 
-        if (authResult == 0) {
+        if (authResult == PegaServerRestTask.AUTH_FAILURE) {
             showAlert(getString(R.string.authentication_error_alert_title),
                     getString(R.string.authentication_error_alert_body));
-        } else if (authResult == 1) {
-
-        } else if (authResult == 2) {
-            launchPegaServerDataActivity();
-        } else if (authResult == -1) {
-
+        } else if (authResult == PegaServerRestTask.AUTH_SUCCESS) {
+            Log.i(TAG, "Successfully authorized with REST service!");
+        } else if (authResult == PegaServerRestTask.DATA_LOAD_SUCCESS) {
+            if (verifyData()) {
+                launchPegaServerDataActivity();
+            } else {
+                showAlert(getString(R.string.data_load_failure_alert_title),
+                        getString(R.string.data_load_failure_alert_body) + statusUrl);
+            }
+        } else if (authResult == PegaServerRestTask.DATA_LOAD_FAILURE) {
+            showAlert(getString(R.string.data_load_failure_alert_title),
+                    getString(R.string.data_load_failure_alert_body) + statusUrl);
+        } else if (authResult == PegaServerRestTask.ACCESS_TOKEN_FAILURE) {
+            Log.e(TAG, "Access token failure!");
         }
     }
 
@@ -245,5 +234,19 @@ public class MainActivity extends AppCompatActivity {
                 launchPegaServerDataActivity();
             }
         });
+    }
+
+    private boolean verifyData() {
+        if (appData instanceof Map<?, ?>) {
+            Map<String, Object> mapAppdata = (Map<String, Object>) appData;
+            Set<String> keySet = mapAppdata.keySet();
+            for (String key : LifecycleLayoutInfo.LC_KEY_ORDER) {
+                if (!keySet.contains(key)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

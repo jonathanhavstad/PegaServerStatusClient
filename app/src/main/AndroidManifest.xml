@@ -24,7 +24,6 @@
             <intent-filter android:priority="10000">
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
                 <category android:name="com.cisco.pegaserverstatusclient" />
             </intent-filter>
         </receiver>
@@ -38,7 +37,8 @@
         </service>
         <service
             android:name=".background.services.PegaRegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false">
+        </service>
         <service
             android:name=".background.services.PegaServerListenerService"
             android:exported="false">
@@ -51,24 +51,21 @@
         </activity>
 
         <activity android:name=".activities.MainActivity" android:label="@string/main_activity_label">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".activities.LoginActivity"
             android:label="@string/login_activity_label"
             android:launchMode="singleTask"
-            android:taskAffinity=""
-            android:excludeFromRecents="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:taskAffinity="" >
         </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="946ab70809aa2a5191e4e4ae5e0bc45c68233a56"
-            />
+            android:value="946ab70809aa2a5191e4e4ae5e0bc45c68233a56" />
     </application>
 
 </manifest>

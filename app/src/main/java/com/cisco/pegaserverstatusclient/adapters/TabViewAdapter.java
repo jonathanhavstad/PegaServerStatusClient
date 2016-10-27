@@ -8,7 +8,6 @@ import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jonathanhavstad on 10/25/16.
