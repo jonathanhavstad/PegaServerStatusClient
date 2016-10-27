@@ -4,5 +4,22 @@
     <string name="title_activity_pega_server_data">PegaServerDataActivity</string>
     <string name="app_binder_data_bundle_key">app_binder_data</string>
     <string name="status_json_filename">status.json</string>
-    <string name="authorization_url">https://api.instagram.com</string>
+    <string name="authorization_url">https://sso.cisco.com/</string>
+    <string name="gcm_project_id">69223856286</string>
+    <string name="google_play_services_error_alert_title">Google Play Services Error</string>
+    <string name="google_play_services_error_alert_message">Google Play Services are unavailable, and application can not continue!</string>
+    <string name="url_empty_alert_message">"Please input a REST URL.  "</string>
+    <string name="username_empty_alert_message">"Please input a username.  "</string>
+    <string name="email_empty_alert_message">"Please input a password.  "</string>
+    <string name="input_entry_error_alert_title">Empty Fields</string>
+    <string name="authentication_error_alert_title">Authentication Failure</string>
+    <string name="authentication_error_alert_body">Invalid credentials.  Please try again.</string>
+    <string name="alert_dialog_confirm_btn_txt">OK</string>
+    <string name="info_binder_data_bundle_key">domain_binder_data</string>
+    <string name="current_page_bundle_key">current_page</string>
+    <string name="app_domain_data_bundle_key">app_domain_data</string>
+    <string name="default_user">defaultUser</string>
+    <string name="default_password">defaultPassword</string>
+    <string name="login_activity_label">Cisco Login</string>
+    <string name="main_activity_label">Cisco Pega Server Status</string>
 </resources>

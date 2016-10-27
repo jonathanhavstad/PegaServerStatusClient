@@ -2,14 +2,11 @@ package com.cisco.pegaserverstatusclient.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.HttpAuthHandler;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,6 +15,9 @@ import com.cisco.pegaserverstatusclient.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String HOME_PAGE = "http://www.cisco.com/";
@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String LOGIN_ACTION_URL = "https://sso.cisco.com/autho/login/loginaction.html";
     private static final String SSO_COOKIE_KEY = "SSOCookie";
 
+    private static final int HTTP_NOT_FOUND_CODE = 404;
     private static final int ACCESS_DATA_REQUEST_CODE = 1000;
     private static final String TAG = "LoginActivity";
 
@@ -45,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Fabric.with(this, new Crashlytics());
 
         ButterKnife.bind(this);
 
@@ -61,20 +64,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 String newUrl = null;
                 if (url.equals(LOGOUT_COMPLETE_URL)) {
-                    view.setVisibility(View.INVISIBLE);
                     newUrl = HOME_PAGE;
                 } else if (url.equals(HOME_PAGE)) {
                     newUrl = LOGIN_URL;
                 } else if (url.equals(SSO_LOGIN_URL)) {
                     beginLogin = true;
                     view.setVisibility(View.VISIBLE);
-                } else if (url.equals(LOGIN_ACTION_URL)) {
-
-                } else if (url.equals(LOGIN_REFERER_URL)) {
-                    if (beginLogin) {
-                        newUrl = LOGIN_REDIRECT_URL;
-                    }
-                } else if (url.equals(LOGIN_REDIRECT_URL)) {
+                } else if (beginLogin) {
                     view.setVisibility(View.INVISIBLE);
                     beginLogin = false;
                     launchMainActivity();
@@ -89,6 +85,12 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Log.d(TAG, "Received " + errorCode + " error loading page " + failingUrl);
+                super.onReceivedError(view, errorCode, description, failingUrl);
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "URL finished loading: " + url);
                 CookieManager.getInstance().setAcceptCookie(true);
@@ -97,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
         beginLogin = false;
 
+        webView.setVisibility(View.INVISIBLE);
         webView.loadUrl(LOGOUT_URL);
     }
 
@@ -127,35 +130,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private String getSSOCookie(String cookie) {
-        int startIndex = cookie.indexOf(SSO_COOKIE_KEY) + SSO_COOKIE_KEY.length() + 1;
-        int endIndex = cookie.length();
-        if (startIndex >= 0) {
-            int tempEndIndex = cookie.indexOf(";", startIndex);
-            if (tempEndIndex >= 0) {
-                endIndex = tempEndIndex;
+        if (cookie != null) {
+            int startIndex = cookie.indexOf(SSO_COOKIE_KEY) + SSO_COOKIE_KEY.length() + 1;
+            int endIndex = cookie.length();
+            if (startIndex >= 0) {
+                int tempEndIndex = cookie.indexOf(";", startIndex);
+                if (tempEndIndex >= 0) {
+                    endIndex = tempEndIndex;
+                }
             }
+            return cookie.substring(startIndex, endIndex);
         }
-        return cookie.substring(startIndex, endIndex);
+        return null;
     }
 
     private String setSSOCookie(String cookie, String newSSOCookie) {
-        String ssoCookie = getSSOCookie(cookie);
-        if (newSSOCookie.isEmpty()) {
-            if (cookie.contains(SSO_COOKIE_KEY)) {
-                int startIndex = cookie.indexOf(SSO_COOKIE_KEY);
-                return cookie.substring(0, startIndex);
+        if (cookie != null && newSSOCookie != null) {
+            String ssoCookie = getSSOCookie(cookie);
+            if (newSSOCookie.isEmpty()) {
+                if (cookie.contains(SSO_COOKIE_KEY)) {
+                    int startIndex = cookie.indexOf(SSO_COOKIE_KEY);
+                    return cookie.substring(0, startIndex);
+                }
+                return cookie;
+            } else if (ssoCookie != null && ssoCookie.length() > 0) {
+                return cookie.replaceAll(ssoCookie, newSSOCookie);
+            } else if (cookie.contains(SSO_COOKIE_KEY)) {
+                int startIndex = cookie.indexOf(SSO_COOKIE_KEY) + SSO_COOKIE_KEY.length() + 1;
+                if (startIndex < cookie.length()) {
+                    return cookie.substring(0, startIndex) + newSSOCookie + cookie.substring(startIndex);
+                } else {
+                    return cookie.substring(0, startIndex) + newSSOCookie;
+                }
             }
-            return cookie;
-        } else if (ssoCookie != null && ssoCookie.length() > 0) {
-            return cookie.replaceAll(ssoCookie, newSSOCookie);
-        } else if (cookie.contains(SSO_COOKIE_KEY)) {
-            int startIndex = cookie.indexOf(SSO_COOKIE_KEY) + SSO_COOKIE_KEY.length() + 1;
-            if (startIndex < cookie.length()) {
-                return cookie.substring(0, startIndex) + newSSOCookie + cookie.substring(startIndex);
-            } else {
-                return cookie.substring(0, startIndex) + newSSOCookie;
-            }
+            return cookie + SSO_COOKIE_KEY + "=" + newSSOCookie;
         }
-        return cookie + SSO_COOKIE_KEY + "=" + newSSOCookie;
+        return null;
     }
 }

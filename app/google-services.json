@@ -1,0 +1,275 @@
+{
+  "project_info": {
+    "project_number": "69223856286",
+    "firebase_url": "https://cisco-project-2016.firebaseio.com",
+    "project_id": "cisco-project-2016",
+    "storage_bucket": "cisco-project-2016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69223856286:android:caa45b1602f84eba",
+        "android_client_info": {
+          "package_name": "com.elkimanteam.mixpanelexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69223856286-adse776q8i7semvc6hnu4agmjh7e66cj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elkimanteam.mixpanelexample",
+            "certificate_hash": "7127571C2C5D349A175508BDCEFB36C5670947F5"
+          }
+        },
+        {
+          "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kXU0i6Dp-yVoSgVawMX_DiRQ3bcpUrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69223856286:android:0d62f9a9762f0b4f",
+        "android_client_info": {
+          "package_name": "com.elkimanteam.pushbotexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69223856286-qmir7tj87kacl0v3va7i6upgsmesucgg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elkimanteam.pushbotexample",
+            "certificate_hash": "7127571C2C5D349A175508BDCEFB36C5670947F5"
+          }
+        },
+        {
+          "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kXU0i6Dp-yVoSgVawMX_DiRQ3bcpUrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69223856286:android:7832165265a3f6c8",
+        "android_client_info": {
+          "package_name": "com.ciscozensarpegateam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69223856286-5hapm3eqjerhm67l1js49o51uknb7mfq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ciscozensarpegateam",
+            "certificate_hash": "7127571C2C5D349A175508BDCEFB36C5670947F5"
+          }
+        },
+        {
+          "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kXU0i6Dp-yVoSgVawMX_DiRQ3bcpUrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69223856286:android:3d71707f3239aeff",
+        "android_client_info": {
+          "package_name": "com.ciscozensarpegateam.firebasepushexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69223856286-fir6e8h1uniivr73j4fhicjo9eo1d14c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ciscozensarpegateam.firebasepushexample",
+            "certificate_hash": "7127571C2C5D349A175508BDCEFB36C5670947F5"
+          }
+        },
+        {
+          "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kXU0i6Dp-yVoSgVawMX_DiRQ3bcpUrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69223856286:android:f36173e948059ccb",
+        "android_client_info": {
+          "package_name": "gcm.play.android.samples.com.gcmquickstart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69223856286-o6lialt39q0nelqkallshj61laqbolab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gcm.play.android.samples.com.gcmquickstart",
+            "certificate_hash": "7127571C2C5D349A175508BDCEFB36C5670947F5"
+          }
+        },
+        {
+          "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kXU0i6Dp-yVoSgVawMX_DiRQ3bcpUrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69223856286:android:9fea800198916136",
+        "android_client_info": {
+          "package_name": "com.cisco.pegaserverstatusclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69223856286-mmtnk4ivcadkqevkh8t41gt8917g8j4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cisco.pegaserverstatusclient",
+            "certificate_hash": "7127571C2C5D349A175508BDCEFB36C5670947F5"
+          }
+        },
+        {
+          "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kXU0i6Dp-yVoSgVawMX_DiRQ3bcpUrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69223856286-8ho6h3otrh3i7anpvrtt0ii0f3i4kg0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

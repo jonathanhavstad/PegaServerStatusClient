@@ -1,0 +1,74 @@
+{
+	“root”: {
+		“attributes”: {
+			“type”: “linear_layout”,
+			“orientation”: “horizontal”,
+			“width”: “match_parent”,
+			“height”: “match_parent”
+		},
+		“hostname”: {
+			“attributes”: {
+				“type”: “linear_layout”,
+				“orientation”: “vertical”,
+				“width”: “match_parent”,
+				“height”: “match_parent”
+			},
+			“children”: [
+				“hostname_list”: {
+					“attributes”: {
+						“width”: “match_parent”,
+						“height”: “match_parent”
+					}
+				}
+			]
+		},
+		“ip_address”: {
+			“attributes”: {
+				“type”: “linear_layout”,
+				“orientation”: “vertical”,
+				“width”: “match_parent”,
+				“height”: “match_parent”
+			},
+			“children”: [
+				“ip_address_list”: {
+					“attributes”: {
+						“width”: “match_parent”,
+						“height”: “match_parent”
+					}
+				}
+			]
+		},
+		“application_name”: {
+			“attributes”: {
+				“type”: “linear_layout”,
+				“orientation”: “vertical”,
+				“width”: “match_parent”,
+				“height”: “match_parent”
+			},
+			“children”: [
+				“application_name_list”: {
+					“attributes”: {
+						“width”: “match_parent”,
+						“height”: “match_parent”
+					}
+				}
+			]
+		},
+		“host_up_down”: {
+			“attributes”: {
+				“type”: “linear_layout”,
+				“orientation”: “vertical”,
+				“width”: “match_parent”,
+				“height”: “match_parent”
+			},
+			“children”: [
+				“host_up_down_list”: {
+					“attributes”: {
+						“width”: “match_parent”,
+						“height”: “match_parent”
+					}
+				}
+			]
+		}
+	}
+}

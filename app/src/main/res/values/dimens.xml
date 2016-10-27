@@ -3,4 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="root_element_horizontal_padding">8dp</dimen>
+    <dimen name="child_element_horizontal_padding">16dp</dimen>
+    <dimen name="root_element_vertical_padding">8dp</dimen>
+    <dimen name="child_element_vertical_padding">8dp</dimen>
+    <dimen name="pega_drawer_width">240dp</dimen>
 </resources>

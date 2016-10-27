@@ -1,0 +1,13 @@
+{
+     "AppId" : "iBPM Monitor",
+    "AppName" : "Application to monitor iBPM Apps",
+    "Action" : "",
+    "Screen" : "Page1",
+    "Layout" : "GRID",
+    "Method" : "PUSH",
+    "URL" : "",
+    "HeaderColumn" : "Domain, Status",
+    "HeaderDesc" : "Domain, Status"
+}
+
+I/RegistrationService: Received token: e5bL4TWTedc:APA91bEkl5dbTa4op1sXY9S-R8DJieJ6T-gu1tca4KAQu4eRLk_jKxt1CwSjRzXdXvA_2Pp1K8THkoj0feVyLaNdcrsOdSSLV86ocfmtlGgs0KhQl_vtWtNjS6cJdeqcr_1bGEFAZwrv

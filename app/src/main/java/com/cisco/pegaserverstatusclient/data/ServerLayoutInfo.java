@@ -5,4 +5,15 @@ package com.cisco.pegaserverstatusclient.data;
  */
 
 public class ServerLayoutInfo extends BaseLayoutInfo {
+    public static final String SERVER_JSON_KEY = "HOSTS";
+
+    private String friendlyName;
+
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
 }

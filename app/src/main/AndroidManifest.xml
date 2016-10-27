@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ciscozensarpegateam.pegaserverstatusclient">
+    package="com.cisco.pegaserverstatusclient">
 
+    <permission
+        android:name="com.cisco.pegaserverstatusclient.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.cisco.pegaserverstatusclient.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -10,16 +17,58 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter android:priority="10000">
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.cisco.pegaserverstatusclient" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".background.services.PegaInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".background.services.PegaRegistrationIntentService"
+            android:exported="false"></service>
+        <service
+            android:name=".background.services.PegaServerListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".activities.PegaServerDataActivity" android:label="@string/main_activity_label">
+        </activity>
+
+        <activity android:name=".activities.MainActivity" android:label="@string/main_activity_label">
+        </activity>
+
+        <activity android:name=".activities.LoginActivity"
+            android:label="@string/login_activity_label"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.PegaServerDataActivity"
-            android:label="@string/title_activity_pega_server_data"></activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="946ab70809aa2a5191e4e4ae5e0bc45c68233a56"
+            />
     </application>
 
 </manifest>
