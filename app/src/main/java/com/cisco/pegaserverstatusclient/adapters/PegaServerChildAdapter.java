@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
+import com.cisco.pegaserverstatusclient.listeners.OnItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,22 +26,19 @@ public class PegaServerChildAdapter extends
     private List<String[]> viewHolderData = new ArrayList<>();
     private OnItemSelectedListener onItemSelectedListener;
     private int itemCount;
-    private String topLevelHeaderName;
+    private String parentKey;
     private List<String> headers;
-
-    public interface OnItemSelectedListener {
-        void sendData(String key, Object data);
-    }
+    private boolean listOnlySelectableItems;
 
     public PegaServerChildAdapter(
             OnItemSelectedListener onItemSelectedListener,
             Object appData,
-            String topLevelHeaderName,
+            String parentKey,
             List<String> headers) {
         this.onItemSelectedListener = onItemSelectedListener;
         this.appData = appData;
         this.itemCount = 0;
-        this.topLevelHeaderName = topLevelHeaderName;
+        this.parentKey = parentKey;
         this.headers = headers;
         populateViewHolderDataFromMap();
     }
@@ -50,7 +48,7 @@ public class PegaServerChildAdapter extends
             Map<String, Object> mapData = (Map<String, Object>) appData;
             itemCount = mapData.size();
             for (String key : mapData.keySet()) {
-                if (mapData.get(key) instanceof String) {
+                if (mapData.get(key) instanceof String && !listOnlySelectableItems) {
                     String[] value = new String[2];
                     value[0] = key;
                     value[1] = (String) mapData.get(key);
@@ -61,7 +59,7 @@ public class PegaServerChildAdapter extends
                     viewHolderData.add(value);
                 }
             }
-        } else if (appData instanceof List<?>) {
+        } else if (appData instanceof List<?> && !listOnlySelectableItems) {
             List<String> listData = (List<String>) appData;
             itemCount = listData.size();
             for (String datum : listData) {
@@ -106,7 +104,7 @@ public class PegaServerChildAdapter extends
                         @Override
                         public void onClick(View v) {
                             if (onItemSelectedListener != null) {
-                                onItemSelectedListener.sendData(keyValue, mapValue);
+                                onItemSelectedListener.receiveData(parentKey, keyValue, mapValue);
                             }
                         }
                     });
@@ -147,6 +145,14 @@ public class PegaServerChildAdapter extends
             }
         }
         return null;
+    }
+
+    public boolean isListOnlySelectableItems() {
+        return listOnlySelectableItems;
+    }
+
+    public void setListOnlySelectableItems(boolean listOnlySelectableItems) {
+        this.listOnlySelectableItems = listOnlySelectableItems;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

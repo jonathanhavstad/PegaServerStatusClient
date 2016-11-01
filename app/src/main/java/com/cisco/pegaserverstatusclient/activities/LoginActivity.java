@@ -16,13 +16,26 @@ import com.cisco.pegaserverstatusclient.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.cisco.pegaserverstatusclient.background.services.PegaRegistrationIntentService;
+import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
+import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+
     private static final String HOME_PAGE = "http://www.cisco.com/";
     private static final String LOGIN_URL = "https://www.cisco.com/c/login/index.html?referer=/c/en/us/index.html";
 //    private static final String LOGIN_URL = "https://ibpm.cisco.com/eabv/demo/login";
@@ -43,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int HTTP_NOT_FOUND_CODE = 404;
     private static final int ACCESS_DATA_REQUEST_CODE = 1000;
-    private static final String TAG = "LoginActivity";
 
     @BindView(R.id.login_web_view)
     WebView webView;
@@ -84,15 +96,55 @@ public class LoginActivity extends AppCompatActivity {
                     beginAuthentication = false;
                     view.setVisibility(View.VISIBLE);
                 } else if (beginLogin) {
-                    beginAuthentication = true;
-                    beginLogin = false;
-                } else if (beginAuthentication && url.equals(LOGIN_FINISHED_URL)) {
-                    view.setVisibility(View.INVISIBLE);
-                    beginAuthentication = false;
-                    if (!loadUrlFromIntent) {
-                        statusUrl = url;
-                    }
-                    launchMainActivity(statusUrl);
+                    final String statusUrl = url;
+                    String baseUrl = PegaServerRestTask.extractBaseUrl(url);
+                    String pathUrl = PegaServerRestTask.extractPathUrl(url);
+                    Retrofit retrofit = new Retrofit
+                            .Builder()
+                            .baseUrl(baseUrl)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    IBPMStatusService service = retrofit.create(IBPMStatusService.class);
+                    service.getStatusWithJsonArray(pathUrl).enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            try {
+                                Log.d(TAG, "Received response");
+                                if (response != null &&
+                                        response.body() != null &&
+                                        response.body().isJsonArray()) {
+                                    launchMainActivity(statusUrl);
+                                    beginLogin = false;
+                                } else {
+
+                                }
+                            } catch (JsonSyntaxException e) {
+                                Log.d(TAG, "Received JSON error: " + e.toString());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            Log.d(TAG, "Received JSON error: " + t.toString());
+                        }
+                    });
+                    service.getStatusWithJsonObject(pathUrl).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Log.d(TAG, "Received response");
+                            if (response != null &&
+                                    response.body() != null &&
+                                    (response.body().isJsonObject())) {
+                                launchMainActivity(statusUrl);
+                                beginLogin = false;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                        }
+                    });
                 }
 
                 if (newUrl != null) {
@@ -123,6 +175,9 @@ public class LoginActivity extends AppCompatActivity {
 
         webView.setVisibility(View.INVISIBLE);
         webView.loadUrl(LOGOUT_URL);
+
+        Intent serviceIntent = new Intent(this, PegaRegistrationIntentService.class);
+        startService(serviceIntent);
     }
 
     private void enableSpecificWebSettings() {
@@ -197,9 +252,9 @@ public class LoginActivity extends AppCompatActivity {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 Set<String> extraKeys = extras.keySet();
-                if (extraKeys.contains("url")) {
+                if (extraKeys.contains(getString(R.string.url_bundle_key))) {
                     loadUrlFromIntent = true;
-                    statusUrl = extras.getString("url");
+                    statusUrl = extras.getString(getString(R.string.url_bundle_key));
                 }
             }
         }

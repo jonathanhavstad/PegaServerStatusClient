@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
+import java.util.ArrayList;
 
 import icepick.Icepick;
 import icepick.State;
@@ -13,17 +13,17 @@ import icepick.State;
  * Created by jonathanhavstad on 10/25/16.
  */
 
-public abstract class PegaBaseFragment extends Fragment {
+public abstract class PegaBaseFragment<T> extends Fragment {
     @State
     String friendlyName;
 
+    @State
+    ArrayList<String> keyPath;
+
+    protected T appData;
+
     public String getFriendlyName() {
         return friendlyName;
-    }
-
-    public interface OnSendDataListener {
-        void setPageTitle(String title);
-        void sendData(String friendlyName, PegaServerNetworkBinder childBinder);
     }
 
     @Override
@@ -37,4 +37,17 @@ public abstract class PegaBaseFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
+
+    public Object getAppData() {
+        return appData;
+    }
+
+    public String getKey() {
+        if (keyPath != null && keyPath.size() > 0) {
+            return keyPath.get(keyPath.size() - 1);
+        }
+        return null;
+    }
+
+    public abstract boolean notifyAppDataChanged(Object appData);
 }

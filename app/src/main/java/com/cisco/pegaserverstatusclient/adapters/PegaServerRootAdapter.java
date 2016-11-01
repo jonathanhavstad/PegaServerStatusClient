@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.decoractors.DividerItemDecoration;
+import com.cisco.pegaserverstatusclient.listeners.OnItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,11 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public class PegaServerRootAdapter extends RecyclerView.Adapter<PegaServerRootAdapter.ViewHolder> {
     private Object appData;
     private List<String[]> viewHolderData = new ArrayList<>();
-    private PegaServerChildAdapter.OnItemSelectedListener onItemSelectedListener;
+    private OnItemSelectedListener onItemSelectedListener;
     private int itemCount;
     private DividerItemDecoration dividerItemDecoration;
 
-    public PegaServerRootAdapter(PegaServerChildAdapter.OnItemSelectedListener onItemSelectedListener,
+    public PegaServerRootAdapter(OnItemSelectedListener onItemSelectedListener,
                                  Object appData,
                                  DividerItemDecoration dividerItemDecoration) {
         this.onItemSelectedListener = onItemSelectedListener;
@@ -86,7 +87,10 @@ public class PegaServerRootAdapter extends RecyclerView.Adapter<PegaServerRootAd
             String[] appValues = viewHolderData.get(position);
             Object mapValue = mapAppData.get(appValues[0]);
             PegaServerChildAdapter adapter =
-                    new PegaServerChildAdapter(onItemSelectedListener, mapValue, null, null);
+                    new PegaServerChildAdapter(onItemSelectedListener,
+                            mapValue,
+                            appValues[0],
+                            null);
             holder.recyclerView.setAdapter(adapter);
         }
         String[] viewHolderValue = viewHolderData.get(position);

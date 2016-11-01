@@ -1,8 +1,11 @@
 package com.cisco.pegaserverstatusclient.rest.services;
 
-import okhttp3.ResponseBody;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Url;
 
 /**
@@ -10,6 +13,10 @@ import retrofit2.http.Url;
  */
 
 public interface IBPMStatusService {
+    @Headers("Cache-Control: no-cache")
     @GET
-    Call<ResponseBody> getStatus(@Url String path);
+    Call<JsonArray> getStatusWithJsonArray(@Url String path);
+    @Headers("Cache-Control: no-cache")
+    @GET
+    Call<JsonObject> getStatusWithJsonObject(@Url String path);
 }

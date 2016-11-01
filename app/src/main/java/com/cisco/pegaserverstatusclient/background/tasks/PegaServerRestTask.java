@@ -13,6 +13,8 @@ import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
 import com.cisco.pegaserverstatusclient.rest.services.OauthAccessService;
 import com.cisco.pegaserverstatusclient.rest.services.OauthRedirectService;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Stack;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -35,6 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -46,13 +50,13 @@ import rx.schedulers.Schedulers;
  */
 
 public class PegaServerRestTask {
+    private static final String TAG = "PegaServerRestTask";
+
     public static final int AUTH_FAILURE = 0;
     public static final int AUTH_SUCCESS = 1;
     public static final int DATA_LOAD_SUCCESS = 2;
     public static final int DATA_LOAD_FAILURE = 3;
     public static final int ACCESS_TOKEN_FAILURE = -1;
-
-    private static final String TAG = "PegaServerRestTask";
 
     private static final String CSRF_TOKEN_KEY = "csrftoken=";
 
@@ -96,7 +100,7 @@ public class PegaServerRestTask {
                     }
                     JSONArray jsonArray = new JSONArray(sb.toString());
                     parseJsonArray(appData, null, jsonArray);
-                    sendAuthStatus(DATA_LOAD_SUCCESS);
+                    sendDataLoadStatus(DATA_LOAD_SUCCESS);
                 } catch (JSONException | IOException e) {
                     Log.e(TAG, e.toString());
                 } finally {
@@ -158,9 +162,9 @@ public class PegaServerRestTask {
                         subscribeToAuthObservable();
                         authObservable.connect();
                         if (!authSuccessful) {
-                            sendAuthStatus(AUTH_FAILURE);
+                            sendDataLoadStatus(AUTH_FAILURE);
                         } else {
-                            sendAuthStatus(AUTH_SUCCESS);
+                            sendDataLoadStatus(AUTH_SUCCESS);
                         }
                     }
 
@@ -194,7 +198,7 @@ public class PegaServerRestTask {
                     subscribeToAuthObservable();
                     authObservable.connect();
                     if (authSuccessful && !haveAccessToken) {
-                        sendAuthStatus(ACCESS_TOKEN_FAILURE);
+                        sendDataLoadStatus(ACCESS_TOKEN_FAILURE);
                     }
                 }
 
@@ -296,7 +300,6 @@ public class PegaServerRestTask {
     }
 
     public void loadStatusFromFile(Action1<Integer> dataSubscriber) {
-
         this.dataSubscriber = dataSubscriber;
         loadFromFile(context, context.getString(R.string.status_json_filename));
     }
@@ -304,34 +307,68 @@ public class PegaServerRestTask {
     public void loadStatusFromNetwork(String url, Action1<Integer> dataSubscriber) {
         this.dataSubscriber = dataSubscriber;
         if (url != null) {
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(extractBaseUrl(url)).build();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(extractBaseUrl(url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
             IBPMStatusService ibpmStatusService = retrofit.create(IBPMStatusService.class);
-            ibpmStatusService.getStatus(extractPathUrl(url)).enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    JSONArray jsonArray = null;
-                    try {
-                        jsonArray = new JSONArray(response.body().string());
-                        parseJsonArray(appData, null, jsonArray);
-                        sendAuthStatus(DATA_LOAD_SUCCESS);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        sendAuthStatus(DATA_LOAD_FAILURE);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        sendAuthStatus(DATA_LOAD_FAILURE);
-                    }
-                }
+            ibpmStatusService
+                    .getStatusWithJsonArray(extractPathUrl(url))
+                    .enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call,
+                                               Response<JsonArray> response) {
+                            try {
+                                if (response.body() != null) {
+                                    JSONArray jsonArray = new JSONArray(response.body().toString());
+                                    parseJsonArray(appData, null, jsonArray);
+                                    sendDataLoadStatus(DATA_LOAD_SUCCESS);
+                                } else {
+                                    Log.e(TAG, "Response body was null!");
+                                    sendDataLoadStatus(DATA_LOAD_FAILURE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                sendDataLoadStatus(DATA_LOAD_FAILURE);
+                            }
+                        }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    sendAuthStatus(DATA_LOAD_FAILURE);
-                }
-            });
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                            Log.e(TAG, "Network failure: " + t.toString());
+                            sendDataLoadStatus(DATA_LOAD_FAILURE);
+                        }
+                    });
+            ibpmStatusService
+                    .getStatusWithJsonObject(extractPathUrl(url))
+                    .enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            try {
+                                if (response.body() != null) {
+                                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                                    parseJsonObj(appData, jsonObject);
+                                    sendDataLoadStatus(DATA_LOAD_SUCCESS);
+                                } else {
+                                    Log.e(TAG, "Response body was null!");
+                                    sendDataLoadStatus(DATA_LOAD_FAILURE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                sendDataLoadStatus(DATA_LOAD_FAILURE);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.e(TAG, "Network failure: " + t.toString());
+                            sendDataLoadStatus(DATA_LOAD_FAILURE);
+                        }
+                    });
         }
     }
 
-    private String extractBaseUrl(String url) {
+    public static String extractBaseUrl(String url) {
         if (url != null) {
             try {
                 URI uri = new URI(url);
@@ -343,7 +380,7 @@ public class PegaServerRestTask {
         return url;
     }
 
-    private String extractPathUrl(String url) {
+    public static String extractPathUrl(String url) {
         if (url != null) {
             try {
                 URI uri = new URI(url);
@@ -413,7 +450,7 @@ public class PegaServerRestTask {
         return values;
     }
 
-    private void sendAuthStatus(int authStatus) {
+    private void sendDataLoadStatus(int authStatus) {
         if (dataSubscriber != null) {
             Observable<Integer> observable = Observable
                     .just(authStatus)
@@ -422,6 +459,7 @@ public class PegaServerRestTask {
             observable.subscribe(dataSubscriber);
         }
     }
+
     public void loadServerInfo(Context context,
                                String url,
                                Action1<BaseLayoutInfo> layoutSubscriber) {

@@ -17,6 +17,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 public class PegaServerListenerService extends GcmListenerService {
     private static final String TAG = "ListenerService";
+
     private static final int INITIAL_NOTIFICATION_ID = 1000;
     private int notificationId;
 

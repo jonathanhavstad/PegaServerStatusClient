@@ -26,4 +26,9 @@
     <string name="load_from_url_bundle_key">load_from_url</string>
     <string name="data_load_failure_alert_title">Data Load Failure</string>
     <string name="data_load_failure_alert_body">"Failed to load data from: "</string>
+    <string name="url_bundle_key">url</string>
+    <string name="default_url">http://www.elkimanteam.com/demo/status.json</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Close</string>
+    <string name="open_nav_drawer">Open</string>
 </resources>

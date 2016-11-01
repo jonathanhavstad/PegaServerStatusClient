@@ -21,5 +21,4 @@
         android:id="@+id/rest_data_list">
 
     </android.support.v7.widget.RecyclerView>
-
 </LinearLayout>

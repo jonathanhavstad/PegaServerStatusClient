@@ -1,7 +1,10 @@
 package com.cisco.pegaserverstatusclient.activities;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AlertDialog;
@@ -15,9 +18,11 @@ import android.widget.ProgressBar;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.background.services.PegaRegistrationIntentService;
+import com.cisco.pegaserverstatusclient.background.services.PegaServerRefreshService;
 import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
 import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
 import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
+import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.LifecycleLayoutInfo;
 import com.cisco.pegaserverstatusclient.parcelables.BaseInfoParcelable;
@@ -38,8 +43,11 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
     private static final int PLAY_SERVICE_RESOLUTION_REQUEST = 10000;
-    private static final int PEGA_DISPLAY_DATA_REQUEST = 2000;
+
+    public  static final int PEGA_DISPLAY_DATA_REQUEST = 2000;
+    public static final int RESULT_RELOAD_DATA = 2000;
 
     @BindView(R.id.username_view)
     EditText usernameView;
@@ -67,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
     private String statusUrl;
 
+    private ServiceConnection connection;
+
+    private Action1<Map<String, Object>> subscriber;
+
+    private SubscriberBinder binder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,19 +92,31 @@ public class MainActivity extends AppCompatActivity {
 
         verifyGooglePlayServices();
         startInstanceIDService();
+
+        parseIntent();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        parseIntent();
         getData(statusUrl);
+        startServerRefreshService();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopServerRefreshService();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PEGA_DISPLAY_DATA_REQUEST) {
-            finish();
+            if (resultCode == RESULT_RELOAD_DATA) {
+
+            } else {
+                finish();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
@@ -151,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
                 PegaServerDataActivity.class);
         PegaServerNetworkBinder appBinder = new PegaServerNetworkBinder();
         appBinder.setAppData(appData);
+        appBinder.setDrawerData(appData);
+        appBinder.setKeyPath(null);
         PegaServerNetworkParcelable appParcelable = new PegaServerNetworkParcelable();
         appParcelable.setBinder(appBinder);
         intent.putExtra(getString(R.string.app_binder_data_bundle_key), appParcelable);
@@ -226,27 +254,44 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadDomainInfo() {
-        task.loadDomainInfo(this, "", new Action1<BaseLayoutInfo>() {
-            @Override
-            public void call(BaseLayoutInfo baseLayoutInfo) {
-                MainActivity.this.baseLayoutInfo = baseLayoutInfo;
-                launchPegaServerDataActivity();
-            }
-        });
+    private void loadLayoutInfo() {
+        baseLayoutInfo = new LifecycleLayoutInfo();
     }
 
     private boolean verifyData() {
-        if (appData instanceof Map<?, ?>) {
-            Map<String, Object> mapAppdata = (Map<String, Object>) appData;
-            Set<String> keySet = mapAppdata.keySet();
-            for (String key : LifecycleLayoutInfo.LC_KEY_ORDER) {
-                if (!keySet.contains(key)) {
-                    return false;
-                }
+        baseLayoutInfo = new LifecycleLayoutInfo();
+        return true;
+    }
+
+    private void startServerRefreshService() {
+        subscriber = new Action1<Map<String, Object>>() {
+            @Override
+            public void call(Map<String, Object> stringObjectMap) {
+                verifyData();
             }
-            return true;
-        }
-        return false;
+        };
+
+        connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                binder = ((SubscriberBinder) service);
+                binder.setAppData(appData);
+                binder.addSubscriber(subscriber);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        Intent intent = new Intent(this, PegaServerRefreshService.class);
+        intent.putExtra(getString(R.string.status_url_bundle_key), statusUrl);
+        bindService(intent, connection, BIND_AUTO_CREATE);
+        startService(intent);
+    }
+
+    private void stopServerRefreshService() {
+        binder.removeSubscriber(subscriber);
+        unbindService(connection);
     }
 }

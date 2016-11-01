@@ -9,10 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.adapters.PegaServerChildAdapter;
 import com.cisco.pegaserverstatusclient.adapters.PegaServerRootAdapter;
 import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 import com.cisco.pegaserverstatusclient.decoractors.DividerItemDecoration;
+import com.cisco.pegaserverstatusclient.listeners.OnItemSelectedListener;
+import com.cisco.pegaserverstatusclient.listeners.OnUpdateDataListener;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,17 +29,25 @@ public class PegaChildFragment extends PegaBaseFragment {
     @BindView(R.id.rest_data_list)
     RecyclerView restDataList;
 
-    private Object appData;
-    private OnSendDataListener onSendDataListener;
     private PegaServerRootAdapter adapter;
+    private OnUpdateDataListener onUpdateDataListener;
+    private OnItemSelectedListener onItemSelectedListener;
 
     public static PegaChildFragment newInstance(Context context,
-                                                 String friendlyName,
-                                                 Object fragmentData) {
+                                                String friendlyName,
+                                                String parentKey,
+                                                String key,
+                                                ArrayList<String> keyPath,
+                                                Object fragmentData) {
         Bundle args = new Bundle();
         args.putString(context.getString(R.string.app_domain_data_bundle_key), friendlyName);
         PegaServerNetworkBinder binder = new PegaServerNetworkBinder();
         binder.setAppData(fragmentData);
+        if (parentKey != null) {
+            keyPath.add(parentKey);
+        }
+        keyPath.add(key);
+        binder.setKeyPath(keyPath);
         args.putBinder(context.getString(R.string.app_binder_data_bundle_key), binder);
         PegaChildFragment fragment = new PegaChildFragment();
         fragment.setArguments(args);
@@ -54,6 +66,7 @@ public class PegaChildFragment extends PegaBaseFragment {
                     (PegaServerNetworkBinder) args.getBinder(getString(R.string.app_binder_data_bundle_key));
             if (binder != null) {
                 appData = binder.getAppData();
+                keyPath = binder.getKeyPath();
             }
         }
     }
@@ -69,14 +82,16 @@ public class PegaChildFragment extends PegaBaseFragment {
 
         ButterKnife.bind(this, rootView);
 
-        final PegaServerChildAdapter.OnItemSelectedListener onItemSelectedListener =
-                new PegaServerChildAdapter.OnItemSelectedListener() {
+        onItemSelectedListener =
+                new OnItemSelectedListener() {
                     @Override
-                    public void sendData(String key, Object data) {
-                        if (onSendDataListener != null) {
+                    public void receiveData(String parentKey, String key, Object data) {
+                        if (onUpdateDataListener != null) {
                             PegaServerNetworkBinder childBinder = new PegaServerNetworkBinder();
                             childBinder.setAppData(data);
-                            onSendDataListener.sendData(key, childBinder);
+                            childBinder.setParentKey(parentKey);
+                            childBinder.setKeyPath(keyPath);
+                            onUpdateDataListener.sendData(key, childBinder);
                         }
                     }
                 };
@@ -93,13 +108,42 @@ public class PegaChildFragment extends PegaBaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnSendDataListener) {
-            onSendDataListener = (OnSendDataListener) context;
+        if (context instanceof OnUpdateDataListener) {
+            onUpdateDataListener = (OnUpdateDataListener) context;
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public boolean notifyAppDataChanged(Object appData) {
+        boolean validFragment = true;
+        if (keyPath != null) {
+            Map<String, Object> mapAppData = (Map<String, Object>) appData;
+            Object value = null;
+            for (int i = 0; i < keyPath.size(); i++) {
+                value = mapAppData.get(keyPath.get(i));
+                if (value == null) {
+                    validFragment = false;
+                } else if (value instanceof Map<?, ?>) {
+                    mapAppData = (Map<String, Object>) value;
+                }
+            }
+
+            if (value != null && validFragment) {
+                this.appData = value;
+            }
+        }
+
+        if (this.isVisible()) {
+            adapter = new PegaServerRootAdapter(onItemSelectedListener,
+                    this.appData,
+                    new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+            restDataList.swapAdapter(adapter, false);
+        }
+        return validFragment;
     }
 }
