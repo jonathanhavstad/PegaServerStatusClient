@@ -8,6 +8,6 @@ import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 
 public interface OnUpdateDataListener {
     void setPageTitle(String title);
-    void sendData(String friendlyName, PegaServerNetworkBinder childBinder);
+    void initPegaDataActivity(String friendlyName, PegaServerNetworkBinder childBinder);
     void requestRefresh();
 }

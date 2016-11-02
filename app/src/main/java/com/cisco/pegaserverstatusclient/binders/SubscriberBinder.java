@@ -3,6 +3,7 @@ package com.cisco.pegaserverstatusclient.binders;
 import android.os.Binder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import rx.functions.Action1;
 
 public class SubscriberBinder extends Binder {
     private Map<String, Object> appData;
+    private long lastRefreshTime;
 
     public interface OnForceRefresh {
         void forceRefresh();
@@ -49,5 +51,13 @@ public class SubscriberBinder extends Binder {
 
     public void setAppData(Map<String, Object> appData) {
         this.appData = appData;
+    }
+
+    public void updateLastRefreshTime() {
+        lastRefreshTime = System.currentTimeMillis();
+    }
+
+    public long getLastRefreshTime() {
+        return lastRefreshTime;
     }
 }

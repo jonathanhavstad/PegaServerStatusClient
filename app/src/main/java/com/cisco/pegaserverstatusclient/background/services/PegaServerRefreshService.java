@@ -23,13 +23,13 @@ import rx.schedulers.Schedulers;
 
 public class PegaServerRefreshService extends IntentService {
     private static final String TAG = "PegaRefreshService";
-    private static final int REFRESH_INTERVAL = 10000;
 
     private PegaServerRestTask task;
     private SubscriberBinder binder;
     private String statusUrl;
     private boolean shouldExecute;
     private Map<String, Object> appData;
+    private int refreshInterval;
 
     public PegaServerRefreshService() {
         super(PegaServerRefreshService.class.getCanonicalName());
@@ -39,6 +39,12 @@ public class PegaServerRefreshService extends IntentService {
                 refreshData();
             }
         });
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        refreshInterval = getResources().getInteger(R.integer.data_refresh_timeout_ms);
     }
 
     @Nullable
@@ -51,14 +57,11 @@ public class PegaServerRefreshService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             statusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
-            if (statusUrl == null) {
-                statusUrl = getString(R.string.default_url);
-            }
             shouldExecute = true;
         }
         while (shouldExecute) {
             try {
-                Thread.sleep(REFRESH_INTERVAL);
+                Thread.sleep(refreshInterval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -84,6 +87,7 @@ public class PegaServerRefreshService extends IntentService {
                 @Override
                 public void call(Integer loadStatus) {
                     if (loadStatus == PegaServerRestTask.DATA_LOAD_SUCCESS) {
+                        binder.updateLastRefreshTime();
                         binder.subscribeObservable(initObservable(appData));
                     } else if (loadStatus == PegaServerRestTask.DATA_LOAD_FAILURE) {
                         Log.e(TAG, "Failed to load data from URL: " + statusUrl + "!");

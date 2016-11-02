@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                            Log.d(TAG, "Received JSON error: " + t.toString());
                         }
                     });
                 }
@@ -153,12 +153,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     super.onPageStarted(view, url, favicon);
                 }
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Log.d(TAG, "Received " + errorCode + " error loading page " + failingUrl);
-                super.onReceivedError(view, errorCode, description, failingUrl);
             }
 
             @Override

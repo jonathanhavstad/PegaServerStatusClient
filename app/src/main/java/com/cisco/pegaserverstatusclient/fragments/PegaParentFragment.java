@@ -85,7 +85,7 @@ public class PegaParentFragment extends PegaBaseFragment {
                             PegaServerNetworkBinder childBinder = new PegaServerNetworkBinder();
                             childBinder.setAppData(data);
                             childBinder.setKeyPath(keyPath);
-                            onUpdateDataListener.sendData(key, childBinder);
+                            onUpdateDataListener.initPegaDataActivity(key, childBinder);
                         }
                     }
                 };

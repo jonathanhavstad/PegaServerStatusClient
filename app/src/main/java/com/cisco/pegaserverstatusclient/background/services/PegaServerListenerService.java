@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
+import com.cisco.pegaserverstatusclient.activities.LoginActivity;
 import com.google.android.gms.gcm.GcmListenerService;
 
 /**
@@ -28,12 +29,15 @@ public class PegaServerListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String s, Bundle bundle) {
         Log.d(TAG, "Received message: " + s);
-        Bundle notificationBundle = bundle.getBundle("notification");
+        Bundle notificationBundle = bundle.getBundle(getString(R.string.notification_bundle_key));
         if (notificationBundle != null) {
-            String title = notificationBundle.getString("title");
-            String body = notificationBundle.getString("body");
-            String icon = notificationBundle.getString("icon");
-            String url = bundle.getString("url");
+            String title =
+                    notificationBundle.getString(getString(R.string.notification_title_bundle_key));
+            String body =
+                    notificationBundle.getString(getString(R.string.notification_body_bundle_key));
+            String icon =
+                    notificationBundle.getString(getString(R.string.notification_icon_bundle_key));
+            String url = bundle.getString(getString(R.string.notification_push_data_url_bundle_key));
             sendNotification(title, body, url);
         }
     }
@@ -44,9 +48,7 @@ public class PegaServerListenerService extends GcmListenerService {
                         .setSmallIcon(R.drawable.ic_add_alert_black_24dp)
                         .setContentTitle(title)
                         .setContentText(body);
-        Intent activityIntent = new Intent();
-        activityIntent.setAction("android.app.action.MAIN");
-        activityIntent.addCategory("android.intent.category.LAUNCHER");
+        Intent activityIntent = new Intent(this, LoginActivity.class);
         activityIntent.putExtra(getString(R.string.status_url_bundle_key), url);
         activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);

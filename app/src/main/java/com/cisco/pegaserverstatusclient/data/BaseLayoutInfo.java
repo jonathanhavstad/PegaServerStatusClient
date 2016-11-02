@@ -22,7 +22,6 @@ public abstract class BaseLayoutInfo {
     protected Map<String, String> headerMap;
     protected String friendlyName;
     protected String key;
-    protected boolean appendParent;
 
     public String getHeaderCols() {
         return headerCols;
@@ -54,10 +53,6 @@ public abstract class BaseLayoutInfo {
         }
     }
 
-    public abstract String getFriendlyName();
-    public abstract void setFriendlyName(String friendlyName);
-    public abstract String getKey();
-    public abstract void setKey(String key);
 
     public String getFriendlyName(String key, boolean appendParent) {
         return key;
@@ -69,4 +64,9 @@ public abstract class BaseLayoutInfo {
     public String toString() {
         return getFriendlyName();
     }
+
+    public abstract String getFriendlyName();
+    public abstract void setFriendlyName(String friendlyName);
+    public abstract String getKey();
+    public abstract void setKey(String key);
 }

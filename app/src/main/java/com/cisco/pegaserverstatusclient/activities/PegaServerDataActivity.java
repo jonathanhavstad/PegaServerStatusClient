@@ -96,6 +96,8 @@ public class PegaServerDataActivity extends AppCompatActivity
     int tabIndex;
     @State
     String title;
+    @State
+    long lastRefreshTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +142,7 @@ public class PegaServerDataActivity extends AppCompatActivity
                                             .newInstance(this,
                                                     LifecycleLayoutInfo.LC_MAPPING.get(lcKey),
                                                     lcKey,
-                                                    new ArrayList<String>(),
+                                                    (ArrayList<String>) appBinder.getKeyPath().clone(),
                                                     mapAppData.get(lcKey));
                             tabViewAdapter.addFragment(domainFragment);
                         }
@@ -236,6 +238,8 @@ public class PegaServerDataActivity extends AppCompatActivity
         getSupportActionBar().setHomeButtonEnabled(true);
 
         createDrawerLayout();
+
+        lastRefreshTime = System.currentTimeMillis();
     }
 
     @Override
@@ -297,7 +301,7 @@ public class PegaServerDataActivity extends AppCompatActivity
     }
 
     @Override
-    public void sendData(String key, PegaServerNetworkBinder childBinder) {
+    public void initPegaDataActivity(String key, PegaServerNetworkBinder childBinder) {
         if (appData instanceof Map<?,?>) {
             Map<String, Object> mapAppData = (Map<String, Object>) appData;
             childBinder.setDrawerData(baseLayoutInfo.getValue(mapAppData, key));
@@ -388,6 +392,8 @@ public class PegaServerDataActivity extends AppCompatActivity
     }
 
     private void notifyFragmentsDataChanged(Object appData) {
+        lastRefreshTime = binder.getLastRefreshTime();
+
         for (int i = 0; i < tabViewAdapter.getCount(); i++) {
             PegaBaseFragment pegaBaseFragment = (PegaBaseFragment) tabViewAdapter.getItem(i);
             if (!pegaBaseFragment.notifyAppDataChanged(appData)) {
@@ -428,6 +434,9 @@ public class PegaServerDataActivity extends AppCompatActivity
             public void onServiceConnected(ComponentName name, IBinder service) {
                 binder = ((SubscriberBinder) service);
                 binder.addSubscriber(subscriber);
+                if (lastRefreshTime != -1L && lastRefreshTime < binder.getLastRefreshTime()) {
+                    notifyFragmentsDataChanged(binder.getAppData());
+                }
             }
 
             @Override
@@ -474,13 +483,6 @@ public class PegaServerDataActivity extends AppCompatActivity
     }
 
     private void createDrawerLayout() {
-        OnItemSelectedListener onItemSelectedListener = new OnItemSelectedListener() {
-            @Override
-            public void receiveData(String parentKey, String key, Object data) {
-                replaceFragment(key, data);
-            }
-        };
-
         populateDrawerList();
 
         leftDrawer.setAdapter(new ArrayAdapter<>(this,
@@ -492,8 +494,8 @@ public class PegaServerDataActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 baseLayoutInfo.setKey(drawerValueList.get(position).getKey());
                 Map<String, Object> drawerMapData = (Map<String, Object>) drawerData;
-                replaceFragment(drawerValueList.get(position).getKey(),
-                        drawerMapData.get(drawerValueList.get(position).getKey()));
+                String drawerKey = drawerValueList.get(position).getKey();
+                replaceFragment(drawerKey, drawerMapData.get(drawerKey));
             }
         });
     }
@@ -530,20 +532,28 @@ public class PegaServerDataActivity extends AppCompatActivity
 
     private void refreshDrawerData(Object appData) {
         if (appBinder != null &&
-                appBinder.getParentKey() != null &&
                 appBinder.getKeyPath() != null) {
             Map<String, Object> mapAppData = (Map<String, Object>) appData;
             ArrayList<String> keyPath = appBinder.getKeyPath();
             Map<String, Object> lastChildMap = mapAppData;
             Object lastObject = lastChildMap;
+            String parentKey = appBinder.getParentKey();
             for (String path : keyPath) {
                 lastChildMap = (Map<String, Object>) lastChildMap.get(path);
                 lastObject = lastChildMap;
             }
-            if (appBinder.getParentKey() != null) {
-                lastObject = lastChildMap.get(appBinder.getParentKey());
+            if (lastChildMap != null && parentKey != null) {
+                lastObject = lastChildMap.get(parentKey);
             }
-            drawerData = lastObject;
+            if (lastObject != null) {
+                drawerData = lastObject;
+                if (baseLayoutInfo instanceof DomainLayoutInfo ||
+                        baseLayoutInfo instanceof AppLayoutInfo) {
+                    this.appData = ((Map<String, Object>) drawerData).get(baseLayoutInfo.getKey());
+                } else {
+                    this.appData = drawerData;
+                }
+            }
         }
     }
 }

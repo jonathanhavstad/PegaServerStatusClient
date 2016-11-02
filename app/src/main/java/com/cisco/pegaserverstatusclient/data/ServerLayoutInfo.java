@@ -9,10 +9,6 @@ import java.util.Map;
 public class ServerLayoutInfo extends BaseLayoutInfo {
     public static final String SERVER_JSON_KEY = "HOSTS";
 
-    private String friendlyName;
-
-    private String key;
-
     public String getFriendlyName() {
         return friendlyName;
     }

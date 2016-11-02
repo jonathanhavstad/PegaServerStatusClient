@@ -71,6 +71,11 @@ public class PegaServerRestTask {
     private Action1<BaseLayoutInfo> layoutSubscriber;
     private Context context;
 
+    private boolean loadJsonArrayFinished;
+    private boolean loadJsonObjectFinished;
+    private boolean loadJsonArraySuccess;
+    private boolean loadJsonObjectSuccess;
+
     public PegaServerRestTask(Context context, Map<String, Object> appData) {
         this.appData = appData;
         this.context = context;
@@ -305,6 +310,10 @@ public class PegaServerRestTask {
     }
 
     public void loadStatusFromNetwork(String url, Action1<Integer> dataSubscriber) {
+        this.loadJsonArraySuccess = false;
+        this.loadJsonObjectSuccess = false;
+        this.loadJsonArrayFinished = false;
+        this.loadJsonObjectFinished = false;
         this.dataSubscriber = dataSubscriber;
         if (url != null) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -322,13 +331,17 @@ public class PegaServerRestTask {
                                 if (response.body() != null) {
                                     JSONArray jsonArray = new JSONArray(response.body().toString());
                                     parseJsonArray(appData, null, jsonArray);
+                                    loadJsonArraySuccess = true;
+                                    loadJsonArrayFinished = true;
                                     sendDataLoadStatus(DATA_LOAD_SUCCESS);
                                 } else {
                                     Log.e(TAG, "Response body was null!");
+                                    loadJsonArrayFinished = true;
                                     sendDataLoadStatus(DATA_LOAD_FAILURE);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                loadJsonArrayFinished = true;
                                 sendDataLoadStatus(DATA_LOAD_FAILURE);
                             }
                         }
@@ -336,6 +349,7 @@ public class PegaServerRestTask {
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
                             Log.e(TAG, "Network failure: " + t.toString());
+                            loadJsonArrayFinished = true;
                             sendDataLoadStatus(DATA_LOAD_FAILURE);
                         }
                     });
@@ -348,13 +362,17 @@ public class PegaServerRestTask {
                                 if (response.body() != null) {
                                     JSONObject jsonObject = new JSONObject(response.body().toString());
                                     parseJsonObj(appData, jsonObject);
+                                    loadJsonObjectSuccess = true;
+                                    loadJsonObjectFinished = true;
                                     sendDataLoadStatus(DATA_LOAD_SUCCESS);
                                 } else {
                                     Log.e(TAG, "Response body was null!");
+                                    loadJsonObjectFinished = true;
                                     sendDataLoadStatus(DATA_LOAD_FAILURE);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                loadJsonObjectFinished = true;
                                 sendDataLoadStatus(DATA_LOAD_FAILURE);
                             }
                         }
@@ -362,6 +380,7 @@ public class PegaServerRestTask {
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e(TAG, "Network failure: " + t.toString());
+                            loadJsonObjectFinished = true;
                             sendDataLoadStatus(DATA_LOAD_FAILURE);
                         }
                     });
@@ -450,13 +469,21 @@ public class PegaServerRestTask {
         return values;
     }
 
-    private void sendDataLoadStatus(int authStatus) {
+    private void sendDataLoadStatus(int dataLoadStatus) {
         if (dataSubscriber != null) {
-            Observable<Integer> observable = Observable
-                    .just(authStatus)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-            observable.subscribe(dataSubscriber);
+            if ((loadJsonArrayFinished && loadJsonArraySuccess) ||
+                    (loadJsonObjectFinished && loadJsonObjectSuccess) ||
+                    (loadJsonArrayFinished && loadJsonObjectFinished)) {
+                Observable<Integer> observable = Observable
+                        .just(dataLoadStatus)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+                observable.subscribe(dataSubscriber);
+                loadJsonArraySuccess = false;
+                loadJsonObjectSuccess = false;
+                loadJsonArrayFinished = false;
+                loadJsonObjectFinished = false;
+            }
         }
     }
 

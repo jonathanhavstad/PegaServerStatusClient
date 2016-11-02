@@ -23,13 +23,17 @@ import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
 import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
 import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
+import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.DomainLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.LifecycleLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.ServerLayoutInfo;
 import com.cisco.pegaserverstatusclient.parcelables.BaseInfoParcelable;
 import com.cisco.pegaserverstatusclient.parcelables.PegaServerNetworkParcelable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressIndicator;
 
     private Map<String, Object> appData = new HashMap<>();
+
+    private Map<String, Object> drawerData;
 
     private BaseLayoutInfo baseLayoutInfo;
 
@@ -151,12 +157,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             statusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
+            if (statusUrl == null) {
+                statusUrl = getString(R.string.default_url);
+            }
         }
     }
 
     private void getData(String restUrl) {
         startLoading();
-        appData.clear();
         Action1<Integer> subscriber = new Action1<Integer>() {
             @Override
             public void call(Integer authSuccessful) {
@@ -166,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
         task = new PegaServerRestTask(this, appData);
         if (restUrl != null && !restUrl.isEmpty()) {
             task.loadStatusFromNetwork(restUrl, subscriber);
-        } else {
-            task.loadStatusFromFile(subscriber);
         }
     }
 
@@ -177,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
                 PegaServerDataActivity.class);
         PegaServerNetworkBinder appBinder = new PegaServerNetworkBinder();
         appBinder.setAppData(appData);
-        appBinder.setDrawerData(appData);
-        appBinder.setKeyPath(null);
+        appBinder.setDrawerData(drawerData);
+        appBinder.setKeyPath(new ArrayList<String>());
         PegaServerNetworkParcelable appParcelable = new PegaServerNetworkParcelable();
         appParcelable.setBinder(appBinder);
         intent.putExtra(getString(R.string.app_binder_data_bundle_key), appParcelable);
@@ -238,9 +244,9 @@ public class MainActivity extends AppCompatActivity {
             showAlert(getString(R.string.authentication_error_alert_title),
                     getString(R.string.authentication_error_alert_body));
         } else if (authResult == PegaServerRestTask.AUTH_SUCCESS) {
-            Log.i(TAG, "Successfully authorized with REST service!");
+            Log.i(TAG, getString(R.string.rest_auth_success_log_message));
         } else if (authResult == PegaServerRestTask.DATA_LOAD_SUCCESS) {
-            if (verifyData()) {
+            if (verifyData(appData)) {
                 launchPegaServerDataActivity();
             } else {
                 showAlert(getString(R.string.data_load_failure_alert_title),
@@ -250,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
             showAlert(getString(R.string.data_load_failure_alert_title),
                     getString(R.string.data_load_failure_alert_body) + statusUrl);
         } else if (authResult == PegaServerRestTask.ACCESS_TOKEN_FAILURE) {
-            Log.e(TAG, "Access token failure!");
+            Log.e(TAG, getString(R.string.rest_access_token_error_log_message));
         }
     }
 
@@ -258,16 +264,52 @@ public class MainActivity extends AppCompatActivity {
         baseLayoutInfo = new LifecycleLayoutInfo();
     }
 
-    private boolean verifyData() {
-        baseLayoutInfo = new LifecycleLayoutInfo();
-        return true;
+    private boolean verifyData(Object appData) {
+        drawerData = this.appData;
+        if (appData instanceof Map<?,?>) {
+            Map<String, Object> mapAppData = (Map<String, Object>) appData;
+            for (String key : mapAppData.keySet()) {
+                if (LifecycleLayoutInfo.LC_MAPPING.containsKey(key.toLowerCase())) {
+                    baseLayoutInfo = new LifecycleLayoutInfo();
+                    return true;
+                }
+                Object childAppData = mapAppData.get(key);
+                if (childAppData instanceof Map<?, ?>) {
+                    Map<String, Object> childMapAppData = (Map<String, Object>) childAppData;
+                    for (String childKey : childMapAppData.keySet()) {
+                        if (childKey.toUpperCase().equals(AppLayoutInfo.APP_JSON_KEY)) {
+                            baseLayoutInfo = new DomainLayoutInfo();
+                            ((DomainLayoutInfo) baseLayoutInfo)
+                                    .setAppName(baseLayoutInfo.getFriendlyName(key, true));
+                            baseLayoutInfo.setKey(key);
+                            if (mapAppData.size() == 1) {
+                                this.appData = childMapAppData;
+                            }
+                            return true;
+                        }
+                    }
+                    for (String childKey : childMapAppData.keySet()) {
+                        if (childKey.toUpperCase().equals(ServerLayoutInfo.SERVER_JSON_KEY)) {
+                            baseLayoutInfo = new AppLayoutInfo();
+                            baseLayoutInfo.setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
+                            baseLayoutInfo.setKey(key);
+                            if (mapAppData.keySet().size() == 1) {
+                                this.appData = childMapAppData;
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void startServerRefreshService() {
         subscriber = new Action1<Map<String, Object>>() {
             @Override
-            public void call(Map<String, Object> stringObjectMap) {
-                verifyData();
+            public void call(Map<String, Object> appData) {
+                verifyData(appData);
             }
         };
 
