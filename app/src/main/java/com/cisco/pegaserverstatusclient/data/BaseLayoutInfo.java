@@ -69,4 +69,45 @@ public abstract class BaseLayoutInfo {
     public abstract void setFriendlyName(String friendlyName);
     public abstract String getKey();
     public abstract void setKey(String key);
+    public abstract BaseLayoutInfo createChildLayout(String parentKey);
+
+    public static class Builder {
+        private BaseLayoutInfo baseLayoutInfo;
+        private String parentKey;
+        private String key;
+        private String friendlyName;
+
+        public Builder layout(BaseLayoutInfo baseLayoutInfo) {
+            this.baseLayoutInfo = baseLayoutInfo;
+            return this;
+        }
+
+        public Builder parentKey(String parentKey) {
+            this.parentKey = parentKey;
+            return this;
+        }
+
+        public Builder key(String key) {
+            this.key = key;
+            return this;
+        }
+
+        public Builder friendlyName(String friendlyName) {
+            this.friendlyName = friendlyName;
+            return this;
+        }
+
+        public BaseLayoutInfo build() {
+            BaseLayoutInfo childInfoLayout = baseLayoutInfo.createChildLayout(parentKey);
+            if (key != null) {
+                childInfoLayout.setKey(key);
+            }
+
+            if (friendlyName != null) {
+                childInfoLayout.setFriendlyName(friendlyName);
+            }
+
+            return childInfoLayout;
+        }
+    }
 }

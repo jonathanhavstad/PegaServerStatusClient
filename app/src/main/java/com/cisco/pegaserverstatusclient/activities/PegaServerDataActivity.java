@@ -154,11 +154,11 @@ public class PegaServerDataActivity extends AppCompatActivity
                 }
             } else if (baseLayoutInfo instanceof DomainLayoutInfo) {
                 DomainLayoutInfo domainLayoutInfo = (DomainLayoutInfo) baseLayoutInfo;
-                friendlyName = domainLayoutInfo.getAppName();
+                friendlyName = domainLayoutInfo.getFriendlyName();
                 currentChildFragment =
                         PegaChildFragment
                                 .newInstance(this,
-                                        domainLayoutInfo.getAppName(),
+                                        domainLayoutInfo.getFriendlyName(),
                                         appBinder.getParentKey(),
                                         domainLayoutInfo.getKey(),
                                         (ArrayList<String>) appBinder.getKeyPath().clone(),
@@ -309,7 +309,6 @@ public class PegaServerDataActivity extends AppCompatActivity
         if (baseLayoutInfo instanceof LifecycleLayoutInfo) {
             DomainLayoutInfo domainLayoutInfo = new DomainLayoutInfo();
             domainLayoutInfo.setFriendlyName(key);
-            domainLayoutInfo.setAppName(key);
             domainLayoutInfo.setKey(key);
             launchPegaServerDataActivity(childBinder, domainLayoutInfo);
         } else if (childBinder.getParentKey().equalsIgnoreCase(AppLayoutInfo.APP_JSON_KEY)) {
@@ -324,7 +323,7 @@ public class PegaServerDataActivity extends AppCompatActivity
             launchPegaServerDataActivity(childBinder, serverLayoutInfo);
         } else {
             DomainLayoutInfo domainLayoutInfo = new DomainLayoutInfo();
-            domainLayoutInfo.setAppName(baseLayoutInfo.getFriendlyName(key, true));
+            domainLayoutInfo.setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
             domainLayoutInfo.setKey(key);
             launchPegaServerDataActivity(childBinder, domainLayoutInfo);
         }

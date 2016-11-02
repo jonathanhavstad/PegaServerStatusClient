@@ -26,6 +26,11 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
+    public BaseLayoutInfo createChildLayout(String parentKey) {
+        return new ServerLayoutInfo();
+    }
+
+    @Override
     public Object getValue(Map<String, Object> appData, String childKey) {
         if (appData != null) {
             Object childValue = appData.get(ServerLayoutInfo.SERVER_JSON_KEY);

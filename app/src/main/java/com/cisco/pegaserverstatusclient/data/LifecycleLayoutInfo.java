@@ -140,4 +140,9 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
     public void setKey(String key) {
         this.key = key;
     }
+
+    @Override
+    public BaseLayoutInfo createChildLayout(String parentKey) {
+        return new DomainLayoutInfo();
+    }
 }

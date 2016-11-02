@@ -51,4 +51,16 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
     public void setKey(String key) {
         this.key = key;
     }
+
+    @Override
+    public BaseLayoutInfo createChildLayout(String parentKey) {
+        if (parentKey != null) {
+            if (parentKey.equalsIgnoreCase(AppLayoutInfo.APP_JSON_KEY)) {
+                return new AppLayoutInfo();
+            } else if (parentKey.equalsIgnoreCase(ServerLayoutInfo.SERVER_JSON_KEY)) {
+                return new ServerLayoutInfo();
+            }
+        }
+        return null;
+    }
 }

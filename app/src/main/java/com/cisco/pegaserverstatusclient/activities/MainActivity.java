@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                         if (childKey.toUpperCase().equals(AppLayoutInfo.APP_JSON_KEY)) {
                             baseLayoutInfo = new DomainLayoutInfo();
                             ((DomainLayoutInfo) baseLayoutInfo)
-                                    .setAppName(baseLayoutInfo.getFriendlyName(key, true));
+                                    .setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
                             baseLayoutInfo.setKey(key);
                             if (mapAppData.size() == 1) {
                                 this.appData = childMapAppData;

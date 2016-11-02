@@ -26,6 +26,11 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
+    public BaseLayoutInfo createChildLayout(String parentKey) {
+        return null;
+    }
+
+    @Override
     public Object getValue(Map<String, Object> appData, String childValue) {
         if (appData != null) {
             return appData.get(key);
