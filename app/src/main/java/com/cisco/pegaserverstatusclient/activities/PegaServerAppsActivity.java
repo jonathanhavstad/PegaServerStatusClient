@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.cisco.pegaserverstatusclient.R;
@@ -35,13 +34,14 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.Icepick;
+import icepick.State;
 import io.fabric.sdk.android.Fabric;
 import rx.functions.Action1;
 
@@ -51,8 +51,6 @@ import rx.functions.Action1;
 
 public class PegaServerAppsActivity extends AppCompatActivity {
     private static final int PLAY_SERVICE_RESOLUTION_REQUEST = 10000;
-
-    private Map<String, Object> appData = new HashMap<>();
     private String appsUrl;
     private ServiceConnection connection;
     private Action1<Map<String, Object>> subscriber;
@@ -67,8 +65,9 @@ public class PegaServerAppsActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     @BindView(R.id.app_left_drawer)
     ListView leftDrawer;
-    @BindView(R.id.app_fragment_view)
-    FrameLayout appFragmentView;
+
+    @State
+    int curAppLayoutInfoPosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,14 +79,15 @@ public class PegaServerAppsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         getApps(appsUrl);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
+        stopServerRefreshService();
     }
 
     @Override
@@ -116,10 +116,23 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
+    }
+
     private void init() {
         verifyGooglePlayServices();
         startInstanceIDService();
         initToolbar();
+        curAppLayoutInfoPosition = 0;
     }
 
     private boolean verifyGooglePlayServices() {
@@ -153,16 +166,15 @@ public class PegaServerAppsActivity extends AppCompatActivity {
                 pegaToolbar,
                 R.string.open_drawer,
                 R.string.close_drawer) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        super.onDrawerOpened(drawerView);
+                    }
 
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-        };
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                    }};
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
@@ -188,11 +200,11 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void startServerRefreshService(String statusUrl) {
+    private void startServerRefreshService(final AppLayoutInfo appLayoutInfo) {
         subscriber = new Action1<Map<String, Object>>() {
             @Override
             public void call(Map<String, Object> appData) {
-
+                populateCurrentFrame(appLayoutInfo, appData);
             }
         };
 
@@ -200,17 +212,16 @@ public class PegaServerAppsActivity extends AppCompatActivity {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 binder = ((SubscriberBinder) service);
-                binder.setAppData(appData);
                 binder.addSubscriber(subscriber);
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-
+                binder.removeSubscriber(subscriber);
             }
         };
         Intent intent = new Intent(this, PegaServerRefreshService.class);
-        intent.putExtra(getString(R.string.status_url_bundle_key), statusUrl);
+        intent.putExtra(getString(R.string.status_url_bundle_key), appLayoutInfo.getUrl());
         bindService(intent, connection, BIND_AUTO_CREATE);
         startService(intent);
     }
@@ -229,7 +240,8 @@ public class PegaServerAppsActivity extends AppCompatActivity {
                     @Override
                     public void call(Integer loadStatus) {
                         if (loadStatus == AppsRestTask.LOAD_FAILURE) {
-                            showAlert("Applications Load Failure", "Failed to load application data!");
+                            showAlert(getString(R.string.app_load_error_alert_title),
+                                    getString(R.string.app_load_error_alert_body));
                             swipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -244,63 +256,87 @@ public class PegaServerAppsActivity extends AppCompatActivity {
 
     private void processAppLayoutInfoList(List<AppLayoutInfo> appLayoutInfoList) {
         initDrawer(appLayoutInfoList);
-        initMainFrame(appLayoutInfoList);
+        initCurrentFrame(appLayoutInfoList);
+        initRefreshView(appLayoutInfoList);
     }
 
     private void initDrawer(final List<AppLayoutInfo> appLayoutInfoList) {
         leftDrawer.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_selectable_list_item,
-                populateDrawerList(appLayoutInfoList)));
+                appLayoutInfoList));
         leftDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AppLayoutInfo appLayoutInfo = appLayoutInfoList.get(position);
+                curAppLayoutInfoPosition = position;
+                final AppLayoutInfo appLayoutInfo = appLayoutInfoList.get(position);
                 if (appLayoutInfo.getUrl() != null) {
                     drawerLayout.closeDrawers();
-                    appData.clear();
                     swipeRefreshLayout.setRefreshing(true);
                     getData(appLayoutInfo.getUrl(), appLayoutInfo);
                 }
             }
         });
+
+        // Register each view to respond to a long click to display a popup menu
         for (int childIndex = 0; childIndex < leftDrawer.getChildCount(); childIndex++) {
             View childView = leftDrawer.getChildAt(childIndex);
             registerForContextMenu(childView);
         }
     }
 
-    private void initMainFrame(List<AppLayoutInfo> appLayoutInfoList) {
-        if (appLayoutInfoList.size() > 0) {
-            AppLayoutInfo firstFrame = appLayoutInfoList.get(0);
-            getData(firstFrame.getUrl(), firstFrame);
+    private void initCurrentFrame(List<AppLayoutInfo> appLayoutInfoList) {
+        if (appLayoutInfoList.size() > 0 && curAppLayoutInfoPosition < appLayoutInfoList.size()) {
+            AppLayoutInfo currentAppLayoutInfo = appLayoutInfoList.get(curAppLayoutInfoPosition);
+            getData(currentAppLayoutInfo.getUrl(), currentAppLayoutInfo);
         }
     }
 
-    private List<String> populateDrawerList(List<AppLayoutInfo> appLayoutInfoList) {
-        List<String> drawerList = new ArrayList<>();
-        for (AppLayoutInfo appLayoutInfo : appLayoutInfoList) {
-            drawerList.add(appLayoutInfo.getAppId());
+    private void initRefreshView(List<AppLayoutInfo> appLayoutInfoList) {
+        if (appLayoutInfoList.size() > 0 && curAppLayoutInfoPosition < appLayoutInfoList.size()) {
+            final AppLayoutInfo currentAppLayoutInfo =
+                    appLayoutInfoList.get(curAppLayoutInfoPosition);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    getData(currentAppLayoutInfo.getUrl(), currentAppLayoutInfo);
+                }
+            });
+        } else {
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    swipeRefreshLayout.setRefreshing(false);
+                    showAlert("App Layout Refresh Error",
+                            "No application is loaded to be refreshed!");
+                }
+            });
         }
-        return drawerList;
     }
 
     private void getData(String restUrl, final AppLayoutInfo appLayoutInfo) {
-        Action1<Integer> subscriber = new Action1<Integer>() {
+        Action1<Integer> dataLoadSubscriber = new Action1<Integer>() {
             @Override
             public void call(Integer dataLoadResult) {
                 swipeRefreshLayout.setRefreshing(false);
                 if (dataLoadResult == PegaServerRestTask.DATA_LOAD_FAILURE) {
                     showAlert("Data Load Failure", "Failed to load application data!");
                 } else if (dataLoadResult == PegaServerRestTask.DATA_LOAD_SUCCESS) {
-                    populateMainFrame(appLayoutInfo, appData);
+                    stopServerRefreshService();
+                    startServerRefreshService(appLayoutInfo);
                 }
             }
         };
-        PegaServerRestTask task = new PegaServerRestTask(this, appData);
-        task.loadStatusFromNetwork(restUrl, subscriber);
+        Action1<Map<String, Object>> appDataSubscriber = new Action1<Map<String, Object>>() {
+            @Override
+            public void call(Map<String, Object> appData) {
+                populateCurrentFrame(appLayoutInfo, appData);
+            }
+        };
+        PegaServerRestTask task = new PegaServerRestTask();
+        task.loadStatusFromNetwork(restUrl, dataLoadSubscriber, appDataSubscriber);
     }
 
-    private void populateMainFrame(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+    private void populateCurrentFrame(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AppFragment appFragment = AppFragment.newInstance(this, appLayoutInfo, appData);

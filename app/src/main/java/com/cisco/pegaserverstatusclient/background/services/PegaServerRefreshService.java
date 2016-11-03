@@ -81,25 +81,23 @@ public class PegaServerRefreshService extends IntentService {
         }
         if (appData != null) {
             if (task == null) {
-                initTask(appData);
+                task = new PegaServerRestTask();
             }
-            task.loadStatusFromNetwork(statusUrl, new Action1<Integer>() {
-                @Override
-                public void call(Integer loadStatus) {
-                    if (loadStatus == PegaServerRestTask.DATA_LOAD_SUCCESS) {
-                        binder.updateLastRefreshTime();
-                        binder.subscribeObservable(initObservable(appData));
-                    } else if (loadStatus == PegaServerRestTask.DATA_LOAD_FAILURE) {
-                        Log.e(TAG, "Failed to load data from URL: " + statusUrl + "!");
-                        binder.subscribeObservable(initObservable(appData));
-                    }
-                }
-            });
+            task.loadStatusFromNetwork(statusUrl,
+                    new Action1<Integer>() {
+                        @Override
+                        public void call(Integer integer) {
+                            Log.e(TAG, "Failed to load data from URL: " + statusUrl);
+                        }
+                    },
+                    new Action1<Map<String, Object>>() {
+                        @Override
+                        public void call(Map<String, Object> stringObjectMap) {
+                            binder.updateLastRefreshTime();
+                            binder.subscribeObservable(initObservable(appData));
+                        }
+                    });
         }
-    }
-
-    private void initTask(Map<String, Object> appData) {
-        task = new PegaServerRestTask(this, appData);
     }
 
     private Observable initObservable(Map<String, Object> appData) {

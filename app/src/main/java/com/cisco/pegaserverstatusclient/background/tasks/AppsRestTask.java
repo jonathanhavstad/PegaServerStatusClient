@@ -6,18 +6,13 @@ import android.content.res.AssetManager;
 import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,6 +26,7 @@ import rx.schedulers.Schedulers;
 public class AppsRestTask {
     public static final int LOAD_SUCCESS = 1;
     public static final int LOAD_FAILURE = 0;
+    public static final int LOAD_NOT_STARTED = -1;
 
     private Action1<Integer> loadStatusSubscriber;
     private Action1<List<AppLayoutInfo>> appsSubscriber;
@@ -59,13 +55,13 @@ public class AppsRestTask {
                     for (int i = 0; i < jsonArray.size(); i++) {
                         AppLayoutInfo appLayoutInfo =
                                 gson.fromJson(jsonArray.get(i), AppLayoutInfo.class);
-                        appLayoutInfo.setHeaderColsList();
-                        appLayoutInfo.setHeaderDescList();
+                        appLayoutInfo.splitHeaderCols();
+                        appLayoutInfo.splitHeaderDesc();
                         appLayoutInfoList.add(appLayoutInfo);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    sendAppsLoadStatus(LOAD_FAILURE);
+                    publishAppsLoadStatus(LOAD_FAILURE);
                 } finally {
                     if (in != null) {
                         try {
@@ -74,14 +70,14 @@ public class AppsRestTask {
                             e.printStackTrace();
                         }
                     }
-                    sendAppsLoadStatus(LOAD_SUCCESS);
-                    sendAppsLayout(appLayoutInfoList);
+                    publishAppsLoadStatus(LOAD_SUCCESS);
+                    publishAppsLayout(appLayoutInfoList);
                 }
             }
         }).start();
     }
 
-    private void sendAppsLoadStatus(int appsLoadStatus) {
+    private void publishAppsLoadStatus(int appsLoadStatus) {
         Observable<Integer> observable = Observable
                 .just(appsLoadStatus)
                 .subscribeOn(Schedulers.io())
@@ -89,7 +85,7 @@ public class AppsRestTask {
         observable.subscribe(loadStatusSubscriber);
     }
 
-    private void sendAppsLayout(List<AppLayoutInfo> appLayoutInfoList) {
+    private void publishAppsLayout(List<AppLayoutInfo> appLayoutInfoList) {
         Observable<List<AppLayoutInfo>> observable = Observable
                 .just(appLayoutInfoList)
                 .subscribeOn(Schedulers.io())

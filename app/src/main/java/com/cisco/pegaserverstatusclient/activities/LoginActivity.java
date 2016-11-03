@@ -201,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchMainActivity(String url) {
-        Intent intent = new Intent(this, PegaServerAppActivity.class);
+        Intent intent = new Intent(this, PegaServerAppsActivity.class);
         intent.putExtra(getString(R.string.status_url_bundle_key), url);
         startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
     }

@@ -112,7 +112,7 @@ public class AppLayoutInfo extends BaseLayoutInfo {
         this.headerColumns = headerColumns;
     }
 
-    public void setHeaderColsList() {
+    public void splitHeaderCols() {
         if (headerColumns != null) {
             headerColsList = headerColumns.split(",");
             trimListElements(headerColsList);
@@ -132,7 +132,7 @@ public class AppLayoutInfo extends BaseLayoutInfo {
         this.headerDesc = headerDesc;
     }
 
-    public void setHeaderDescList() {
+    public void splitHeaderDesc() {
         if (headerDesc != null) {
             headerDescList = headerDesc.split(",");
             trimListElements(headerDescList);
@@ -168,12 +168,19 @@ public class AppLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public String getFriendlyName() {
+        if (friendlyName == null && appId != null) {
+            int firstWordEndIndex = appId.indexOf(" ");
+            if (firstWordEndIndex < 0) {
+                firstWordEndIndex = appId.length();
+            }
+            return appId.substring(0, firstWordEndIndex);
+        }
         return null;
     }
 
     @Override
     public void setFriendlyName(String friendlyName) {
-
+        this.friendlyName = friendlyName;
     }
 
     @Override

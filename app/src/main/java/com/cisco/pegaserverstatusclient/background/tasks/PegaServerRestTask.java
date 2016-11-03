@@ -57,36 +57,13 @@ public class PegaServerRestTask {
     public static final int DATA_LOAD_FAILURE = 3;
     public static final int ACCESS_TOKEN_FAILURE = -1;
 
-    private static final String CSRF_TOKEN_KEY = "csrftoken=";
-
-    private static final int AUTH_FAILURE_CODE = 403;
-    private static final int AUTH_TRY_AGAIN_CODE = 200;
-    private Map<String, Object> appData;
-    private boolean authSuccessful;
-    private boolean haveAccessToken;
-    private ConnectableObservable<Integer> authObservable;
-    private Action1<Integer> authSubscriber;
-    private Action1<Integer> dataSubscriber;
-    private Action1<BaseLayoutInfo> layoutSubscriber;
-    private Context context;
+    private Action1<Integer> loadStatusSubscriber;
+    private Action1<Map<String, Object>> appDataSubscriber;
 
     private boolean loadJsonArrayFinished;
     private boolean loadJsonObjectFinished;
     private boolean loadJsonArraySuccess;
     private boolean loadJsonObjectSuccess;
-
-    public PegaServerRestTask(Context context, Map<String, Object> appData) {
-        this.appData = appData;
-        this.context = context;
-    }
-
-    private void createAuthObservable() {
-        this.authObservable = Observable
-                .just(1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .publish();
-    }
 
     private void loadFromFile(final Context context, final String filename) {
         final AssetManager assetManager = context.getAssets();
@@ -94,6 +71,7 @@ public class PegaServerRestTask {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Map<String, Object> appData = new HashMap<>();
                 InputStream inputStream = null;
                 try {
                     inputStream = assetManager.open(filename);
@@ -104,7 +82,7 @@ public class PegaServerRestTask {
                     }
                     JSONArray jsonArray = new JSONArray(sb.toString());
                     parseJsonArray(appData, null, jsonArray);
-                    sendDataLoadStatus(DATA_LOAD_SUCCESS);
+                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
                 } catch (JSONException | IOException e) {
                     Log.e(TAG, e.toString());
                 } finally {
@@ -120,200 +98,22 @@ public class PegaServerRestTask {
         }).start();
     }
 
-    private void loadRedirectUrl(final String redirectUrl,
-                                final String username,
-                                final String password,
-                                final String cookies,
-                                final boolean post) {
-        OkHttpClient.Builder clientBuilder =
-                new OkHttpClient.Builder().followRedirects(false);
-        OkHttpClient client = clientBuilder.build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(client)
-                .baseUrl("https://www.instagram.com")
-                .build();
-        OauthAccessService oauthAccessService = retrofit.create(OauthAccessService.class);
-
-        if (cookies != null && !cookies.isEmpty() && post) {
-            String csrfToken = extractCsrfToken(cookies);
-
-            if (csrfToken != null) {
-
-                oauthAccessService.authorizeUser(
-                        redirectUrl,
-                        username,
-                        password,
-                        csrfToken, cookies)
-                        .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(
-                            Call<ResponseBody> call,
-                            Response<ResponseBody> response) {
-                        Log.d(TAG, "Request URL: " + response.raw().request().url());
-                        Log.d(TAG, "Request headers: " + response.raw().headers().toString());
-                        Log.d(TAG, "Response code: " + response.code());
-                        String cookies = concatCookies(response.headers().values("set-cookie"));
-                        authSuccessful =
-                                (response.code() != AUTH_FAILURE_CODE &&
-                                response.code() != AUTH_TRY_AGAIN_CODE);
-                        loadRedirectUrl(
-                                response.raw().headers().get("location"),
-                                username,
-                                password,
-                                cookies,
-                                false);
-                        subscribeToAuthObservable();
-                        authObservable.connect();
-                        if (!authSuccessful) {
-                            sendDataLoadStatus(AUTH_FAILURE);
-                        } else {
-                            sendDataLoadStatus(AUTH_SUCCESS);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e(TAG, "Failure: " + t.toString());
-                    }
-                });
-                return;
-            }
-        }
-        if (redirectUrl != null) {
-            oauthAccessService
-                    .redirect(redirectUrl, cookies).enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Log.d(TAG, "Request URL: " + response.raw().request().url());
-                    Log.d(TAG, "Request headers: " + response.raw().headers().toString());
-                    Log.d(TAG, "Response code: " + response.code());
-                    String cookies = concatCookies(response.headers().values("set-cookie"));
-                    if (!(haveAccessToken = hasAccessToken(response))) {
-                        loadRedirectUrl(
-                                response.raw().headers().get("location"),
-                                username,
-                                password,
-                                cookies,
-                                post);
-                    } else {
-                        Log.d(TAG, "Access token: " + extractAccessToken(response));
-                    }
-                    subscribeToAuthObservable();
-                    authObservable.connect();
-                    if (authSuccessful && !haveAccessToken) {
-                        sendDataLoadStatus(ACCESS_TOKEN_FAILURE);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.e(TAG, "Failure: " + t.toString());
-                }
-            });
-        }
-    }
-
-    private boolean hasLocation(Response<ResponseBody> response) {
-        return (response.raw().headers().get("location") != null);
-    }
-
-    private boolean hasAccessToken(Response<ResponseBody> response) {
-        return hasLocation(response)
-                && response.raw().headers().get("location").contains("access_token=");
-    }
-
-    private String extractAccessToken(Response<ResponseBody> response) {
-        String accessToken = null;
-        if (hasLocation(response)) {
-            String location = response.raw().headers().get("location");
-            int accessTokenStartIndex = location.indexOf("access_token=");
-            if (accessTokenStartIndex >= 0) {
-                accessTokenStartIndex += "access_token=".length() + 1;
-                accessToken = location.substring(accessTokenStartIndex);
-            }
-        }
-        return accessToken;
-    }
-
-    private String concatCookies(List<String> values) {
-        StringBuilder sb = new StringBuilder();
-        for (String value : values) {
-            sb.append(value);
-            sb.append("; ");
-        }
-        return sb.toString();
-    }
-
-    private void retrieveAccessToken(final String authUrl) {
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder().followRedirects(false);
-        OkHttpClient client = clientBuilder.build();
-        Retrofit retrofit =
-                new Retrofit.Builder().client(client).baseUrl(authUrl).build();
-        OauthRedirectService oauthRedirectService = retrofit.create(OauthRedirectService.class);
-        oauthRedirectService.getAccessToken().enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void retrieveAccessToken(final String authUrl,
-                                    final String username,
-                                    final String password) {
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder().followRedirects(false);
-        OkHttpClient client = clientBuilder.build();
-        Retrofit retrofit =
-                new Retrofit.Builder().client(client).baseUrl(authUrl).build();
-        OauthRedirectService oauthRedirectService = retrofit.create(OauthRedirectService.class);
-        oauthRedirectService.getAccessToken().enqueue(new Callback<ResponseBody>() {
-
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, "Request URL: " + response.raw().request().url().toString());
-                Log.d(TAG, "Response code: " + response.code());
-                String cookies = concatCookies(response.headers().values("set-cookie"));
-                loadRedirectUrl(response.raw().headers().get("location"),
-                        username,
-                        password,
-                        cookies,
-                        true);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "Failure: " + t.toString());
-            }
-        });
-    }
-
-    private String extractCsrfToken(String cookieValue) {
-        int startIndex = cookieValue.indexOf(CSRF_TOKEN_KEY);
-        if (startIndex >= 0) {
-            startIndex += CSRF_TOKEN_KEY.length();
-            int endIndex = cookieValue.indexOf(';', startIndex);
-            return cookieValue.substring(startIndex, endIndex);
-        }
-        return null;
-    }
-
-    public void loadStatusFromFile(Action1<Integer> dataSubscriber) {
-        this.dataSubscriber = dataSubscriber;
+    public void loadStatusFromFile(Context context, Action1<Integer> dataSubscriber) {
+        this.loadStatusSubscriber = dataSubscriber;
         loadFromFile(context, context.getString(R.string.status_json_filename));
     }
 
-    public void loadStatusFromNetwork(String url, Action1<Integer> dataSubscriber) {
+    public void loadStatusFromNetwork(String url,
+                                      Action1<Integer> loadStatusSubscriber,
+                                      Action1<Map<String, Object>> appDataSubscriber) {
+        this.loadStatusSubscriber = loadStatusSubscriber;
+        this.appDataSubscriber = appDataSubscriber;
+
         this.loadJsonArraySuccess = false;
         this.loadJsonObjectSuccess = false;
         this.loadJsonArrayFinished = false;
         this.loadJsonObjectFinished = false;
-        this.dataSubscriber = dataSubscriber;
+
         if (url != null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(extractBaseUrl(url))
@@ -328,20 +128,22 @@ public class PegaServerRestTask {
                                                Response<JsonArray> response) {
                             try {
                                 if (response.body() != null) {
+                                    Map<String, Object> appData = new HashMap<>();
                                     JSONArray jsonArray = new JSONArray(response.body().toString());
                                     parseJsonArray(appData, null, jsonArray);
                                     loadJsonArraySuccess = true;
                                     loadJsonArrayFinished = true;
-                                    sendDataLoadStatus(DATA_LOAD_SUCCESS);
+                                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
+                                    publishAppData(appData);
                                 } else {
                                     Log.e(TAG, "Response body was null!");
                                     loadJsonArrayFinished = true;
-                                    sendDataLoadStatus(DATA_LOAD_FAILURE);
+                                    publishDataLoadStatus(DATA_LOAD_FAILURE);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 loadJsonArrayFinished = true;
-                                sendDataLoadStatus(DATA_LOAD_FAILURE);
+                                publishDataLoadStatus(DATA_LOAD_FAILURE);
                             }
                         }
 
@@ -349,7 +151,7 @@ public class PegaServerRestTask {
                         public void onFailure(Call<JsonArray> call, Throwable t) {
                             Log.e(TAG, "Network failure: " + t.toString());
                             loadJsonArrayFinished = true;
-                            sendDataLoadStatus(DATA_LOAD_FAILURE);
+                            publishDataLoadStatus(DATA_LOAD_FAILURE);
                         }
                     });
             ibpmStatusService
@@ -359,20 +161,22 @@ public class PegaServerRestTask {
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             try {
                                 if (response.body() != null) {
+                                    Map<String, Object> appData = new HashMap<>();
                                     JSONObject jsonObject = new JSONObject(response.body().toString());
                                     parseJsonObj(appData, jsonObject);
                                     loadJsonObjectSuccess = true;
                                     loadJsonObjectFinished = true;
-                                    sendDataLoadStatus(DATA_LOAD_SUCCESS);
+                                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
+                                    publishAppData(appData);
                                 } else {
                                     Log.e(TAG, "Response body was null!");
                                     loadJsonObjectFinished = true;
-                                    sendDataLoadStatus(DATA_LOAD_FAILURE);
+                                    publishDataLoadStatus(DATA_LOAD_FAILURE);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 loadJsonObjectFinished = true;
-                                sendDataLoadStatus(DATA_LOAD_FAILURE);
+                                publishDataLoadStatus(DATA_LOAD_FAILURE);
                             }
                         }
 
@@ -380,7 +184,7 @@ public class PegaServerRestTask {
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e(TAG, "Network failure: " + t.toString());
                             loadJsonObjectFinished = true;
-                            sendDataLoadStatus(DATA_LOAD_FAILURE);
+                            publishDataLoadStatus(DATA_LOAD_FAILURE);
                         }
                     });
         }
@@ -408,10 +212,6 @@ public class PegaServerRestTask {
             }
         }
         return url;
-    }
-
-    private void subscribeToAuthObservable() {
-        authObservable.subscribe(authSubscriber);
     }
 
     private void parseJsonArray(Map<String, Object> values, String key, JSONArray jsonArray) {
@@ -468,8 +268,8 @@ public class PegaServerRestTask {
         return values;
     }
 
-    private void sendDataLoadStatus(int dataLoadStatus) {
-        if (dataSubscriber != null) {
+    private void publishDataLoadStatus(int dataLoadStatus) {
+        if (loadStatusSubscriber != null) {
             if ((loadJsonArrayFinished && loadJsonArraySuccess) ||
                     (loadJsonObjectFinished && loadJsonObjectSuccess) ||
                     (loadJsonArrayFinished && loadJsonObjectFinished)) {
@@ -477,7 +277,7 @@ public class PegaServerRestTask {
                         .just(dataLoadStatus)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
-                observable.subscribe(dataSubscriber);
+                observable.subscribe(loadStatusSubscriber);
                 loadJsonArraySuccess = false;
                 loadJsonObjectSuccess = false;
                 loadJsonArrayFinished = false;
@@ -486,148 +286,11 @@ public class PegaServerRestTask {
         }
     }
 
-    public void loadServerInfo(Context context,
-                               String url,
-                               Action1<BaseLayoutInfo> layoutSubscriber) {
-        this.layoutSubscriber = layoutSubscriber;
-        loadServerLayoutFromFile(context, url);
-    }
-
-    private void loadServerLayoutFromFile(Context context, final String filename) {
-        final AssetManager assetManager = context.getAssets();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                InputStream inputStream = null;
-                try {
-                    inputStream = assetManager.open(filename);
-                    sendServerLayout(parseServerInfo(readInputStream(inputStream)));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }).start();
-    }
-
-    private void sendServerLayout(ServerLayoutInfo serverInfo) {
-        Observable<ServerLayoutInfo> observable = Observable
-                .just(serverInfo)
+    private void publishAppData(Map<String, Object> appData) {
+        Observable<Map<String, Object>> observable = Observable
+                .just(appData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(layoutSubscriber);
-    }
-
-    private ServerLayoutInfo parseServerInfo(String json) {
-        Gson gson = new Gson();
-        return gson.fromJson(json, ServerLayoutInfo.class);
-    }
-
-    public void loadAppInfo(Context context,
-                            String url,
-                            Action1<BaseLayoutInfo> layoutSubscriber) {
-        this.layoutSubscriber = layoutSubscriber;
-        loadAppLayoutFromFile(context, url);
-    }
-
-    private void loadAppLayoutFromFile(Context context, final String filename) {
-        final AssetManager assetManager = context.getAssets();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                InputStream inputStream = null;
-                try {
-                    inputStream = assetManager.open(filename);
-                    sendAppLayout(parseAppInfo(readInputStream(inputStream)));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }).start();
-    }
-
-    private void sendAppLayout(DomainAppLayoutInfo domainAppLayoutInfo) {
-        Observable<DomainAppLayoutInfo> observable = Observable
-                .just(domainAppLayoutInfo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(layoutSubscriber);
-    }
-
-    private DomainAppLayoutInfo parseAppInfo(String json) {
-        Gson gson = new Gson();
-        DomainAppLayoutInfo domainAppLayoutInfo = gson.fromJson(json, DomainAppLayoutInfo.class);
-        return domainAppLayoutInfo;
-    }
-
-    public void loadDomainInfo(Context context,
-                                     String url,
-                                     Action1<BaseLayoutInfo> layoutSubscriber) {
-        this.layoutSubscriber = layoutSubscriber;
-        loadDomainLayoutFromFile(context, url);
-    }
-
-    private void loadDomainLayoutFromFile(Context context, final String filename) {
-        final AssetManager assetManager = context.getAssets();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                InputStream inputStream = null;
-                try {
-                    inputStream = assetManager.open(filename);
-                    sendDomainLayout(parseDomainInfo(readInputStream(inputStream)));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (inputStream != null) {
-                            inputStream.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }).start();
-    }
-
-    private void sendDomainLayout(DomainLayoutInfo domainInfo) {
-        Observable<DomainLayoutInfo> observable = Observable
-                .just(domainInfo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(layoutSubscriber);
-    }
-
-    private DomainLayoutInfo parseDomainInfo(String json) {
-        Gson gson = new Gson();
-        DomainLayoutInfo domainInfo = gson.fromJson(json, DomainLayoutInfo.class);
-        return domainInfo;
-    }
-
-    private String readInputStream(InputStream inputStream) {
-        Scanner scanner = new Scanner(inputStream);
-        StringBuffer sb = new StringBuffer();
-        while (scanner.hasNextLine()) {
-            sb.append(scanner.nextLine());
-        }
-        scanner.close();
-        return sb.toString();
+        observable.subscribe(appDataSubscriber);
     }
 }

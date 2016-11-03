@@ -46,4 +46,6 @@
     <string name="app_layout_info_bundle_key">app_layout_info</string>
     <string name="main_application_title">Cisco EA Status Monitor</string>
     <string name="app_chooser_title">App Chooser</string>
+    <string name="app_load_error_alert_title">Applications Load Failure</string>
+    <string name="app_load_error_alert_body">Failed to load application data!</string>
 </resources>

@@ -1,0 +1,10 @@
+{
+  "Id": "App",
+  "Layout": "VERTICAL",
+  "Action": "",
+  "Screen": "Page 3",
+  "URL": "",
+  "Method": "PULL",
+  "HeaderColumn": "HOSTS, STATUS, DateTime, ProxyURL",
+  "HeaderDesc": "Servers, Status, Date & Time, Proxy URL"
+}
