@@ -48,7 +48,7 @@ import rx.schedulers.Schedulers;
  * Created by jonathanhavstad on 10/18/16.
  */
 
-public class PegaServerRestTask {
+public class ServerDataRestTask {
     private static final String TAG = "PegaServerRestTask";
 
     public static final int AUTH_FAILURE = 0;

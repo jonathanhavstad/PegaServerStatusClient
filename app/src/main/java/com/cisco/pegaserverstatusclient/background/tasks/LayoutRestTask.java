@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.stream.JsonReader;
@@ -23,18 +24,18 @@ import rx.schedulers.Schedulers;
  * Created by jonathanhavstad on 11/2/16.
  */
 
-public class AppsRestTask {
+public class LayoutRestTask {
     public static final int LOAD_SUCCESS = 1;
     public static final int LOAD_FAILURE = 0;
     public static final int LOAD_NOT_STARTED = -1;
 
     private Action1<Integer> loadStatusSubscriber;
-    private Action1<List<AppLayoutInfo>> appsSubscriber;
+    private Action1<List<BaseLayoutInfo>> appsSubscriber;
 
     public void loadAppsLayout(Context context,
                                String appsUrl,
                                Action1<Integer> loadStatusSubscriber,
-                               Action1<List<AppLayoutInfo>> appsSubscriber) {
+                               Action1<List<BaseLayoutInfo>> appsSubscriber) {
         this.loadStatusSubscriber = loadStatusSubscriber;
         this.appsSubscriber = appsSubscriber;
         loadFromFile(context, "apps.json");
@@ -45,7 +46,7 @@ public class AppsRestTask {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<AppLayoutInfo> appLayoutInfoList = new ArrayList<>();
+                List<BaseLayoutInfo> appLayoutInfoList = new ArrayList<>();
                 InputStream in = null;
                 try {
                     in = assetManager.open(filename);
@@ -85,8 +86,8 @@ public class AppsRestTask {
         observable.subscribe(loadStatusSubscriber);
     }
 
-    private void publishAppsLayout(List<AppLayoutInfo> appLayoutInfoList) {
-        Observable<List<AppLayoutInfo>> observable = Observable
+    private void publishAppsLayout(List<BaseLayoutInfo> appLayoutInfoList) {
+        Observable<List<BaseLayoutInfo>> observable = Observable
                 .just(appLayoutInfoList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

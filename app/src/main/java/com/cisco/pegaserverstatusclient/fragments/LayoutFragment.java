@@ -26,18 +26,17 @@ import butterknife.ButterKnife;
  * Created by jonathanhavstad on 11/2/16.
  */
 
-public class AppFragment extends Fragment {
+public class LayoutFragment extends Fragment {
     private AppLayoutInfo appLayoutInfo;
     private Map<String, Object> appData;
-    private FragmentListAdapter adapter;
 
     @BindView(R.id.landing_fragment_list)
     RecyclerView landingFragmentList;
 
-    public static AppFragment newInstance(Context context,
-                                          AppLayoutInfo appLayoutInfo,
-                                          Map<String, Object> fragmentData) {
-        AppFragment appFragment = new AppFragment();
+    public static LayoutFragment newInstance(Context context,
+                                             BaseLayoutInfo appLayoutInfo,
+                                             Map<String, Object> fragmentData) {
+        LayoutFragment layoutFragment = new LayoutFragment();
 
         Bundle args = new Bundle();
 
@@ -49,9 +48,9 @@ public class AppFragment extends Fragment {
         pegaServerNetworkBinder.setAppData(fragmentData);
         args.putBinder(context.getString(R.string.app_binder_data_bundle_key), pegaServerNetworkBinder);
 
-        appFragment.setArguments(args);
+        layoutFragment.setArguments(args);
 
-        return appFragment;
+        return layoutFragment;
     }
 
     @Override
@@ -87,7 +86,7 @@ public class AppFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        adapter = new FragmentListAdapter(appLayoutInfo, appData);
+        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
         landingFragmentList.setAdapter(adapter);
         landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.HORIZONTAL_LIST));
@@ -95,7 +94,9 @@ public class AppFragment extends Fragment {
         return rootView;
     }
 
-    public void updateAppData(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
-        adapter.updateAppData(appLayoutInfo, appData);
+    public void updateAppData(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+
+        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
+        landingFragmentList.swapAdapter(adapter, false);
     }
 }
