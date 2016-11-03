@@ -29,6 +29,10 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
     private List<String> orderedKeySet;
 
     public FragmentListAdapter(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+        init(appLayoutInfo, appData);
+    }
+
+    private void init(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
         this.appLayoutInfo  = appLayoutInfo;
         this.appData = appData;
         this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
@@ -88,5 +92,10 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public void updateAppData(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+        init(appLayoutInfo, appData);
+        notifyDataSetChanged();
     }
 }

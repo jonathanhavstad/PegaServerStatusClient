@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -68,6 +69,8 @@ public class PegaServerAppsActivity extends AppCompatActivity {
 
     @State
     int curAppLayoutInfoPosition;
+
+    private boolean bgServiceStarted;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,6 +136,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         startInstanceIDService();
         initToolbar();
         curAppLayoutInfoPosition = 0;
+        bgServiceStarted = false;
     }
 
     private boolean verifyGooglePlayServices() {
@@ -224,11 +228,14 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         intent.putExtra(getString(R.string.status_url_bundle_key), appLayoutInfo.getUrl());
         bindService(intent, connection, BIND_AUTO_CREATE);
         startService(intent);
+        bgServiceStarted = true;
     }
 
     private void stopServerRefreshService() {
-        binder.removeSubscriber(subscriber);
-        unbindService(connection);
+        if (bgServiceStarted) {
+            binder.removeSubscriber(subscriber);
+            unbindService(connection);
+        }
     }
 
     private void getApps(String appsUrl) {
@@ -267,12 +274,16 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         leftDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                curAppLayoutInfoPosition = position;
+                boolean refresh = true;
+                if (curAppLayoutInfoPosition != position) {
+                    curAppLayoutInfoPosition = position;
+                    refresh = false;
+                }
                 final AppLayoutInfo appLayoutInfo = appLayoutInfoList.get(position);
                 if (appLayoutInfo.getUrl() != null) {
                     drawerLayout.closeDrawers();
                     swipeRefreshLayout.setRefreshing(true);
-                    getData(appLayoutInfo.getUrl(), appLayoutInfo);
+                    getData(appLayoutInfo.getUrl(), appLayoutInfo, refresh);
                 }
             }
         });
@@ -287,7 +298,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
     private void initCurrentFrame(List<AppLayoutInfo> appLayoutInfoList) {
         if (appLayoutInfoList.size() > 0 && curAppLayoutInfoPosition < appLayoutInfoList.size()) {
             AppLayoutInfo currentAppLayoutInfo = appLayoutInfoList.get(curAppLayoutInfoPosition);
-            getData(currentAppLayoutInfo.getUrl(), currentAppLayoutInfo);
+            getData(currentAppLayoutInfo.getUrl(), currentAppLayoutInfo, false);
         }
     }
 
@@ -298,7 +309,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    getData(currentAppLayoutInfo.getUrl(), currentAppLayoutInfo);
+                    getData(currentAppLayoutInfo.getUrl(), currentAppLayoutInfo, true);
                 }
             });
         } else {
@@ -313,7 +324,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         }
     }
 
-    private void getData(String restUrl, final AppLayoutInfo appLayoutInfo) {
+    private void getData(String restUrl, final AppLayoutInfo appLayoutInfo, final boolean refresh) {
         Action1<Integer> dataLoadSubscriber = new Action1<Integer>() {
             @Override
             public void call(Integer dataLoadResult) {
@@ -329,7 +340,11 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         Action1<Map<String, Object>> appDataSubscriber = new Action1<Map<String, Object>>() {
             @Override
             public void call(Map<String, Object> appData) {
-                populateCurrentFrame(appLayoutInfo, appData);
+                if (refresh) {
+                    refreshCurrentFrame(appLayoutInfo, appData);
+                } else {
+                    populateCurrentFrame(appLayoutInfo, appData);
+                }
             }
         };
         PegaServerRestTask task = new PegaServerRestTask();
@@ -343,5 +358,14 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.app_fragment_view, appFragment);
         fragmentTransaction.commit();
         setTitle(appLayoutInfo.getAppId());
+    }
+
+    private void refreshCurrentFrame(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> currentFragments = fragmentManager.getFragments();
+        if (currentFragments.size() > 0) {
+            ((AppFragment) currentFragments.get(currentFragments.size() - 1))
+                    .updateAppData(appLayoutInfo, appData);
+        }
     }
 }

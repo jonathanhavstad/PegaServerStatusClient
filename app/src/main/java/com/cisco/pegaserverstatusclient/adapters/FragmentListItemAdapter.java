@@ -47,7 +47,7 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String[] headerColumnList = appLayoutInfo.getHeaderColsList();
-        String key = orderedKeySet.get(position % orderedKeySet.size());
+        String key = orderedKeySet.get(position / headerColumnList.length);
         Map<String, Object> childAppData = (Map<String, Object>) appData.get(key);
         int colIndex = position % headerColumnList.length;
         if (colIndex == 0) {

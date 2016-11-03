@@ -10,7 +10,6 @@ import rx.Observable;
 import rx.functions.Action1;
 
 public class SubscriberBinder extends Binder {
-    private Map<String, Object> appData;
     private long lastRefreshTime;
 
     public interface OnForceRefresh {
@@ -42,14 +41,6 @@ public class SubscriberBinder extends Binder {
         if (this.onForceRefresh != null) {
             onForceRefresh.forceRefresh();
         }
-    }
-
-    public Map<String, Object> getAppData() {
-        return appData;
-    }
-
-    public void setAppData(Map<String, Object> appData) {
-        this.appData = appData;
     }
 
     public void updateLastRefreshTime() {

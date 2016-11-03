@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 public class AppFragment extends Fragment {
     private AppLayoutInfo appLayoutInfo;
     private Map<String, Object> appData;
+    private FragmentListAdapter adapter;
 
     @BindView(R.id.landing_fragment_list)
     RecyclerView landingFragmentList;
@@ -86,11 +87,15 @@ public class AppFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
+        adapter = new FragmentListAdapter(appLayoutInfo, appData);
         landingFragmentList.setAdapter(adapter);
         landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.HORIZONTAL_LIST));
 
         return rootView;
+    }
+
+    public void updateAppData(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+        adapter.updateAppData(appLayoutInfo, appData);
     }
 }
