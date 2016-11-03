@@ -9,6 +9,7 @@ import android.util.Log;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
+import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 
 import java.util.Map;
 
@@ -26,9 +27,8 @@ public class PegaServerRefreshService extends IntentService {
 
     private PegaServerRestTask task;
     private SubscriberBinder binder;
-    private String statusUrl;
     private boolean shouldExecute;
-    private Map<String, Object> appData;
+    private Map<AppLayoutInfo, Map<String, Object>> appsData;
     private int refreshInterval;
 
     public PegaServerRefreshService() {
@@ -36,7 +36,7 @@ public class PegaServerRefreshService extends IntentService {
         binder = new SubscriberBinder(new SubscriberBinder.OnForceRefresh() {
             @Override
             public void forceRefresh() {
-                refreshData();
+                refreshAppsData();
             }
         });
     }
@@ -55,17 +55,14 @@ public class PegaServerRefreshService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            statusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
-            shouldExecute = true;
-        }
+        shouldExecute = true;
         while (shouldExecute) {
             try {
                 Thread.sleep(refreshInterval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            refreshData();
+            refreshAppsData();
         }
     }
 
@@ -75,31 +72,38 @@ public class PegaServerRefreshService extends IntentService {
         shouldExecute = false;
     }
 
-    private void refreshData() {
-        if (appData == null) {
-            appData = binder.getAppData();
+    private void refreshAppsData() {
+        if (appsData == null) {
+            appsData = binder.getAppsData();
         }
-        if (appData != null) {
-            if (task == null) {
-                initTask(appData);
-            }
-            task.loadStatusFromNetwork(statusUrl, new Action1<Integer>() {
-                @Override
-                public void call(Integer loadStatus) {
-                    if (loadStatus == PegaServerRestTask.DATA_LOAD_SUCCESS) {
-                        binder.updateLastRefreshTime();
-                        binder.subscribeObservable(initObservable(appData));
-                    } else if (loadStatus == PegaServerRestTask.DATA_LOAD_FAILURE) {
-                        Log.e(TAG, "Failed to load data from URL: " + statusUrl + "!");
-                        binder.subscribeObservable(initObservable(appData));
-                    }
-                }
-            });
+        for (AppLayoutInfo appLayoutInfo : appsData.keySet()) {
+            refreshData(appLayoutInfo.getUrl(), appsData.get(appLayoutInfo));
         }
     }
 
-    private void initTask(Map<String, Object> appData) {
-        task = new PegaServerRestTask(this, appData);
+    private void refreshData(final String statusUrl, Map<String, Object> appData) {
+        if (appData != null) {
+            if (task == null) {
+                task = new PegaServerRestTask();
+            }
+            task.loadStatusFromNetwork(statusUrl,
+                    new Action1<Integer>() {
+                        @Override
+                        public void call(Integer loadStatus) {
+                            if (loadStatus == PegaServerRestTask.DATA_LOAD_SUCCESS) {
+                                binder.updateLastRefreshTime();
+                            } else if (loadStatus == PegaServerRestTask.DATA_LOAD_FAILURE) {
+                                Log.e(TAG, "Failed to load data from URL: " + statusUrl + "!");
+                            }
+                        }
+                    },
+                    new Action1<Map<String, Object>>() {
+                        @Override
+                        public void call(Map<String, Object> appData) {
+
+                        }
+                    });
+        }
     }
 
     private Observable initObservable(Map<String, Object> appData) {
