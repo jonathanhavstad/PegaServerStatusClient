@@ -1,8 +1,12 @@
 package com.cisco.pegaserverstatusclient.data;
 
+import android.content.Context;
+
+import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,48 +15,16 @@ import java.util.Map;
  */
 
 public abstract class BaseLayoutInfo {
-    @Expose
-    @SerializedName("HeaderColumn")
-    protected String headerCols;
-    @Expose
-    @SerializedName("HeaderDesc")
-    protected String headerDesc;
-    protected String[] headerColsList;
-    protected String[] headerDescList;
-    protected Map<String, String> headerMap;
     protected String friendlyName;
     protected String key;
 
-    public String getHeaderCols() {
-        return headerCols;
+    public interface AddLayoutViewAdapter {
+        void add(PegaBaseFragment fragment);
     }
 
-    public void setHeaderCols(String headerCols) {
-        this.headerCols = headerCols;
-        this.headerColsList = headerCols.split(",");
+    public interface ReplaceLayoutViewAdapter {
+        void replace(boolean recreateView, PegaBaseFragment newFragment);
     }
-
-    public String getHeaderDesc() {
-        return headerDesc;
-    }
-
-    public void setHeaderDesc(String headerDesc) {
-        this.headerDesc = headerDesc;
-        this.headerDescList = headerDesc.split(",");
-    }
-
-    public void createHeaderMap() {
-        if (headerMap == null) {
-            headerMap = new HashMap<String, String>();
-        }
-        headerMap.clear();
-        for (int i = 0; i < this.headerColsList.length; i++) {
-            if (i < this.headerDescList.length) {
-                headerMap.put(headerColsList[i], headerDescList[i]);
-            }
-        }
-    }
-
 
     public String getFriendlyName(String key, boolean appendParent) {
         return key;
@@ -70,6 +42,16 @@ public abstract class BaseLayoutInfo {
     public abstract String getKey();
     public abstract void setKey(String key);
     public abstract BaseLayoutInfo createChildLayout(String parentKey);
+    public abstract PegaBaseFragment addLayoutToView(Context context,
+                                                     String parentKey,
+                                                     ArrayList<String> keyPath,
+                                                     Object appData,
+                                                     AddLayoutViewAdapter addLayoutViewAdapter);
+    public abstract PegaBaseFragment replaceLayoutToView(Context context,
+                                                     String parentKey,
+                                                     ArrayList<String> keyPath,
+                                                     Object appData,
+                                                     ReplaceLayoutViewAdapter replaceLayoutViewAdapter);
 
     public static class Builder {
         private BaseLayoutInfo baseLayoutInfo;
@@ -98,7 +80,14 @@ public abstract class BaseLayoutInfo {
         }
 
         public BaseLayoutInfo build() {
-            BaseLayoutInfo childInfoLayout = baseLayoutInfo.createChildLayout(parentKey);
+            BaseLayoutInfo childInfoLayout = null;
+
+            if (baseLayoutInfo != null) {
+                childInfoLayout = baseLayoutInfo.createChildLayout(parentKey);
+            } else {
+                childInfoLayout = new DomainLayoutInfo();
+            }
+
             if (key != null) {
                 childInfoLayout.setKey(key);
             }

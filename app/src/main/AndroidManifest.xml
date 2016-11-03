@@ -51,11 +51,15 @@
         <activity android:name=".activities.PegaServerDataActivity" android:label="@string/main_activity_label">
         </activity>
 
-        <activity android:name=".activities.MainActivity" android:label="@string/main_activity_label">
+        <activity android:name=".activities.PegaServerAppsActivity"
+            android:label="@string/main_application_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.PegaServerAppActivity" android:label="@string/main_activity_label">
         </activity>
 
         <activity android:name=".activities.LoginActivity"

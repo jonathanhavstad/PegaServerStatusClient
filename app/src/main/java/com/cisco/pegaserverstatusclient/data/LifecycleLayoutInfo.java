@@ -1,8 +1,13 @@
 package com.cisco.pegaserverstatusclient.data;
 
+import android.content.Context;
+
+import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
+import com.cisco.pegaserverstatusclient.fragments.PegaParentFragment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,28 +32,6 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
 
     public static final Map<String, String> LC_MAPPING = new HashMap<>();
 
-    @Expose
-    @SerializedName("AppId")
-    private String appId;
-    @Expose
-    @SerializedName("AppName")
-    private String appName;
-    @Expose
-    @SerializedName("Action")
-    private String action;
-    @Expose
-    @SerializedName("Screen")
-    private String screen;
-    @Expose
-    @SerializedName("Layout")
-    private String layout;
-    @Expose
-    @SerializedName("Method")
-    private String method;
-    @Expose
-    @SerializedName("URL")
-    private String url;
-
     static {
         LC_KEY_ORDER[0] = PROD_KEY;
         LC_KEY_ORDER[1] = STAGE_KEY;
@@ -59,54 +42,6 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
         LC_MAPPING.put(STAGE_KEY, STAGE_FRIENDLY_NAME);
         LC_MAPPING.put(LT_KEY, LT_FRIENDLY_NAME);
         LC_MAPPING.put(DEV_KEY, DEV_FRIENDLY_NAME);
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getScreen() {
-        return screen;
-    }
-
-    public void setScreen(String screen) {
-        this.screen = screen;
-    }
-
-    public String getLayout() {
-        return layout;
-    }
-
-    public void setLayout(String layout) {
-        this.layout = layout;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getFriendlyName(String key, boolean appendParent) {
@@ -144,5 +79,54 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
         return new DomainLayoutInfo();
+    }
+
+    @Override
+    public PegaBaseFragment addLayoutToView(Context context,
+                                            String parentKey,
+                                            ArrayList<String> keyPath,
+                                            Object appData,
+                                            AddLayoutViewAdapter addLayoutViewAdapter) {
+        if (addLayoutViewAdapter != null) {
+            if (appData instanceof Map<?, ?>) {
+                Map<String, Object> mapAppData = (Map<String, Object>) appData;
+                int index = 0;
+                for (String lcKey : LifecycleLayoutInfo.LC_KEY_ORDER) {
+                    if (mapAppData.containsKey(lcKey.toLowerCase())) {
+                        PegaParentFragment fragment =
+                                PegaParentFragment
+                                        .newInstance(context,
+                                                LifecycleLayoutInfo.LC_MAPPING.get(lcKey),
+                                                lcKey,
+                                                (ArrayList<String>) keyPath.clone(),
+                                                mapAppData.get(lcKey));
+                        addLayoutViewAdapter.add(fragment);
+                    }
+                    if (index == 0) {
+                        key = lcKey;
+                    }
+                    index++;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public PegaBaseFragment replaceLayoutToView(Context context,
+                                                String parentKey,
+                                                ArrayList<String> keyPath,
+                                                Object appData,
+                                                ReplaceLayoutViewAdapter replaceLayoutViewAdapter) {
+        if (replaceLayoutViewAdapter != null) {
+            if (appData instanceof Map<?, ?>) {
+                if (LifecycleLayoutInfo.LC_MAPPING.containsKey(key)) {
+                    replaceLayoutViewAdapter.replace(false, null);
+                }
+            }
+        }
+
+        return null;
     }
 }

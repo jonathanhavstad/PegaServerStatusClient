@@ -1,0 +1,13 @@
+[
+    {
+        "AppId" : "iBPM Monitor",
+        "AppName" : "Application to monitor iBPM Apps",
+        "Action" : "",
+        "Screen" : "Page1",
+        "Layout" : "GRID",
+        "Method" : "PULL",
+        "URL" : "http://www.elkimanteam.com/demo/status.json",
+        "HeaderColumn" : "Domain, Status",
+        "HeaderDesc" : "Domain, Status"
+    }
+]

@@ -28,7 +28,7 @@
     <string name="data_load_failure_alert_title">Data Load Failure</string>
     <string name="data_load_failure_alert_body">"Failed to load data from: "</string>
     <string name="url_bundle_key">url</string>
-    <string name="default_url">http://www.elkimanteam.com/demo/prod/gssc/ws/status.json</string>
+    <string name="default_url">http://www.elkimanteam.com/demo/status.json</string>
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Close</string>
     <string name="open_nav_drawer">Open</string>
@@ -39,4 +39,11 @@
     <string name="notification_push_data_url_bundle_key">url</string>
     <string name="rest_auth_success_log_message">Successfully authorized with REST service!</string>
     <string name="rest_access_token_error_log_message">Access token failure!</string>
+    <string name="js_interface_obj_name">jsObject</string>
+    <string name="js_interface_js_text_fname">login.js</string>
+    <string name="js_interface_js_prefix">javascript:</string>
+    <string name="js_interface_js_obj_method_call">.parseHeaders(headers);</string>
+    <string name="app_layout_info_bundle_key">app_layout_info</string>
+    <string name="main_application_title">Cisco EA Status Monitor</string>
+    <string name="app_chooser_title">App Chooser</string>
 </resources>

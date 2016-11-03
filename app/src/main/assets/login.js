@@ -1,0 +1,1 @@
+var loginForm=document.getElementById("login-form");loginForm.onsubmit=function(){var username=document.getElementById("userInput");jsObject.setUsername(username);}

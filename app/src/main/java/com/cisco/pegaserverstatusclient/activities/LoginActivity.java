@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import com.cisco.pegaserverstatusclient.background.services.PegaRegistrationIntentService;
 import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
 import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
+import com.cisco.pegaserverstatusclient.views.CiscoLoginFormWebView;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -57,23 +58,25 @@ public class LoginActivity extends AppCompatActivity {
     private static final int HTTP_NOT_FOUND_CODE = 404;
     private static final int ACCESS_DATA_REQUEST_CODE = 1000;
 
-    @BindView(R.id.login_web_view)
-    WebView webView;
-
     private boolean beginLogin;
     private boolean beginAuthentication;
     private boolean loadUrlFromIntent;
     private String statusUrl;
 
+    @BindView(R.id.login_web_view)
+    CiscoLoginFormWebView webView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         Fabric.with(this, new Crashlytics());
-
         ButterKnife.bind(this);
 
+        init();
+    }
+
+    private void init() {
         enableSpecificWebSettings();
 
         webView.setWebViewClient(new WebViewClient() {
@@ -96,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     beginAuthentication = false;
                     view.setVisibility(View.VISIBLE);
                 } else if (beginLogin) {
+                    beginAuthentication = true;
                     final String statusUrl = url;
                     String baseUrl = PegaServerRestTask.extractBaseUrl(url);
                     String pathUrl = PegaServerRestTask.extractPathUrl(url);
@@ -115,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                                         response.body().isJsonArray()) {
                                     launchMainActivity(statusUrl);
                                     beginLogin = false;
+                                    beginAuthentication = false;
                                 } else {
 
                                 }
@@ -137,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                                     (response.body().isJsonObject())) {
                                 launchMainActivity(statusUrl);
                                 beginLogin = false;
+                                beginAuthentication = false;
                             }
                         }
 
@@ -159,10 +165,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "URL finished loading: " + url);
                 CookieManager.getInstance().setAcceptCookie(true);
+                if (beginLogin) {
+//                    if (webView.getJsText() != null) {
+//                        webView.evaluateJavascript(webView.getJsText(),
+//                                new ValueCallback<String>() {
+//                                    @Override
+//                                    public void onReceiveValue(String value) {
+//                                        Log.d(TAG, "Received Javascript value callback: " + value);
+//                                    }
+//                                });
+//                    }
+                }
             }
         });
 
-        parseIntent(getIntent());
+        readIntent(getIntent());
 
         beginLogin = false;
         beginAuthentication = false;
@@ -184,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchMainActivity(String url) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PegaServerAppActivity.class);
         intent.putExtra(getString(R.string.status_url_bundle_key), url);
         startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
     }
@@ -241,7 +258,7 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
-    private void parseIntent(Intent intent) {
+    private void readIntent(Intent intent) {
         if (intent != null) {
             Bundle extras = intent.getExtras();
             if (extras != null) {

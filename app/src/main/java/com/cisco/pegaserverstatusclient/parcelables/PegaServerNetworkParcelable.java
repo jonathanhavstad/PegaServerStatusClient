@@ -28,7 +28,8 @@ public class PegaServerNetworkParcelable implements Parcelable {
         return 0;
     }
 
-    public static final Creator<PegaServerNetworkParcelable> CREATOR = new Creator<PegaServerNetworkParcelable>() {
+    public static final Creator<PegaServerNetworkParcelable> CREATOR =
+            new Creator<PegaServerNetworkParcelable>() {
         @Override
         public PegaServerNetworkParcelable createFromParcel(Parcel in) {
             return new PegaServerNetworkParcelable(in);

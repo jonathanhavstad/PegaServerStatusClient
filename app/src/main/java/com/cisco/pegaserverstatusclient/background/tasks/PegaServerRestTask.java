@@ -5,7 +5,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.DomainAppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.DomainLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.ServerLayoutInfo;
@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Stack;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -562,18 +561,18 @@ public class PegaServerRestTask {
         }).start();
     }
 
-    private void sendAppLayout(AppLayoutInfo appLayoutInfo) {
-        Observable<AppLayoutInfo> observable = Observable
-                .just(appLayoutInfo)
+    private void sendAppLayout(DomainAppLayoutInfo domainAppLayoutInfo) {
+        Observable<DomainAppLayoutInfo> observable = Observable
+                .just(domainAppLayoutInfo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(layoutSubscriber);
     }
 
-    private AppLayoutInfo parseAppInfo(String json) {
+    private DomainAppLayoutInfo parseAppInfo(String json) {
         Gson gson = new Gson();
-        AppLayoutInfo appLayoutInfo = gson.fromJson(json, AppLayoutInfo.class);
-        return appLayoutInfo;
+        DomainAppLayoutInfo domainAppLayoutInfo = gson.fromJson(json, DomainAppLayoutInfo.class);
+        return domainAppLayoutInfo;
     }
 
     public void loadDomainInfo(Context context,

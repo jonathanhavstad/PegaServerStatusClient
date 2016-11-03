@@ -23,7 +23,7 @@ import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
 import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
 import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.DomainAppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.DomainLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.LifecycleLayoutInfo;
@@ -36,7 +36,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +44,7 @@ import rx.functions.Action1;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity {
+public class PegaServerAppActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private static final int PLAY_SERVICE_RESOLUTION_REQUEST = 10000;
@@ -53,53 +52,35 @@ public class MainActivity extends AppCompatActivity {
     public  static final int PEGA_DISPLAY_DATA_REQUEST = 2000;
     public static final int RESULT_RELOAD_DATA = 2000;
 
-    @BindView(R.id.username_view)
-    EditText usernameView;
-
-    @BindView(R.id.password_view)
-    EditText passwordView;
-
-    @BindView(R.id.get_view_url)
-    EditText getViewUrl;
-
-    @BindView(R.id.get_view_btn)
-    Button getViewBtn;
-
-    @BindView(R.id.progress_indicator)
-    ProgressBar progressIndicator;
-
     private Map<String, Object> appData = new HashMap<>();
-
     private Map<String, Object> drawerData;
-
     private BaseLayoutInfo baseLayoutInfo;
-
     private CountingIdlingResource countingIdlingResource =
             new CountingIdlingResource("LoaddAppDataIdlingResource");
-
     private PegaServerRestTask task;
-
     private String statusUrl;
-
     private ServiceConnection connection;
-
     private Action1<Map<String, Object>> subscriber;
-
     private SubscriberBinder binder;
+
+    @BindView(R.id.username_view)
+    EditText usernameView;
+    @BindView(R.id.password_view)
+    EditText passwordView;
+    @BindView(R.id.get_view_url)
+    EditText getViewUrl;
+    @BindView(R.id.get_view_btn)
+    Button getViewBtn;
+    @BindView(R.id.progress_indicator)
+    ProgressBar progressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Fabric.with(this, new Crashlytics());
-
         ButterKnife.bind(this);
-
-        verifyGooglePlayServices();
-        startInstanceIDService();
-
-        parseIntent();
+        init();
     }
 
     @Override
@@ -128,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void init() {
+        verifyGooglePlayServices();
+        startInstanceIDService();
+        readIntent();
+    }
+
     private boolean verifyGooglePlayServices() {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int playServicesResultCode = googleApiAvailability.isGooglePlayServicesAvailable(this);
@@ -153,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         startService(instanceIDServiceIntent);
     }
 
-    private void parseIntent() {
+    private void readIntent() {
         Intent intent = getIntent();
         if (intent != null) {
             statusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
@@ -179,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchPegaServerDataActivity() {
         Intent intent = new Intent(
-                MainActivity.this,
+                PegaServerAppActivity.this,
                 PegaServerDataActivity.class);
         PegaServerNetworkBinder appBinder = new PegaServerNetworkBinder();
         appBinder.setAppData(appData);
@@ -277,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 if (childAppData instanceof Map<?, ?>) {
                     Map<String, Object> childMapAppData = (Map<String, Object>) childAppData;
                     for (String childKey : childMapAppData.keySet()) {
-                        if (childKey.toUpperCase().equals(AppLayoutInfo.APP_JSON_KEY)) {
+                        if (childKey.toUpperCase().equals(DomainAppLayoutInfo.APP_JSON_KEY)) {
                             baseLayoutInfo = new DomainLayoutInfo();
                             ((DomainLayoutInfo) baseLayoutInfo)
                                     .setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
@@ -290,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     for (String childKey : childMapAppData.keySet()) {
                         if (childKey.toUpperCase().equals(ServerLayoutInfo.SERVER_JSON_KEY)) {
-                            baseLayoutInfo = new AppLayoutInfo();
+                            baseLayoutInfo = new DomainAppLayoutInfo();
                             baseLayoutInfo.setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
                             baseLayoutInfo.setKey(key);
                             if (mapAppData.keySet().size() == 1) {

@@ -27,16 +27,11 @@ import com.cisco.pegaserverstatusclient.background.services.PegaServerRefreshSer
 import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
 import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.DomainAppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.DomainLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.DrawerListItem;
-import com.cisco.pegaserverstatusclient.data.LifecycleLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.ServerLayoutInfo;
 import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
-import com.cisco.pegaserverstatusclient.fragments.PegaChildFragment;
-import com.cisco.pegaserverstatusclient.fragments.PegaParentFragment;
-import com.cisco.pegaserverstatusclient.listeners.OnItemSelectedListener;
 import com.cisco.pegaserverstatusclient.listeners.OnUpdateDataListener;
 import com.cisco.pegaserverstatusclient.parcelables.BaseInfoParcelable;
 import com.cisco.pegaserverstatusclient.parcelables.PegaServerNetworkParcelable;
@@ -103,143 +98,9 @@ public class PegaServerDataActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pega_server_data);
-
         Fabric.with(this, new Crashlytics());
-
         ButterKnife.bind(this);
-
-        weakActivity = new WeakReference<>(this);
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            appParcelable = intent.getParcelableExtra(getString(R.string.app_binder_data_bundle_key));
-            layoutParcelable =
-                    intent.getParcelableExtra(getString(R.string.info_binder_data_bundle_key));
-            pageNum = intent.getIntExtra(getString(R.string.current_page_bundle_key), 1);
-            tabIndex= 0;
-        } else {
-            Icepick.restoreInstanceState(this, savedInstanceState);
-        }
-
-        appBinder = appParcelable.getBinder();
-        appData = appBinder.getAppData();
-        drawerData = appBinder.getDrawerData();
-
-        tabViewAdapter = new TabViewAdapter(getSupportFragmentManager());
-
-        if (layoutParcelable != null) {
-            BaseLayoutInfoBinder baseLayoutInfoBinder =
-                    layoutParcelable.getBaseLayoutInfoBinder();
-            baseLayoutInfo = baseLayoutInfoBinder.getBaseLayoutInfo();
-            if (baseLayoutInfo instanceof LifecycleLayoutInfo) {
-                if (appData instanceof Map<?, ?>) {
-                    Map<String, Object> mapAppData = (Map<String, Object>) appData;
-                    int index = 0;
-                    for (String lcKey : LifecycleLayoutInfo.LC_KEY_ORDER) {
-                        if (mapAppData.containsKey(lcKey.toLowerCase())) {
-                            PegaParentFragment domainFragment =
-                                    PegaParentFragment
-                                            .newInstance(this,
-                                                    LifecycleLayoutInfo.LC_MAPPING.get(lcKey),
-                                                    lcKey,
-                                                    (ArrayList<String>) appBinder.getKeyPath().clone(),
-                                                    mapAppData.get(lcKey));
-                            tabViewAdapter.addFragment(domainFragment);
-                        }
-                        if (index == 0) {
-                            baseLayoutInfo.setKey(lcKey);
-                        }
-                        index++;
-                    }
-                }
-            } else if (baseLayoutInfo instanceof DomainLayoutInfo) {
-                DomainLayoutInfo domainLayoutInfo = (DomainLayoutInfo) baseLayoutInfo;
-                friendlyName = domainLayoutInfo.getFriendlyName();
-                currentChildFragment =
-                        PegaChildFragment
-                                .newInstance(this,
-                                        domainLayoutInfo.getFriendlyName(),
-                                        appBinder.getParentKey(),
-                                        domainLayoutInfo.getKey(),
-                                        (ArrayList<String>) appBinder.getKeyPath().clone(),
-                                        appData);
-                tabViewAdapter.addFragment(currentChildFragment);
-            } else if (baseLayoutInfo instanceof AppLayoutInfo) {
-                AppLayoutInfo appLayoutInfo = (AppLayoutInfo) baseLayoutInfo;
-                friendlyName = appLayoutInfo.getFriendlyName();
-                currentChildFragment =
-                        PegaChildFragment
-                                .newInstance(this,
-                                        appLayoutInfo.getFriendlyName(),
-                                        appBinder.getParentKey(),
-                                        appLayoutInfo.getKey(),
-                                        (ArrayList<String>) appBinder.getKeyPath().clone(),
-                                        appData);
-                tabViewAdapter.addFragment(currentChildFragment);
-            } else if (baseLayoutInfo instanceof ServerLayoutInfo) {
-                ServerLayoutInfo serverLayoutInfo = (ServerLayoutInfo) baseLayoutInfo;
-                friendlyName = serverLayoutInfo.getFriendlyName();
-                currentChildFragment =
-                        PegaChildFragment
-                                .newInstance(this,
-                                        serverLayoutInfo.getFriendlyName(),
-                                        appBinder.getParentKey(),
-                                        serverLayoutInfo.getKey(),
-                                        (ArrayList<String>) appBinder.getKeyPath().clone(),
-                                        appData);
-                tabViewAdapter.addFragment(currentChildFragment);
-            }
-        }
-
-        onPageChangeListener = createPageChangeListener();
-
-        pegaDataPager.addOnPageChangeListener(onPageChangeListener);
-
-        pegaDataPager.setAdapter(tabViewAdapter);
-
-        if (title == null) {
-            if (friendlyName == null) {
-                friendlyName = baseLayoutInfo.getFriendlyName(baseLayoutInfo.getKey(), false);
-            }
-            setPageTitle(friendlyName);
-        }
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                requestRefresh();
-            }
-        });
-
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                pegaToolbar,
-                R.string.open_drawer,
-                R.string.close_drawer) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                Log.d(TAG, "Drawer open");
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                Log.d(TAG, "Drawer closed");
-            }
-        };
-
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
-        setSupportActionBar(pegaToolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        createDrawerLayout();
-
-        lastRefreshTime = System.currentTimeMillis();
+        init(savedInstanceState);
     }
 
     @Override
@@ -261,6 +122,19 @@ public class PegaServerDataActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
+        setPageTitle(this.title);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
@@ -272,6 +146,53 @@ public class PegaServerDataActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setPageTitle(String title) {
+        this.title = title;
+        this.friendlyName = title;
+        pegaToolbar.setSubtitle(title);
+    }
+
+    @Override
+    public void initPegaDataActivity(String key, PegaServerNetworkBinder childBinder) {
+        if (appData instanceof Map<?,?>) {
+            Map<String, Object> mapAppData = (Map<String, Object>) appData;
+            childBinder.setDrawerData(baseLayoutInfo.getValue(mapAppData, key));
+        }
+
+        BaseLayoutInfo childLayoutInfo = new BaseLayoutInfo.Builder()
+                .layout(baseLayoutInfo)
+                .parentKey(childBinder.getParentKey())
+                .friendlyName(baseLayoutInfo.getFriendlyName(key, true))
+                .key(key)
+                .build();
+
+        launchPegaServerDataActivity(childBinder, childLayoutInfo);
+    }
+
+    @Override
+    public void requestRefresh() {
+        if (binder != null) {
+            binder.forceRefresh();
+        } else if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PegaServerAppActivity.PEGA_DISPLAY_DATA_REQUEST) {
+            if (resultCode == PegaServerAppActivity.RESULT_RELOAD_DATA) {
+                setResult(PegaServerAppActivity.RESULT_RELOAD_DATA);
+                finish();
+            } else {
+
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void launchPegaServerDataActivity(final PegaServerNetworkBinder appBinder,
@@ -290,79 +211,7 @@ public class PegaServerDataActivity extends AppCompatActivity
 
         intent.putExtra(getString(R.string.current_page_bundle_key), pageNum + 1);
 
-        startActivityForResult(intent, MainActivity.PEGA_DISPLAY_DATA_REQUEST);
-    }
-
-    @Override
-    public void setPageTitle(String title) {
-        this.title = title;
-        this.friendlyName = title;
-        pegaToolbar.setSubtitle(title);
-    }
-
-    @Override
-    public void initPegaDataActivity(String key, PegaServerNetworkBinder childBinder) {
-        if (appData instanceof Map<?,?>) {
-            Map<String, Object> mapAppData = (Map<String, Object>) appData;
-            childBinder.setDrawerData(baseLayoutInfo.getValue(mapAppData, key));
-        }
-        if (baseLayoutInfo instanceof LifecycleLayoutInfo) {
-            DomainLayoutInfo domainLayoutInfo = new DomainLayoutInfo();
-            domainLayoutInfo.setFriendlyName(key);
-            domainLayoutInfo.setKey(key);
-            launchPegaServerDataActivity(childBinder, domainLayoutInfo);
-        } else if (childBinder.getParentKey().equalsIgnoreCase(AppLayoutInfo.APP_JSON_KEY)) {
-            AppLayoutInfo appLayoutInfo = new AppLayoutInfo();
-            appLayoutInfo.setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
-            appLayoutInfo.setKey(key);
-            launchPegaServerDataActivity(childBinder, appLayoutInfo);
-        } else if (childBinder.getParentKey().equalsIgnoreCase(ServerLayoutInfo.SERVER_JSON_KEY)) {
-            ServerLayoutInfo serverLayoutInfo = new ServerLayoutInfo();
-            serverLayoutInfo.setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
-            serverLayoutInfo.setKey(key);
-            launchPegaServerDataActivity(childBinder, serverLayoutInfo);
-        } else {
-            DomainLayoutInfo domainLayoutInfo = new DomainLayoutInfo();
-            domainLayoutInfo.setFriendlyName(baseLayoutInfo.getFriendlyName(key, true));
-            domainLayoutInfo.setKey(key);
-            launchPegaServerDataActivity(childBinder, domainLayoutInfo);
-        }
-    }
-
-    @Override
-    public void requestRefresh() {
-        if (binder != null) {
-            binder.forceRefresh();
-        } else if (swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        setPageTitle(this.title);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.PEGA_DISPLAY_DATA_REQUEST) {
-            if (resultCode == MainActivity.RESULT_RELOAD_DATA) {
-                setResult(MainActivity.RESULT_RELOAD_DATA);
-                finish();
-            } else {
-
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        startActivityForResult(intent, PegaServerAppActivity.PEGA_DISPLAY_DATA_REQUEST);
     }
 
     private ViewPager.OnPageChangeListener createPageChangeListener() {
@@ -405,11 +254,11 @@ public class PegaServerDataActivity extends AppCompatActivity
             }
         }
         if (tabViewAdapter.getCount() == 0) {
-            setResult(MainActivity.RESULT_RELOAD_DATA);
+            setResult(PegaServerAppActivity.RESULT_RELOAD_DATA);
             finish();
         }
         if (currentChildFragment != null && !currentChildFragment.notifyAppDataChanged(appData)) {
-            setResult(MainActivity.RESULT_RELOAD_DATA);
+            setResult(PegaServerAppActivity.RESULT_RELOAD_DATA);
             finish();
         }
 
@@ -452,36 +301,109 @@ public class PegaServerDataActivity extends AppCompatActivity
         unbindService(connection);
     }
 
-    private void replaceFragment(String key, Object replacementAppData) {
+    private void replaceFragment(final String key, final Object replacementAppData) {
         baseLayoutInfo.setKey(key);
-        if (baseLayoutInfo instanceof LifecycleLayoutInfo) {
-            if (appData instanceof Map<?, ?>) {
-                if (LifecycleLayoutInfo.LC_MAPPING.containsKey(key)) {
-                    pegaDataPager.setCurrentItem(tabViewAdapter.getFragmentPosition(key));
-                    baseLayoutInfo.setKey(key);
-                }
-            }
-        } else {
-            appData = replacementAppData;
-            friendlyName = baseLayoutInfo.getFriendlyName(key, false);
-            currentChildFragment =
-                    PegaChildFragment
-                            .newInstance(this,
-                                    friendlyName,
-                                    appBinder.getParentKey(),
-                                    key,
-                                    (ArrayList<String>) appBinder.getKeyPath().clone(),
-                                    appData);
-            tabViewAdapter = new TabViewAdapter(getSupportFragmentManager());
-            tabViewAdapter.addFragment(currentChildFragment);
-            pegaDataPager.setAdapter(tabViewAdapter);
-            setPageTitle(friendlyName);
-            pegaDataPager.forceLayout();
-        }
+        friendlyName = baseLayoutInfo.getFriendlyName(key, false);
+
+        baseLayoutInfo.replaceLayoutToView(this,
+                appBinder.getParentKey(),
+                appBinder.getKeyPath(),
+                replacementAppData,
+                new BaseLayoutInfo.ReplaceLayoutViewAdapter() {
+                    @Override
+                    public void replace(boolean recreateView, PegaBaseFragment newFragment) {
+                        if (recreateView) {
+                            currentChildFragment = newFragment;
+                            tabViewAdapter = new TabViewAdapter(getSupportFragmentManager());
+                            tabViewAdapter.addFragment(currentChildFragment);
+                            pegaDataPager.setAdapter(tabViewAdapter);
+                            setPageTitle(friendlyName);
+                            pegaDataPager.forceLayout();
+                            appData = replacementAppData;
+                        } else {
+                            pegaDataPager.setCurrentItem(tabViewAdapter.getFragmentPosition(key));
+                        }
+                    }
+                });
+
         drawerLayout.closeDrawers();
     }
 
-    private void createDrawerLayout() {
+    private void init(Bundle savedInstanceState) {
+        weakActivity = new WeakReference<>(this);
+        readIntent(savedInstanceState);
+        initTabAdapter();
+        initTitle();
+        initRefreshLayout();
+        initToolbar();
+        initDrawerLayout();
+        lastRefreshTime = System.currentTimeMillis();
+    }
+
+    private void readIntent(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        if (intent != null) {
+            appParcelable = intent.getParcelableExtra(getString(R.string.app_binder_data_bundle_key));
+            layoutParcelable =
+                    intent.getParcelableExtra(getString(R.string.info_binder_data_bundle_key));
+            pageNum = intent.getIntExtra(getString(R.string.current_page_bundle_key), 1);
+            tabIndex= 0;
+
+            appBinder = appParcelable.getBinder();
+            appData = appBinder.getAppData();
+            drawerData = appBinder.getDrawerData();
+        } else {
+            Icepick.restoreInstanceState(this, savedInstanceState);
+        }
+    }
+
+    private void initTabAdapter() {
+        tabViewAdapter = new TabViewAdapter(getSupportFragmentManager());
+
+        if (layoutParcelable != null) {
+            BaseLayoutInfoBinder baseLayoutInfoBinder =
+                    layoutParcelable.getBaseLayoutInfoBinder();
+            baseLayoutInfo = baseLayoutInfoBinder.getBaseLayoutInfo();
+            friendlyName = baseLayoutInfo.getFriendlyName();
+            currentChildFragment = baseLayoutInfo.addLayoutToView(this,
+                    appBinder.getParentKey(),
+                    appBinder.getKeyPath(),
+                    appData,
+                    new BaseLayoutInfo.AddLayoutViewAdapter() {
+                        @Override
+                        public void add(PegaBaseFragment fragment) {
+                            tabViewAdapter.addFragment(fragment);
+                        }
+                    });
+        }
+
+        onPageChangeListener = createPageChangeListener();
+
+        pegaDataPager.addOnPageChangeListener(onPageChangeListener);
+
+        pegaDataPager.setAdapter(tabViewAdapter);
+    }
+
+    private void initTitle() {
+        if (title == null) {
+            if (friendlyName == null) {
+                friendlyName = baseLayoutInfo.getFriendlyName(baseLayoutInfo.getKey(), false);
+            }
+            setPageTitle(friendlyName);
+        }
+    }
+
+    private void initRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                requestRefresh();
+            }
+        });
+    }
+
+    private void initDrawerLayout() {
         populateDrawerList();
 
         leftDrawer.setAdapter(new ArrayAdapter<>(this,
@@ -497,6 +419,33 @@ public class PegaServerDataActivity extends AppCompatActivity
                 replaceFragment(drawerKey, drawerMapData.get(drawerKey));
             }
         });
+    }
+
+    private void initToolbar() {
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,
+                drawerLayout,
+                pegaToolbar,
+                R.string.open_drawer,
+                R.string.close_drawer) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Log.d(TAG, "Drawer open");
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                Log.d(TAG, "Drawer closed");
+            }
+        };
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        setSupportActionBar(pegaToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void populateDrawerList() {
@@ -547,7 +496,7 @@ public class PegaServerDataActivity extends AppCompatActivity
             if (lastObject != null) {
                 drawerData = lastObject;
                 if (baseLayoutInfo instanceof DomainLayoutInfo ||
-                        baseLayoutInfo instanceof AppLayoutInfo) {
+                        baseLayoutInfo instanceof DomainAppLayoutInfo) {
                     this.appData = ((Map<String, Object>) drawerData).get(baseLayoutInfo.getKey());
                 } else {
                     this.appData = drawerData;

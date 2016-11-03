@@ -1,8 +1,11 @@
 package com.cisco.pegaserverstatusclient.data;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import android.content.Context;
 
+import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
+import com.cisco.pegaserverstatusclient.fragments.PegaChildFragment;
+
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -13,7 +16,7 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
     @Override
     public Object getValue(Map<String, Object> appData, String childKey) {
         if (appData != null) {
-            Object childValue = appData.get(AppLayoutInfo.APP_JSON_KEY);
+            Object childValue = appData.get(DomainAppLayoutInfo.APP_JSON_KEY);
             if (childValue != null && childValue instanceof Map<?,?>) {
                 Map<String, Object> appChildMap = (Map<String, Object>) childValue;
                 if (appChildMap.containsKey(childKey)) {
@@ -55,12 +58,58 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
         if (parentKey != null) {
-            if (parentKey.equalsIgnoreCase(AppLayoutInfo.APP_JSON_KEY)) {
-                return new AppLayoutInfo();
+            if (parentKey.equalsIgnoreCase(DomainAppLayoutInfo.APP_JSON_KEY)) {
+                return new DomainAppLayoutInfo();
             } else if (parentKey.equalsIgnoreCase(ServerLayoutInfo.SERVER_JSON_KEY)) {
                 return new ServerLayoutInfo();
             }
         }
         return null;
+    }
+
+    @Override
+    public PegaBaseFragment addLayoutToView(Context context,
+                                            String parentKey,
+                                            ArrayList<String> keyPath,
+                                            Object appData,
+                                            AddLayoutViewAdapter addLayoutViewAdapter) {
+        PegaBaseFragment fragment = null;
+
+        if (addLayoutViewAdapter != null) {
+            fragment =
+                    PegaChildFragment
+                            .newInstance(context,
+                                    friendlyName,
+                                    parentKey,
+                                    key,
+                                    (ArrayList<String>) keyPath.clone(),
+                                    appData);
+            addLayoutViewAdapter.add(fragment);
+        }
+
+        return fragment;
+    }
+
+    @Override
+    public PegaBaseFragment replaceLayoutToView(Context context,
+                                                String parentKey,
+                                                ArrayList<String> keyPath,
+                                                Object appData,
+                                                ReplaceLayoutViewAdapter replaceLayoutViewAdapter) {
+        PegaBaseFragment fragment = null;
+
+        if (replaceLayoutViewAdapter != null) {
+            fragment =
+                    PegaChildFragment
+                            .newInstance(context,
+                                    friendlyName,
+                                    parentKey,
+                                    key,
+                                    (ArrayList<String>) keyPath.clone(),
+                                    appData);
+            replaceLayoutViewAdapter.replace(true, fragment);
+        }
+
+        return fragment;
     }
 }

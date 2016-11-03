@@ -12,8 +12,8 @@ import java.util.Map;
  * Created by jonathanhavstad on 10/25/16.
  */
 
-public class ServerLayoutInfo extends BaseLayoutInfo {
-    public static final String SERVER_JSON_KEY = "HOSTS";
+public class DomainAppLayoutInfo extends BaseLayoutInfo {
+    public static final String APP_JSON_KEY = "APPS";
 
     public String getFriendlyName() {
         return friendlyName;
@@ -33,7 +33,7 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
-        return null;
+        return new ServerLayoutInfo();
     }
 
     @Override
@@ -45,8 +45,7 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
         PegaBaseFragment fragment = null;
 
         if (addLayoutViewAdapter != null) {
-            fragment =
-                    PegaChildFragment
+            fragment = PegaChildFragment
                             .newInstance(context,
                                     friendlyName,
                                     parentKey,
@@ -83,8 +82,15 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public Object getValue(Map<String, Object> appData, String childValue) {
+    public Object getValue(Map<String, Object> appData, String childKey) {
         if (appData != null) {
+            Object childValue = appData.get(ServerLayoutInfo.SERVER_JSON_KEY);
+            if (childValue != null && childValue instanceof Map<?,?>) {
+                Map<String, Object> serverChildMap = (Map<String, Object>) childValue;
+                if (serverChildMap.containsKey(childKey)) {
+                    return serverChildMap;
+                }
+            }
             return appData.get(key);
         }
         return null;
