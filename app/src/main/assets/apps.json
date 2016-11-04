@@ -9,16 +9,5 @@
         "URL" : "http://www.elkimanteam.com/demo/status.json",
         "HeaderColumn" : "Domain, Status",
         "HeaderDesc" : "Domain, Status"
-    },
-    {
-        "AppId" : "Test",
-        "AppName" : "Testing",
-        "Action" : "",
-        "Screen" : "Page1",
-        "Layout" : "GRID",
-        "Method" : "PULL",
-        "URL" : "",
-        "HeaderColumn" : "",
-        "HeaderDesc" : ""
     }
 ]

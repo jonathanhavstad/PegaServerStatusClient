@@ -116,7 +116,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
 
     private List<String> appFilter = new ArrayList<>();
 
-    private AdapterView.OnItemClickListener drawerClickListener;
+    private String baseStatusUrl;
 
     @BindView(R.id.app_toolbar)
     Toolbar pegaToolbar;
@@ -154,6 +154,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         getSupportFragmentManager().popBackStackImmediate();
+        finish();
         super.onBackPressed();
     }
 
@@ -236,6 +237,7 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         verifyGooglePlayServices();
         startInstanceIDService();
         initToolbar();
+        readIntent();
         curAppLayoutInfoPosition = 0;
     }
 
@@ -286,6 +288,13 @@ public class PegaServerAppsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         setTitle(getString(R.string.app_chooser_title));
+    }
+
+    private void readIntent() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            baseStatusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
+        }
     }
 
     private void showAlert(String title, String body, final boolean critical) {
@@ -439,7 +448,9 @@ public class PegaServerAppsActivity extends AppCompatActivity {
                          String restUrl,
                          final BaseLayoutInfo appLayoutInfo,
                          final boolean refresh) {
-
+        if (baseStatusUrl != null) {
+            restUrl = baseStatusUrl;
+        }
         Action1<Integer> dataLoadSubscriber = new Action1<Integer>() {
             @Override
             public void call(Integer dataLoadResult) {

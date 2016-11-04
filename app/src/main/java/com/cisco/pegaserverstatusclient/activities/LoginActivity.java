@@ -112,25 +112,21 @@ public class LoginActivity extends AppCompatActivity {
                     service.getStatusWithJsonArray(pathUrl).enqueue(new Callback<JsonArray>() {
                         @Override
                         public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                            try {
-                                Log.d(TAG, "Received response");
-                                if (response != null &&
-                                        response.body() != null &&
-                                        response.body().isJsonArray()) {
-                                    launchMainActivity(statusUrl);
-                                    beginLogin = false;
-                                    beginAuthentication = false;
-                                } else {
-
-                                }
-                            } catch (JsonSyntaxException e) {
-                                Log.d(TAG, "Received JSON error: " + e.toString());
+                            Log.d(TAG, "Received response");
+                            if (response != null &&
+                                    response.body() != null &&
+                                    response.body().isJsonArray()) {
+                                launchMainActivity(statusUrl);
+                                beginLogin = false;
+                                beginAuthentication = false;
+                            } else {
+                                Log.e(TAG, "Response body is not acceptable!");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<JsonArray> call, Throwable t) {
-                            Log.d(TAG, "Received JSON error: " + t.toString());
+                            Log.e(TAG, "Received JSON error: " + t.toString());
                         }
                     });
                     service.getStatusWithJsonObject(pathUrl).enqueue(new Callback<JsonObject>() {
@@ -143,12 +139,14 @@ public class LoginActivity extends AppCompatActivity {
                                 launchMainActivity(statusUrl);
                                 beginLogin = false;
                                 beginAuthentication = false;
+                            } else {
+                                Log.e(TAG, "Response body is not acceptable!");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.d(TAG, "Received JSON error: " + t.toString());
+                            Log.e(TAG, "Received JSON error: " + t.toString());
                         }
                     });
                 }
@@ -165,17 +163,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "URL finished loading: " + url);
                 CookieManager.getInstance().setAcceptCookie(true);
-                if (beginLogin) {
-//                    if (webView.getJsText() != null) {
-//                        webView.evaluateJavascript(webView.getJsText(),
-//                                new ValueCallback<String>() {
-//                                    @Override
-//                                    public void onReceiveValue(String value) {
-//                                        Log.d(TAG, "Received Javascript value callback: " + value);
-//                                    }
-//                                });
-//                    }
-                }
             }
         });
 
