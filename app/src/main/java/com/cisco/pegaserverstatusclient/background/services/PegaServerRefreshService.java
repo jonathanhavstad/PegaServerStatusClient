@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
+import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ import rx.schedulers.Schedulers;
 public class PegaServerRefreshService extends IntentService {
     private static final String TAG = "PegaRefreshService";
 
-    private PegaServerRestTask task;
+    private ServerDataRestTask task;
     private SubscriberBinder binder;
     private String statusUrl;
     private boolean shouldExecute;
@@ -38,6 +38,7 @@ public class PegaServerRefreshService extends IntentService {
                 refreshData();
             }
         });
+        task = new ServerDataRestTask();
     }
 
     @Override
@@ -75,9 +76,6 @@ public class PegaServerRefreshService extends IntentService {
     }
 
     private void refreshData() {
-        if (task == null) {
-            task = new PegaServerRestTask();
-        }
         task.loadStatusFromNetwork(statusUrl,
                 new Action1<Integer>() {
                     @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.KeyMapping;
 
 import java.util.List;
@@ -24,15 +25,15 @@ import butterknife.ButterKnife;
  */
 
 public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapter.ViewHolder> {
-    private AppLayoutInfo appLayoutInfo;
+    private BaseLayoutInfo appLayoutInfo;
     private Map<String, Object> appData;
     private List<String> orderedKeySet;
 
-    public FragmentListAdapter(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+    public FragmentListAdapter(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
         init(appLayoutInfo, appData);
     }
 
-    private void init(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+    private void init(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
         this.appLayoutInfo  = appLayoutInfo;
         this.appData = appData;
         this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
@@ -58,16 +59,15 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
 
         String[] headers = appLayoutInfo.getHeaderDescList();
         FragmentListHeaderAdapter headerAdapter = new FragmentListHeaderAdapter(headers);
-        holder.loadingFragmentListHeaders.setAdapter(headerAdapter);
         ((GridLayoutManager) holder.loadingFragmentListHeaders.getLayoutManager())
                 .setSpanCount(appLayoutInfo.getHeaderColsList().length);
+        holder.loadingFragmentListHeaders.setAdapter(headerAdapter);
 
-        Map<String, Object> childAppData =
-                (Map<String, Object>) appData.get(key);
+        Map<String, Object> childAppData = (Map<String, Object>) appData.get(key);
         FragmentListItemAdapter adapter = new FragmentListItemAdapter(appLayoutInfo, childAppData);
-        holder.landingFragmentListItem.setAdapter(adapter);
         ((GridLayoutManager) holder.landingFragmentListItem.getLayoutManager())
                 .setSpanCount(appLayoutInfo.getHeaderColsList().length);
+        holder.landingFragmentListItem.setAdapter(adapter);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
         }
     }
 
-    public void updateAppData(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+    public void updateAppData(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
         init(appLayoutInfo, appData);
         notifyDataSetChanged();
     }

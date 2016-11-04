@@ -48,4 +48,8 @@
     <string name="app_chooser_title">App Chooser</string>
     <string name="app_load_error_alert_title">Applications Load Failure</string>
     <string name="app_load_error_alert_body">Failed to load application data!</string>
+    <string name="child_layout_bundle_key">child_layout</string>
+    <string name="app_fragment_tag">app_fragment</string>
+    <string name="app_layout_refresh_error_alert_title">App Layout Refresh Error</string>
+    <string name="app_layout_refresh_error_alert_body">No application is loaded to be refreshed!</string>
 </resources>

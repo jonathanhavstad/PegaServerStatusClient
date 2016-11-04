@@ -2,9 +2,6 @@ package com.cisco.pegaserverstatusclient.data;
 
 import android.content.Context;
 
-import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
-import com.cisco.pegaserverstatusclient.fragments.PegaChildFragment;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -68,48 +65,7 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public PegaBaseFragment addLayoutToView(Context context,
-                                            String parentKey,
-                                            ArrayList<String> keyPath,
-                                            Object appData,
-                                            AddLayoutViewAdapter addLayoutViewAdapter) {
-        PegaBaseFragment fragment = null;
-
-        if (addLayoutViewAdapter != null) {
-            fragment =
-                    PegaChildFragment
-                            .newInstance(context,
-                                    friendlyName,
-                                    parentKey,
-                                    key,
-                                    (ArrayList<String>) keyPath.clone(),
-                                    appData);
-            addLayoutViewAdapter.add(fragment);
-        }
-
-        return fragment;
-    }
-
-    @Override
-    public PegaBaseFragment replaceLayoutToView(Context context,
-                                                String parentKey,
-                                                ArrayList<String> keyPath,
-                                                Object appData,
-                                                ReplaceLayoutViewAdapter replaceLayoutViewAdapter) {
-        PegaBaseFragment fragment = null;
-
-        if (replaceLayoutViewAdapter != null) {
-            fragment =
-                    PegaChildFragment
-                            .newInstance(context,
-                                    friendlyName,
-                                    parentKey,
-                                    key,
-                                    (ArrayList<String>) keyPath.clone(),
-                                    appData);
-            replaceLayoutViewAdapter.replace(true, fragment);
-        }
-
-        return fragment;
+    public String getUrl() {
+        return null;
     }
 }

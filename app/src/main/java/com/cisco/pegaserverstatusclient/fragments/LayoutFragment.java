@@ -29,13 +29,15 @@ import butterknife.ButterKnife;
 public class LayoutFragment extends Fragment {
     private AppLayoutInfo appLayoutInfo;
     private Map<String, Object> appData;
+    private boolean childLayout;
 
     @BindView(R.id.landing_fragment_list)
     RecyclerView landingFragmentList;
 
     public static LayoutFragment newInstance(Context context,
                                              BaseLayoutInfo appLayoutInfo,
-                                             Map<String, Object> fragmentData) {
+                                             Map<String, Object> fragmentData,
+                                             boolean childLayout) {
         LayoutFragment layoutFragment = new LayoutFragment();
 
         Bundle args = new Bundle();
@@ -47,6 +49,8 @@ public class LayoutFragment extends Fragment {
         PegaServerNetworkBinder pegaServerNetworkBinder = new PegaServerNetworkBinder();
         pegaServerNetworkBinder.setAppData(fragmentData);
         args.putBinder(context.getString(R.string.app_binder_data_bundle_key), pegaServerNetworkBinder);
+
+        args.putBoolean(context.getString(R.string.child_layout_bundle_key), childLayout);
 
         layoutFragment.setArguments(args);
 
@@ -74,6 +78,8 @@ public class LayoutFragment extends Fragment {
             if (binder != null) {
                 appData = (Map<String, Object>) binder.getAppData();
             }
+
+            childLayout = args.getBoolean(getString(R.string.child_layout_bundle_key));
         }
     }
 
@@ -82,21 +88,30 @@ public class LayoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+        View rootView = null;
 
-        ButterKnife.bind(this, rootView);
+        if (childLayout) {
 
-        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
-        landingFragmentList.setAdapter(adapter);
-        landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.HORIZONTAL_LIST));
+        } else {
+            rootView = inflater.inflate(R.layout.fragment_list, container, false);
+
+            ButterKnife.bind(this, rootView);
+            FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
+            landingFragmentList.setAdapter(adapter);
+            landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.HORIZONTAL_LIST));
+        }
 
         return rootView;
     }
 
     public void updateAppData(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
-
         FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
         landingFragmentList.swapAdapter(adapter, false);
+    }
+
+    public void scrollToPosition(int position) {
+        landingFragmentList.scrollToPosition(position);
+        landingFragmentList.forceLayout();
     }
 }

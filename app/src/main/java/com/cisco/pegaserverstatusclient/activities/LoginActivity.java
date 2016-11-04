@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.cisco.pegaserverstatusclient.background.services.PegaRegistrationIntentService;
-import com.cisco.pegaserverstatusclient.background.tasks.PegaServerRestTask;
+import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
 import com.cisco.pegaserverstatusclient.views.CiscoLoginFormWebView;
 import com.crashlytics.android.Crashlytics;
@@ -101,8 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (beginLogin) {
                     beginAuthentication = true;
                     final String statusUrl = url;
-                    String baseUrl = PegaServerRestTask.extractBaseUrl(url);
-                    String pathUrl = PegaServerRestTask.extractPathUrl(url);
+                    String baseUrl = ServerDataRestTask.extractBaseUrl(url);
+                    String pathUrl = ServerDataRestTask.extractPathUrl(url);
                     Retrofit retrofit = new Retrofit
                             .Builder()
                             .baseUrl(baseUrl)

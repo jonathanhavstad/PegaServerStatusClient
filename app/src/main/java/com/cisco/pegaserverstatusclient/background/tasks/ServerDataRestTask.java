@@ -103,9 +103,11 @@ public class ServerDataRestTask {
         loadFromFile(context, context.getString(R.string.status_json_filename));
     }
 
-    public void loadStatusFromNetwork(String url,
+    public boolean loadStatusFromNetwork(String url,
                                       Action1<Integer> loadStatusSubscriber,
                                       Action1<Map<String, Object>> appDataSubscriber) {
+        boolean initResult = false;
+
         this.loadStatusSubscriber = loadStatusSubscriber;
         this.appDataSubscriber = appDataSubscriber;
 
@@ -114,7 +116,8 @@ public class ServerDataRestTask {
         this.loadJsonArrayFinished = false;
         this.loadJsonObjectFinished = false;
 
-        if (url != null) {
+        if (url != null && !url.isEmpty()) {
+            initResult = true;
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(extractBaseUrl(url))
                     .addConverterFactory(GsonConverterFactory.create())
@@ -188,6 +191,7 @@ public class ServerDataRestTask {
                         }
                     });
         }
+        return initResult;
     }
 
     public static String extractBaseUrl(String url) {

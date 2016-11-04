@@ -2,12 +2,10 @@ package com.cisco.pegaserverstatusclient.data;
 
 import android.content.Context;
 
-import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,17 +34,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     @Expose
     @SerializedName("URL")
     private String url;
-    @Expose
-    @SerializedName("HeaderColumn")
-    private String headerColumns;
-    @Expose
-    @SerializedName("HeaderDesc")
-    private String headerDesc;
-
-    private String[] headerColsList;
-    private String[] headerDescList;
-
-    private Map<String, String> headerMap;
 
     public String getAppId() {
         return appId;
@@ -104,63 +91,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
         this.method = method;
     }
 
-    public String getHeaderColumns() {
-        return headerColumns;
-    }
-
-    public void setHeaderColumns(String headerColumns) {
-        this.headerColumns = headerColumns;
-    }
-
-    public void splitHeaderCols() {
-        if (headerColumns != null) {
-            headerColsList = headerColumns.split(",");
-            trimListElements(headerColsList);
-        }
-    }
-
-    public String[] getHeaderColsList() {
-        return headerColsList;
-    }
-
-    public String getHeaderDesc() {
-        return headerDesc;
-    }
-
-    public void setHeaderDesc(String headerDesc) {
-        this.headerDescList = headerDesc.split(",");
-        this.headerDesc = headerDesc;
-    }
-
-    public void splitHeaderDesc() {
-        if (headerDesc != null) {
-            headerDescList = headerDesc.split(",");
-            trimListElements(headerDescList);
-        }
-    }
-
-    private void trimListElements(String[] list) {
-        for (int i = 0; i < list.length; i++) {
-            list[i] = list[i].trim();
-        }
-    }
-
-    public String[] getHeaderDescList() {
-        return headerDescList;
-    }
-
-    public void createHeaderMap() {
-        if (headerMap == null) {
-            headerMap = new HashMap<String, String>();
-        }
-        headerMap.clear();
-        for (int i = 0; i < this.headerColsList.length; i++) {
-            if (i < this.headerDescList.length) {
-                headerMap.put(headerColsList[i], headerDescList[i]);
-            }
-        }
-    }
-
     @Override
     public Object getValue(Map<String, Object> appData, String childKey) {
         return null;
@@ -195,16 +125,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
-        return null;
-    }
-
-    @Override
-    public PegaBaseFragment addLayoutToView(Context context, String parentKey, ArrayList<String> keyPath, Object appData, AddLayoutViewAdapter addLayoutViewAdapter) {
-        return null;
-    }
-
-    @Override
-    public PegaBaseFragment replaceLayoutToView(Context context, String parentKey, ArrayList<String> keyPath, Object appData, ReplaceLayoutViewAdapter replaceLayoutViewAdapter) {
         return null;
     }
 }

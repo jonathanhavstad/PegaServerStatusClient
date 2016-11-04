@@ -28,6 +28,9 @@ public class KeyMapping {
                 return KEY_MAPPING.get(keyMapping);
             }
         }
+        if (!shouldIgnoreKey(key)) {
+            return key;
+        }
         return null;
     }
 

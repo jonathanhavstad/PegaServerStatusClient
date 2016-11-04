@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
+import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.KeyMapping;
 
 import java.util.List;
@@ -24,12 +25,12 @@ import butterknife.ButterKnife;
  */
 
 public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListItemAdapter.ViewHolder> {
-    private AppLayoutInfo appLayoutInfo;
+    private BaseLayoutInfo appLayoutInfo;
     private Map<String, Object> appData;
     private List<String> orderedKeySet;
     private int size;
 
-    public FragmentListItemAdapter(AppLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+    public FragmentListItemAdapter(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
         this.appLayoutInfo = appLayoutInfo;
         this.appData = appData;
         this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
@@ -50,9 +51,15 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
         String key = orderedKeySet.get(position / headerColumnList.length);
         Map<String, Object> childAppData = (Map<String, Object>) appData.get(key);
         int colIndex = position % headerColumnList.length;
+        holder.landingFragmentListChildItem.setClickable(false);
+        holder.landingFragmentListChildItem.setText("");
+        holder.landingFragmentListChildItem.setTextAppearance(holder.itemView.getContext(),
+                R.style.DefaultItemTextStyle);
         if (colIndex == 0) {
             holder.landingFragmentListChildItem.setClickable(true);
-            holder.landingFragmentListChildItem.setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
+            holder
+                    .landingFragmentListChildItem
+                    .setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
             holder.landingFragmentListChildItem.setText(key);
         } else {
             String header = headerColumnList[colIndex];

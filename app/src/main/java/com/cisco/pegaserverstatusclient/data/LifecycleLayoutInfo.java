@@ -2,11 +2,6 @@ package com.cisco.pegaserverstatusclient.data;
 
 import android.content.Context;
 
-import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
-import com.cisco.pegaserverstatusclient.fragments.PegaParentFragment;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,51 +77,7 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public PegaBaseFragment addLayoutToView(Context context,
-                                            String parentKey,
-                                            ArrayList<String> keyPath,
-                                            Object appData,
-                                            AddLayoutViewAdapter addLayoutViewAdapter) {
-        if (addLayoutViewAdapter != null) {
-            if (appData instanceof Map<?, ?>) {
-                Map<String, Object> mapAppData = (Map<String, Object>) appData;
-                int index = 0;
-                for (String lcKey : LifecycleLayoutInfo.LC_KEY_ORDER) {
-                    if (mapAppData.containsKey(lcKey.toLowerCase())) {
-                        PegaParentFragment fragment =
-                                PegaParentFragment
-                                        .newInstance(context,
-                                                LifecycleLayoutInfo.LC_MAPPING.get(lcKey),
-                                                lcKey,
-                                                (ArrayList<String>) keyPath.clone(),
-                                                mapAppData.get(lcKey));
-                        addLayoutViewAdapter.add(fragment);
-                    }
-                    if (index == 0) {
-                        key = lcKey;
-                    }
-                    index++;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public PegaBaseFragment replaceLayoutToView(Context context,
-                                                String parentKey,
-                                                ArrayList<String> keyPath,
-                                                Object appData,
-                                                ReplaceLayoutViewAdapter replaceLayoutViewAdapter) {
-        if (replaceLayoutViewAdapter != null) {
-            if (appData instanceof Map<?, ?>) {
-                if (LifecycleLayoutInfo.LC_MAPPING.containsKey(key)) {
-                    replaceLayoutViewAdapter.replace(false, null);
-                }
-            }
-        }
-
+    public String getUrl() {
         return null;
     }
 }

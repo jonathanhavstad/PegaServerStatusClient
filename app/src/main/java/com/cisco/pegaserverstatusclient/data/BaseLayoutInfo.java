@@ -2,7 +2,6 @@ package com.cisco.pegaserverstatusclient.data;
 
 import android.content.Context;
 
-import com.cisco.pegaserverstatusclient.fragments.PegaBaseFragment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -15,15 +14,76 @@ import java.util.Map;
  */
 
 public abstract class BaseLayoutInfo {
+    @Expose
+    @SerializedName("HeaderColumn")
+    private String headerColumns;
+    @Expose
+    @SerializedName("HeaderDesc")
+    private String headerDesc;
+
     protected String friendlyName;
     protected String key;
 
-    public interface AddLayoutViewAdapter {
-        void add(PegaBaseFragment fragment);
+    protected String[] headerColsList;
+    protected String[] headerDescList;
+
+    private Map<String, String> headerMap;
+
+    public String getHeaderColumns() {
+        return headerColumns;
     }
 
-    public interface ReplaceLayoutViewAdapter {
-        void replace(boolean recreateView, PegaBaseFragment newFragment);
+    public void setHeaderColumns(String headerColumns) {
+        this.headerColumns = headerColumns;
+    }
+
+    public String getHeaderDesc() {
+        return headerDesc;
+    }
+
+    public void setHeaderDesc(String headerDesc) {
+        this.headerDescList = headerDesc.split(",");
+        this.headerDesc = headerDesc;
+    }
+
+    public void splitHeaderDesc() {
+        if (headerDesc != null) {
+            headerDescList = headerDesc.split(",");
+            trimListElements(headerDescList);
+        }
+    }
+
+    private void trimListElements(String[] list) {
+        for (int i = 0; i < list.length; i++) {
+            list[i] = list[i].trim();
+        }
+    }
+
+    public String[] getHeaderDescList() {
+        return headerDescList;
+    }
+
+    public void createHeaderMap() {
+        if (headerMap == null) {
+            headerMap = new HashMap<String, String>();
+        }
+        headerMap.clear();
+        for (int i = 0; i < this.headerColsList.length; i++) {
+            if (i < this.headerDescList.length) {
+                headerMap.put(headerColsList[i], headerDescList[i]);
+            }
+        }
+    }
+
+    public void splitHeaderCols() {
+        if (headerColumns != null) {
+            headerColsList = headerColumns.split(",");
+            trimListElements(headerColsList);
+        }
+    }
+
+    public String[] getHeaderColsList() {
+        return headerColsList;
     }
 
     public String getFriendlyName(String key, boolean appendParent) {
@@ -42,61 +102,6 @@ public abstract class BaseLayoutInfo {
     public abstract String getKey();
     public abstract void setKey(String key);
     public abstract BaseLayoutInfo createChildLayout(String parentKey);
-    public abstract PegaBaseFragment addLayoutToView(Context context,
-                                                     String parentKey,
-                                                     ArrayList<String> keyPath,
-                                                     Object appData,
-                                                     AddLayoutViewAdapter addLayoutViewAdapter);
-    public abstract PegaBaseFragment replaceLayoutToView(Context context,
-                                                     String parentKey,
-                                                     ArrayList<String> keyPath,
-                                                     Object appData,
-                                                     ReplaceLayoutViewAdapter replaceLayoutViewAdapter);
+    public abstract String getUrl();
 
-    public static class Builder {
-        private BaseLayoutInfo baseLayoutInfo;
-        private String parentKey;
-        private String key;
-        private String friendlyName;
-
-        public Builder layout(BaseLayoutInfo baseLayoutInfo) {
-            this.baseLayoutInfo = baseLayoutInfo;
-            return this;
-        }
-
-        public Builder parentKey(String parentKey) {
-            this.parentKey = parentKey;
-            return this;
-        }
-
-        public Builder key(String key) {
-            this.key = key;
-            return this;
-        }
-
-        public Builder friendlyName(String friendlyName) {
-            this.friendlyName = friendlyName;
-            return this;
-        }
-
-        public BaseLayoutInfo build() {
-            BaseLayoutInfo childInfoLayout = null;
-
-            if (baseLayoutInfo != null) {
-                childInfoLayout = baseLayoutInfo.createChildLayout(parentKey);
-            } else {
-                childInfoLayout = new DomainLayoutInfo();
-            }
-
-            if (key != null) {
-                childInfoLayout.setKey(key);
-            }
-
-            if (friendlyName != null) {
-                childInfoLayout.setFriendlyName(friendlyName);
-            }
-
-            return childInfoLayout;
-        }
-    }
 }
