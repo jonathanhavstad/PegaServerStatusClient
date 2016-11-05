@@ -3,19 +3,19 @@ package com.cisco.pegaserverstatusclient.parcelables;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
+import com.cisco.pegaserverstatusclient.binders.ServerDataBinder;
 
 /**
  * Created by jonathanhavstad on 10/20/16.
  */
 
 public class PegaServerNetworkParcelable implements Parcelable {
-    private PegaServerNetworkBinder binder = new PegaServerNetworkBinder();
+    private ServerDataBinder binder = new ServerDataBinder();
 
     public PegaServerNetworkParcelable() {}
 
     protected PegaServerNetworkParcelable(Parcel in) {
-        binder = (PegaServerNetworkBinder) in.readStrongBinder();
+        binder = (ServerDataBinder) in.readStrongBinder();
     }
 
     @Override
@@ -41,11 +41,11 @@ public class PegaServerNetworkParcelable implements Parcelable {
         }
     };
 
-    public PegaServerNetworkBinder getBinder() {
+    public ServerDataBinder getBinder() {
         return binder;
     }
 
-    public void setBinder(PegaServerNetworkBinder binder) {
+    public void setBinder(ServerDataBinder binder) {
         this.binder = binder;
     }
 }

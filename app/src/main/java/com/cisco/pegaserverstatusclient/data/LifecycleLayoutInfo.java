@@ -2,8 +2,11 @@ package com.cisco.pegaserverstatusclient.data;
 
 import android.content.Context;
 
+import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +40,10 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
         LC_MAPPING.put(STAGE_KEY, STAGE_FRIENDLY_NAME);
         LC_MAPPING.put(LT_KEY, LT_FRIENDLY_NAME);
         LC_MAPPING.put(DEV_KEY, DEV_FRIENDLY_NAME);
+    }
+
+    public LifecycleLayoutInfo(BaseLayoutInfo parentLayout) {
+        super(parentLayout);
     }
 
     public String getFriendlyName(String key, boolean appendParent) {
@@ -73,11 +80,46 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
-        return new DomainLayoutInfo();
+        return new DomainLayoutInfo(this);
     }
 
     @Override
-    public String getUrl() {
+    public BaseLayoutInfo getChildLayout(int index) {
+        if (index >= 0 && index < childrenLayouts.size()) {
+            return childrenLayouts.get(index);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean readFromNetwork(InputStream in) {
+        List<BaseLayoutInfo> layoutList = new ArrayList<>();
+
+        if (appData != null) {
+            orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
+            for (String key : orderedKeySet) {
+                DomainLayoutInfo layoutInfo = new DomainLayoutInfo(this);
+                layoutInfo.setKey(key);
+                layoutInfo.setAppData((Map<String, Object>) appData.get(key));
+                layoutInfo.setFriendlyName(layoutInfo.getFriendlyName(key, false));
+                layoutInfo.splitHeaderCols();
+                layoutInfo.splitHeaderDesc();
+                layoutList.add(layoutInfo);
+            }
+            setChildrenLayouts(layoutList);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public List<String> getDataUrls() {
+        return null;
+    }
+
+    @Override
+    public BaseLayoutInfo filteredLayout(String filter) {
         return null;
     }
 }

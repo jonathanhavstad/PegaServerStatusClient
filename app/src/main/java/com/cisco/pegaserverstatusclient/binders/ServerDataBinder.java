@@ -8,11 +8,11 @@ import java.util.ArrayList;
  * Created by jonathanhavstad on 10/20/16.
  */
 
-public class PegaServerNetworkBinder<T> extends Binder {
+public class ServerDataBinder<T> extends Binder {
     private T appData;
+    private T drawerData;
     private String parentKey;
     private ArrayList<String> keyPath;
-    private T drawerData;
 
     public T getAppData() {
         return appData;

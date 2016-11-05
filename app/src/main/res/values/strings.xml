@@ -52,4 +52,5 @@
     <string name="app_fragment_tag">app_fragment</string>
     <string name="app_layout_refresh_error_alert_title">App Layout Refresh Error</string>
     <string name="app_layout_refresh_error_alert_body">No application is loaded to be refreshed!</string>
+    <string name="drawer_title_bundle_key">drawer_title</string>
 </resources>

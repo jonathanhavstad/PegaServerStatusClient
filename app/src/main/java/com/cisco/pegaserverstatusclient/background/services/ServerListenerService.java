@@ -16,13 +16,13 @@ import com.google.android.gms.gcm.GcmListenerService;
  * Created by jonathanhavstad on 10/21/16.
  */
 
-public class PegaServerListenerService extends GcmListenerService {
+public class ServerListenerService extends GcmListenerService {
     private static final String TAG = "ListenerService";
 
     private static final int INITIAL_NOTIFICATION_ID = 1000;
     private int notificationId;
 
-    public PegaServerListenerService() {
+    public ServerListenerService() {
         notificationId = INITIAL_NOTIFICATION_ID;
     }
 

@@ -30,9 +30,9 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
     private List<String> orderedKeySet;
     private int size;
 
-    public FragmentListItemAdapter(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
+    public FragmentListItemAdapter(BaseLayoutInfo appLayoutInfo) {
         this.appLayoutInfo = appLayoutInfo;
-        this.appData = appData;
+        this.appData = appLayoutInfo.getAppData();
         this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
         this.size = this.orderedKeySet.size() * this.appLayoutInfo.getHeaderDescList().length;
     }

@@ -3,7 +3,7 @@ package com.cisco.pegaserverstatusclient.parcelables;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
+import com.cisco.pegaserverstatusclient.binders.LayoutInfoBinder;
 
 /**
  * Created by jonathanhavstad on 10/25/16.
@@ -11,12 +11,12 @@ import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
 
 public class BaseInfoParcelable implements Parcelable {
 
-    private BaseLayoutInfoBinder baseLayoutInfoBinder;
+    private LayoutInfoBinder layoutInfoBinder;
 
     public BaseInfoParcelable() {}
 
     protected BaseInfoParcelable(Parcel in) {
-        baseLayoutInfoBinder = (BaseLayoutInfoBinder) in.readStrongBinder();
+        layoutInfoBinder = (LayoutInfoBinder) in.readStrongBinder();
     }
 
     public static final Creator<BaseInfoParcelable> CREATOR = new Creator<BaseInfoParcelable>() {
@@ -38,14 +38,14 @@ public class BaseInfoParcelable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStrongBinder(baseLayoutInfoBinder);
+        dest.writeStrongBinder(layoutInfoBinder);
     }
 
-    public BaseLayoutInfoBinder getBaseLayoutInfoBinder() {
-        return baseLayoutInfoBinder;
+    public LayoutInfoBinder getLayoutInfoBinder() {
+        return layoutInfoBinder;
     }
 
-    public void setBaseLayoutInfoBinder(BaseLayoutInfoBinder baseLayoutInfoBinder) {
-        this.baseLayoutInfoBinder = baseLayoutInfoBinder;
+    public void setLayoutInfoBinder(LayoutInfoBinder layoutInfoBinder) {
+        this.layoutInfoBinder = layoutInfoBinder;
     }
 }

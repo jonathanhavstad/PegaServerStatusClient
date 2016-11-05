@@ -16,14 +16,13 @@ import com.cisco.pegaserverstatusclient.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.cisco.pegaserverstatusclient.background.services.PegaRegistrationIntentService;
+import com.cisco.pegaserverstatusclient.background.services.RegistrationIntentService;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
 import com.cisco.pegaserverstatusclient.views.CiscoLoginFormWebView;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 
 import java.util.Set;
 
@@ -174,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
         webView.setVisibility(View.INVISIBLE);
         webView.loadUrl(LOGOUT_URL);
 
-        Intent serviceIntent = new Intent(this, PegaRegistrationIntentService.class);
+        Intent serviceIntent = new Intent(this, RegistrationIntentService.class);
         startService(serviceIntent);
     }
 
@@ -188,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchMainActivity(String url) {
-        Intent intent = new Intent(this, PegaServerAppsActivity.class);
+        Intent intent = new Intent(this, ServerAppsActivity.class);
         intent.putExtra(getString(R.string.status_url_bundle_key), url);
         startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
     }

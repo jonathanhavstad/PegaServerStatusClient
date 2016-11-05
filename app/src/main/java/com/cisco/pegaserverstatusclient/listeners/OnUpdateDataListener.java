@@ -1,6 +1,6 @@
 package com.cisco.pegaserverstatusclient.listeners;
 
-import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
+import com.cisco.pegaserverstatusclient.binders.ServerDataBinder;
 
 /**
  * Created by jonathanhavstad on 10/31/16.
@@ -8,6 +8,6 @@ import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
 
 public interface OnUpdateDataListener {
     void setPageTitle(String title);
-    void initPegaDataActivity(String friendlyName, PegaServerNetworkBinder childBinder);
+    void initPegaDataActivity(String friendlyName, ServerDataBinder childBinder);
     void requestRefresh();
 }

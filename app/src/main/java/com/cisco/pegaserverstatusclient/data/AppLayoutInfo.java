@@ -5,7 +5,10 @@ import android.content.Context;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,9 +34,14 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     @Expose
     @SerializedName("Method")
     private String method;
-    @Expose
-    @SerializedName("URL")
-    private String url;
+
+    public AppLayoutInfo() {
+        super(null);
+    }
+
+    public AppLayoutInfo(BaseLayoutInfo parentLayout) {
+        super(parentLayout);
+    }
 
     public String getAppId() {
         return appId;
@@ -75,12 +83,78 @@ public class AppLayoutInfo extends BaseLayoutInfo {
         this.layout = layout;
     }
 
-    public String getUrl() {
-        return url;
+    @Override
+    public boolean readFromNetwork(InputStream in) {
+        List<BaseLayoutInfo> layoutList = new ArrayList<>();
+        if (appData != null && childrenLayouts ==  null) {
+            orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
+            for (String key : orderedKeySet) {
+                LifecycleLayoutInfo lifecycleLayoutInfo = new LifecycleLayoutInfo(this);
+                lifecycleLayoutInfo.setKey(key);
+                lifecycleLayoutInfo.setAppData((Map<String, Object>) appData.get(key));
+                lifecycleLayoutInfo.setFriendlyName(lifecycleLayoutInfo.getFriendlyName(key, false));
+                lifecycleLayoutInfo.setHeaderColumns(getHeaderColumns());
+                lifecycleLayoutInfo.setHeaderDesc(getHeaderDesc());
+                lifecycleLayoutInfo.splitHeaderCols();
+                lifecycleLayoutInfo.splitHeaderDesc();
+                lifecycleLayoutInfo.setKey(key);
+                layoutList.add(lifecycleLayoutInfo);
+            }
+            setChildrenLayouts(layoutList);
+            return true;
+        } else if (childrenLayouts != null) {
+            return true;
+        }
+
+        // TODO: Change to a REST call to read from the network
+
+        return false;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    @Override
+    public List<String> getDataUrls() {
+        List<String> dataUrlList = new ArrayList<>();
+        dataUrlList.add(url);
+        return dataUrlList;
+    }
+
+    @Override
+    public BaseLayoutInfo filteredLayout(String filter) {
+        if (appData != null &&
+                filter != null &&
+                !KeyMapping.shouldIgnoreKey(filter) &&
+                appData.containsKey(filter)) {
+            AppLayoutInfo appLayoutInfo = new AppLayoutInfo(getParentLayout());
+
+            ArrayList<BaseLayoutInfo> filteredChildrenLayout = new ArrayList<>();
+            for (BaseLayoutInfo childLayout : childrenLayouts) {
+                if (childLayout.getKey().equals(filter)) {
+                    filteredChildrenLayout.add(childLayout);
+                }
+            }
+            appLayoutInfo.setChildrenLayouts(filteredChildrenLayout);
+
+            appLayoutInfo.setAppId(getAppId());
+            appLayoutInfo.setAppName(getAppName());
+            appLayoutInfo.setScreen(getScreen());
+            appLayoutInfo.setMethod(getMethod());
+            appLayoutInfo.setLayout(getLayout());
+            appLayoutInfo.setAction(getAction());
+            appLayoutInfo.setUrl(getUrl());
+            appLayoutInfo.setFriendlyName(getFriendlyName());
+            appLayoutInfo.setKey(getKey());
+            appLayoutInfo.setHeaderColumns(getHeaderColumns());
+            appLayoutInfo.setHeaderDesc(getHeaderDesc());
+            appLayoutInfo.splitHeaderCols();
+            appLayoutInfo.splitHeaderDesc();
+
+            Map<String, Object> filteredAppData = new HashMap<>();
+            filteredAppData.put(filter, appData.get(filter));
+            appLayoutInfo.setAppData(filteredAppData);
+
+            return appLayoutInfo;
+        }
+        return this;
     }
 
     public String getMethod() {
@@ -105,7 +179,7 @@ public class AppLayoutInfo extends BaseLayoutInfo {
             }
             return appId.substring(0, firstWordEndIndex);
         }
-        return null;
+        return friendlyName;
     }
 
     @Override
@@ -115,16 +189,24 @@ public class AppLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public String getKey() {
-        return null;
+        return key;
     }
 
     @Override
     public void setKey(String key) {
-
+        this.key = key;
     }
 
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
+        return null;
+    }
+
+    @Override
+    public BaseLayoutInfo getChildLayout(int index) {
+        if (index >= 0 && index < childrenLayouts.size()) {
+            return childrenLayouts.get(index);
+        }
         return null;
     }
 }

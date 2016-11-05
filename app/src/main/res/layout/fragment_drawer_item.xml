@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_drawer_item_view"
+    android:paddingTop="@dimen/root_element_horizontal_padding"
+    android:paddingBottom="@dimen/root_element_horizontal_padding"
+    android:paddingLeft="@dimen/root_element_vertical_padding"
+    android:paddingRight="@dimen/root_element_vertical_padding"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:textAppearance="@style/DrawerItemTextStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+</TextView>

@@ -5,8 +5,10 @@ import android.content.Context;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,10 +18,13 @@ import java.util.Map;
 public abstract class BaseLayoutInfo {
     @Expose
     @SerializedName("HeaderColumn")
-    private String headerColumns;
+    protected String headerColumns;
     @Expose
     @SerializedName("HeaderDesc")
-    private String headerDesc;
+    protected String headerDesc;
+    @Expose
+    @SerializedName("URL")
+    protected String url;
 
     protected String friendlyName;
     protected String key;
@@ -28,6 +33,20 @@ public abstract class BaseLayoutInfo {
     protected String[] headerDescList;
 
     private Map<String, String> headerMap;
+
+    protected Map<String, Object> appData;
+
+    protected List<BaseLayoutInfo> childrenLayouts;
+
+    protected List<String> orderedKeySet;
+
+    protected List<String> dataUrls;
+
+    private BaseLayoutInfo parentLayout;
+
+    public BaseLayoutInfo(BaseLayoutInfo parentLayout) {
+        this.parentLayout = parentLayout;
+    }
 
     public String getHeaderColumns() {
         return headerColumns;
@@ -42,14 +61,28 @@ public abstract class BaseLayoutInfo {
     }
 
     public void setHeaderDesc(String headerDesc) {
-        this.headerDescList = headerDesc.split(",");
         this.headerDesc = headerDesc;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public void splitHeaderDesc() {
         if (headerDesc != null) {
             headerDescList = headerDesc.split(",");
             trimListElements(headerDescList);
+        }
+    }
+
+    public void splitHeaderCols() {
+        if (headerColumns != null) {
+            headerColsList = headerColumns.split(",");
+            trimListElements(headerColsList);
         }
     }
 
@@ -61,6 +94,14 @@ public abstract class BaseLayoutInfo {
 
     public String[] getHeaderDescList() {
         return headerDescList;
+    }
+
+    public String[] getHeaderColsList() {
+        return headerColsList;
+    }
+
+    public String getFriendlyName(String key, boolean appendParent) {
+        return key;
     }
 
     public void createHeaderMap() {
@@ -75,33 +116,51 @@ public abstract class BaseLayoutInfo {
         }
     }
 
-    public void splitHeaderCols() {
-        if (headerColumns != null) {
-            headerColsList = headerColumns.split(",");
-            trimListElements(headerColsList);
+    public void setAppData(Map<String, Object> appData) {
+        this.appData = appData;
+        this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
+    }
+
+    public Map<String, Object> getAppData() {
+        return appData;
+    }
+
+    public void setChildrenLayouts(List<BaseLayoutInfo> childrenLayouts) {
+        this.childrenLayouts = childrenLayouts;
+    }
+
+    public List<BaseLayoutInfo> getChildrenLayouts() {
+        return childrenLayouts;
+    }
+
+    public int size() {
+        if (childrenLayouts != null) {
+            return childrenLayouts.size();
         }
+        return 0;
     }
 
-    public String[] getHeaderColsList() {
-        return headerColsList;
+    public BaseLayoutInfo getParentLayout() {
+        return parentLayout;
     }
 
-    public String getFriendlyName(String key, boolean appendParent) {
-        return key;
+    public void setParentLayout(BaseLayoutInfo parentLayout) {
+        this.parentLayout = parentLayout;
     }
 
     public abstract Object getValue(Map<String, Object> appData, String childKey);
-
-    @Override
-    public String toString() {
-        return getFriendlyName();
-    }
-
     public abstract String getFriendlyName();
     public abstract void setFriendlyName(String friendlyName);
     public abstract String getKey();
     public abstract void setKey(String key);
     public abstract BaseLayoutInfo createChildLayout(String parentKey);
-    public abstract String getUrl();
+    public abstract BaseLayoutInfo getChildLayout(int index);
+    public abstract boolean readFromNetwork(InputStream in);
+    public abstract List<String> getDataUrls();
+    public abstract BaseLayoutInfo filteredLayout(String filter);
 
+    @Override
+    public String toString() {
+        return getFriendlyName();
+    }
 }

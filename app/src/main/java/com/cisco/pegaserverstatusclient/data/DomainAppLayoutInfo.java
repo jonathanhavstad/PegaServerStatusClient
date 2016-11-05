@@ -2,7 +2,9 @@ package com.cisco.pegaserverstatusclient.data;
 
 import android.content.Context;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,6 +13,10 @@ import java.util.Map;
 
 public class DomainAppLayoutInfo extends BaseLayoutInfo {
     public static final String APP_JSON_KEY = "APPS";
+
+    public DomainAppLayoutInfo(BaseLayoutInfo parentLayout) {
+        super(parentLayout);
+    }
 
     public String getFriendlyName() {
         return friendlyName;
@@ -30,11 +36,26 @@ public class DomainAppLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo createChildLayout(String parentKey) {
-        return new ServerLayoutInfo();
+        return new ServerLayoutInfo(this);
     }
 
     @Override
-    public String getUrl() {
+    public BaseLayoutInfo getChildLayout(int index) {
+        return null;
+    }
+
+    @Override
+    public boolean readFromNetwork(InputStream in) {
+        return false;
+    }
+
+    @Override
+    public List<String> getDataUrls() {
+        return null;
+    }
+
+    @Override
+    public BaseLayoutInfo filteredLayout(String filter) {
         return null;
     }
 

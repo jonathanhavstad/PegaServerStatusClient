@@ -3,16 +3,10 @@ package com.cisco.pegaserverstatusclient.background.tasks;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -30,14 +24,16 @@ public class LayoutRestTask {
     public static final int LOAD_NOT_STARTED = -1;
 
     private Action1<Integer> loadStatusSubscriber;
-    private Action1<List<BaseLayoutInfo>> appsSubscriber;
+    private Action1<BaseLayoutInfo> layoutSubscriber;
+    private BaseLayoutInfo layoutInfo;
 
     public void loadAppsLayout(Context context,
-                               String appsUrl,
+                               BaseLayoutInfo layoutInfo,
                                Action1<Integer> loadStatusSubscriber,
-                               Action1<List<BaseLayoutInfo>> appsSubscriber) {
+                               Action1<BaseLayoutInfo> layoutSubscriber) {
+        this.layoutInfo = layoutInfo;
         this.loadStatusSubscriber = loadStatusSubscriber;
-        this.appsSubscriber = appsSubscriber;
+        this.layoutSubscriber = layoutSubscriber;
         loadFromFile(context, "apps.json");
     }
 
@@ -46,19 +42,14 @@ public class LayoutRestTask {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<BaseLayoutInfo> appLayoutInfoList = new ArrayList<>();
                 InputStream in = null;
                 try {
                     in = assetManager.open(filename);
-                    Gson gson = new Gson();
-                    JsonReader jsonReader = new JsonReader(new InputStreamReader(in));
-                    JsonArray jsonArray = gson.fromJson(jsonReader, JsonArray.class);
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        AppLayoutInfo appLayoutInfo =
-                                gson.fromJson(jsonArray.get(i), AppLayoutInfo.class);
-                        appLayoutInfo.splitHeaderCols();
-                        appLayoutInfo.splitHeaderDesc();
-                        appLayoutInfoList.add(appLayoutInfo);
+                    if (layoutInfo.readFromNetwork(in)) {
+                        publishAppsLoadStatus(LOAD_SUCCESS);
+                        publishLayout(layoutInfo);
+                    } else {
+                        publishAppsLoadStatus(LOAD_FAILURE);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -71,8 +62,6 @@ public class LayoutRestTask {
                             e.printStackTrace();
                         }
                     }
-                    publishAppsLoadStatus(LOAD_SUCCESS);
-                    publishAppsLayout(appLayoutInfoList);
                 }
             }
         }).start();
@@ -86,11 +75,11 @@ public class LayoutRestTask {
         observable.subscribe(loadStatusSubscriber);
     }
 
-    private void publishAppsLayout(List<BaseLayoutInfo> appLayoutInfoList) {
-        Observable<List<BaseLayoutInfo>> observable = Observable
-                .just(appLayoutInfoList)
+    private void publishLayout(BaseLayoutInfo layoutInfo) {
+        Observable<BaseLayoutInfo> observable = Observable
+                .just(layoutInfo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(appsSubscriber);
+        observable.subscribe(layoutSubscriber);
     }
 }

@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.adapters.FragmentListAdapter;
-import com.cisco.pegaserverstatusclient.binders.BaseLayoutInfoBinder;
-import com.cisco.pegaserverstatusclient.binders.PegaServerNetworkBinder;
+import com.cisco.pegaserverstatusclient.binders.LayoutInfoBinder;
+import com.cisco.pegaserverstatusclient.binders.ServerDataBinder;
 import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.decoractors.DividerItemDecoration;
@@ -27,9 +27,9 @@ import butterknife.ButterKnife;
  */
 
 public class LayoutFragment extends Fragment {
-    private AppLayoutInfo appLayoutInfo;
+    private BaseLayoutInfo appLayoutInfo;
     private Map<String, Object> appData;
-    private boolean childLayout;
+    private boolean isChildLayout;
 
     @BindView(R.id.landing_fragment_list)
     RecyclerView landingFragmentList;
@@ -37,20 +37,20 @@ public class LayoutFragment extends Fragment {
     public static LayoutFragment newInstance(Context context,
                                              BaseLayoutInfo appLayoutInfo,
                                              Map<String, Object> fragmentData,
-                                             boolean childLayout) {
+                                             boolean isChildLayout) {
         LayoutFragment layoutFragment = new LayoutFragment();
 
         Bundle args = new Bundle();
 
-        BaseLayoutInfoBinder baseLayoutInfoBinder = new BaseLayoutInfoBinder();
-        baseLayoutInfoBinder.setBaseLayoutInfo(appLayoutInfo);
-        args.putBinder(context.getString(R.string.app_layout_info_bundle_key), baseLayoutInfoBinder);
+        LayoutInfoBinder layoutInfoBinder = new LayoutInfoBinder();
+        layoutInfoBinder.setBaseLayoutInfo(appLayoutInfo);
+        args.putBinder(context.getString(R.string.app_layout_info_bundle_key), layoutInfoBinder);
 
-        PegaServerNetworkBinder pegaServerNetworkBinder = new PegaServerNetworkBinder();
-        pegaServerNetworkBinder.setAppData(fragmentData);
-        args.putBinder(context.getString(R.string.app_binder_data_bundle_key), pegaServerNetworkBinder);
+        ServerDataBinder serverDataBinder = new ServerDataBinder();
+        serverDataBinder.setAppData(fragmentData);
+        args.putBinder(context.getString(R.string.app_binder_data_bundle_key), serverDataBinder);
 
-        args.putBoolean(context.getString(R.string.child_layout_bundle_key), childLayout);
+        args.putBoolean(context.getString(R.string.child_layout_bundle_key), isChildLayout);
 
         layoutFragment.setArguments(args);
 
@@ -67,19 +67,20 @@ public class LayoutFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            BaseLayoutInfoBinder baseLayoutInfoBinder =
-                    (BaseLayoutInfoBinder) args.getBinder(getContext().getString(R.string.app_layout_info_bundle_key));
-            if (baseLayoutInfoBinder != null) {
-                appLayoutInfo = (AppLayoutInfo) baseLayoutInfoBinder.getBaseLayoutInfo();
+            LayoutInfoBinder layoutInfoBinder =
+                    (LayoutInfoBinder) args.getBinder(getContext().getString(R.string.app_layout_info_bundle_key));
+            if (layoutInfoBinder != null) {
+                appLayoutInfo = layoutInfoBinder.getBaseLayoutInfo();
+                appLayoutInfo.readFromNetwork(null);
             }
 
-            PegaServerNetworkBinder binder =
-                    (PegaServerNetworkBinder) args.getBinder(getString(R.string.app_binder_data_bundle_key));
+            ServerDataBinder binder =
+                    (ServerDataBinder) args.getBinder(getString(R.string.app_binder_data_bundle_key));
             if (binder != null) {
                 appData = (Map<String, Object>) binder.getAppData();
             }
 
-            childLayout = args.getBoolean(getString(R.string.child_layout_bundle_key));
+            isChildLayout = args.getBoolean(getString(R.string.child_layout_bundle_key));
         }
     }
 
@@ -90,13 +91,13 @@ public class LayoutFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = null;
 
-        if (childLayout) {
+        if (isChildLayout) {
 
         } else {
             rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
             ButterKnife.bind(this, rootView);
-            FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
+            FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo);
             landingFragmentList.setAdapter(adapter);
             landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
                     DividerItemDecoration.HORIZONTAL_LIST));
@@ -106,12 +107,7 @@ public class LayoutFragment extends Fragment {
     }
 
     public void updateAppData(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
-        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo, appData);
+        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo);
         landingFragmentList.swapAdapter(adapter, false);
-    }
-
-    public void scrollToPosition(int position) {
-        landingFragmentList.scrollToPosition(position);
-        landingFragmentList.forceLayout();
     }
 }

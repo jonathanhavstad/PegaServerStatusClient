@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
  * Created by jonathanhavstad on 10/28/16.
  */
 
-public class PegaServerRefreshService extends IntentService {
+public class ServerRefreshService extends IntentService {
     private static final String TAG = "PegaRefreshService";
 
     private ServerDataRestTask task;
@@ -30,8 +30,8 @@ public class PegaServerRefreshService extends IntentService {
     private boolean shouldExecute;
     private int refreshInterval;
 
-    public PegaServerRefreshService() {
-        super(PegaServerRefreshService.class.getCanonicalName());
+    public ServerRefreshService() {
+        super(ServerRefreshService.class.getCanonicalName());
         binder = new SubscriberBinder(new SubscriberBinder.OnForceRefresh() {
             @Override
             public void forceRefresh() {

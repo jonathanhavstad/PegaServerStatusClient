@@ -15,16 +15,16 @@ import java.io.IOException;
  * Created by jonathanhavstad on 10/24/16.
  */
 
-public class PegaRegistrationIntentService extends IntentService {
+public class RegistrationIntentService extends IntentService {
     private static final String TAG = "RegistrationService";
 
-    public PegaRegistrationIntentService() {
-        super(PegaRegistrationIntentService.class.getCanonicalName());
+    public RegistrationIntentService() {
+        super(RegistrationIntentService.class.getCanonicalName());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        InstanceID instanceID = InstanceID.getInstance(PegaRegistrationIntentService.this);
+        InstanceID instanceID = InstanceID.getInstance(RegistrationIntentService.this);
         String token = null;
         try {
             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
