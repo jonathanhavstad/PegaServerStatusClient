@@ -29,9 +29,6 @@ import butterknife.ButterKnife;
 public class DrawerFragment extends Fragment {
     private BaseLayoutInfo appLayoutInfo;
 
-    @BindView(R.id.drawer_back_button)
-    ImageButton drawerBackButton;
-
     @BindView(R.id.drawer_toolbar)
     Toolbar drawerToolbar;
 
@@ -94,14 +91,11 @@ public class DrawerFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        drawerToolbar.setNavigationIcon(R.drawable.);
         drawerToolbar.setTitle(appLayoutInfo.getFriendlyName());
 
-        if (appLayoutInfo.getParentLayout() == null) {
-            drawerBackButton.setVisibility(View.INVISIBLE);
-            drawerBackButton.setEnabled(false);
-        } else {
-            drawerBackButton.setOnClickListener(new View.OnClickListener() {
+        if (appLayoutInfo.getParentLayout() != null) {
+            drawerToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            drawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressedClickListener.backPressed(appLayoutInfo);
