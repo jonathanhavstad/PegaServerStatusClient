@@ -94,6 +94,7 @@ public class DrawerFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
+        drawerToolbar.setNavigationIcon(R.drawable.);
         drawerToolbar.setTitle(appLayoutInfo.getFriendlyName());
 
         if (appLayoutInfo.getParentLayout() == null) {
