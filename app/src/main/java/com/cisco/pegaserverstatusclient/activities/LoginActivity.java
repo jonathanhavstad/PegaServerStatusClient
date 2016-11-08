@@ -36,27 +36,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
-    private static final String HOME_PAGE = "http://www.cisco.com/";
-    private static final String LOGIN_URL = "https://www.cisco.com/c/login/index.html?referer=/c/en/us/index.html";
-//    private static final String LOGIN_URL = "https://ibpm.cisco.com/eabv/demo/login";
-    private static final String LOGIN_FINISHED_URL = "http://www.cisco.com/c/en/us/index.html";
-//    private static final String LOGIN_FINISHED_URL = "https://ibpm.cisco.com/eabv/status";
-    private static final String SSO_LOGIN_URL = "https://sso.cisco.com/autho/forms/CDClogin.html";
-    private static final String LOGIN_ACTION = "https://ibpm.cisco.com/eabv/demo/login";
-    private static final String CGI_LOGIN_URL = "https://www.cisco.com/cgi-bin/login";
-    private static final String LOGIN_REDIRECT_URL = "http://www.cisco.com/c/en/us/index.html";
-    private static final String LOGIN_REFERER_URL = "http://www.cisco.com/c/login/index.html?referer=/c/en/us/index.html";
-    private static final String LOGOUT_INTERMEDIATE_URL = "http://www.cisco.com/web/fw/lo/logout.html";
-    private static final String LOGOUT_COMPLETE_URL = "http://www.cisco.com/web/siteassets/logout/logout.html";
-    private static final String LOGOUT_URL = "http://www.cisco.com/autho/logout.html?ReturnUrl=//www.cisco.com/web/fw/lo/logout.html";
-    private static final String EVIL_COOKIE_URL = "https://sso.cisco.com/oberr.cgi?status%3D400%20errmsg%3DErrEvilFormLoginCookie%20p1%3D";
-    private static final String LOGIN_ACTION_URL = "https://sso.cisco.com/autho/login/loginaction.html";
-    private static final String SSO_COOKIE_KEY = "SSOCookie";
-    private static final String INVALID_SSO_COOKIE = "loggedout";
-
-    private static final int HTTP_NOT_FOUND_CODE = 404;
     private static final int ACCESS_DATA_REQUEST_CODE = 1000;
 
+    private String LOGOUT_URL;
+    private String HOME_PAGE;
+    private String LOGIN_URL;
+    private String SSO_LOGIN_URL;
+    private String LOGOUT_COMPLETE_URL;
+    private String SSO_COOKIE_KEY;
     private boolean beginLogin;
     private boolean beginAuthentication;
     private boolean loadUrlFromIntent;
@@ -76,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void init() {
+        loadWebValues();
+
         enableSpecificWebSettings();
 
         webView.setWebViewClient(new WebViewClient() {
@@ -177,6 +166,28 @@ public class LoginActivity extends AppCompatActivity {
         startService(serviceIntent);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACCESS_DATA_REQUEST_CODE) {
+            beginLogin = false;
+            beginAuthentication = false;
+            webView.clearCache(true);
+            webView.setVisibility(View.INVISIBLE);
+            webView.loadUrl(LOGOUT_URL);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void loadWebValues() {
+        LOGOUT_URL = getString(R.string.cisco_logout_url);
+        HOME_PAGE = getString(R.string.cisco_home_page_url);
+        LOGIN_URL = getString(R.string.cisco_login_url);
+        SSO_LOGIN_URL = getString(R.string.cisco_sso_login_url);
+        LOGOUT_COMPLETE_URL = getString(R.string.cisco_logout_complete_url);
+        SSO_COOKIE_KEY = getString(R.string.sso_cookie_key);
+    }
+
     private void enableSpecificWebSettings() {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -190,19 +201,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ServerAppsActivity.class);
         intent.putExtra(getString(R.string.status_url_bundle_key), url);
         startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ACCESS_DATA_REQUEST_CODE) {
-            beginLogin = false;
-            beginAuthentication = false;
-            webView.clearCache(true);
-            webView.setVisibility(View.INVISIBLE);
-            webView.loadUrl(LOGOUT_URL);
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     private String getSSOCookie(String cookie) {

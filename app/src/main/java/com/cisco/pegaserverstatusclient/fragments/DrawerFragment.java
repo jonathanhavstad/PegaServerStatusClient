@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.adapters.FragmentDrawerListAdapter;

@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -26,7 +25,6 @@ import com.cisco.pegaserverstatusclient.background.services.ServerRefreshService
 import com.cisco.pegaserverstatusclient.background.tasks.LayoutRestTask;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.AppsLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.fragments.DrawerFragment;
@@ -39,7 +37,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -173,9 +170,9 @@ public class ServerAppsActivity extends AppCompatActivity implements
     @Override
     public void open(BaseLayoutInfo layoutInfo) {
         layoutInfo.readFromNetwork(null);
-        appFilter.add(layoutInfo.getKey());
+        addLayoutKeyToAppFilter(layoutInfo);
         populateDrawerFrame(layoutInfo);
-        populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
+        populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()), layoutInfo);
     }
 
     @Override
@@ -190,14 +187,15 @@ public class ServerAppsActivity extends AppCompatActivity implements
             if (lastFilter.equals(baseLayoutInfo.getKey())) {
                 BaseLayoutInfo parentLayout = baseLayoutInfo.getParentLayout();
                 if (parentLayout != null) {
-                    appFilter.remove(appFilter.size() - 1);
-                    populateDrawerFrame(parentLayout);
-                    if (parentLayout.getParentLayout() != null) {
-                        populateCurrentFrame(parentLayout
-                                .getParentLayout()
-                                .filteredLayout(parentLayout.getKey()));
+                    if (appFilter.size() > 1) {
+                        appFilter.remove(appFilter.size() - 1);
+                        if (parentLayout.getParentLayout() != null) {
+                            open(parentLayout);
+                        } else {
+                            getSupportActionBar().setSubtitle("");
+                        }
                     } else {
-                        getSupportActionBar().setSubtitle("");
+                        populateDrawerFrame(parentLayout);
                     }
                 }
             }
@@ -286,7 +284,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
         alertDialog.show();
     }
 
-    private void startServerRefreshService(int index, final BaseLayoutInfo appLayoutInfo) {
+    private void startServerRefreshService(int index, final BaseLayoutInfo layoutInfo) {
         BgServiceInfo bgServiceInfo = null;
 
         if (index < bgServiceInfoList.length && bgServiceInfoList[index] != null) {
@@ -299,13 +297,15 @@ public class ServerAppsActivity extends AppCompatActivity implements
         bgServiceInfo.subscriber = new Action1<Map<String, Object>>() {
             @Override
             public void call(Map<String, Object> appData) {
-                refreshCurrentFrame(appLayoutInfo);
+                refreshCurrentFrame(layoutInfo);
             }
         };
 
+        final BaseLayoutInfo currentAppLayoutInfo = layoutInfo.getChildLayout(index);
+
         bgServiceInfo.connection = new BgServiceConnection(bgServiceInfo);
         Intent intent = new Intent(this, ServerRefreshService.class);
-        intent.putExtra(getString(R.string.status_url_bundle_key), appLayoutInfo.getUrl());
+        intent.putExtra(getString(R.string.status_url_bundle_key), currentAppLayoutInfo.getUrl());
         bindService(intent, bgServiceInfo.connection, BIND_AUTO_CREATE);
         startService(intent);
         bgServiceInfo.bgServiceStarted = true;
@@ -370,11 +370,11 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
         for (int i = 0; i < layoutInfo.size(); i++) {
             BaseLayoutInfo childLayout = layoutInfo.getChildLayout(i);
-            getData(i, childLayout.getUrl(), childLayout, false);
+            getData(i, childLayout.getUrl(), layoutInfo, false);
         }
     }
 
-    private void initRefreshView(BaseLayoutInfo layoutInfo) {
+    private void initRefreshView(final BaseLayoutInfo layoutInfo) {
         if (layoutInfo.size() > 0 && curAppLayoutInfoPosition < layoutInfo.size()) {
             final BaseLayoutInfo currentAppLayoutInfo =
                     layoutInfo.getChildLayout(curAppLayoutInfoPosition);
@@ -383,7 +383,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 public void onRefresh() {
                     getData(curAppLayoutInfoPosition,
                             currentAppLayoutInfo.getUrl(),
-                            currentAppLayoutInfo,
+                            layoutInfo,
                             true);
                 }
             });
@@ -402,11 +402,12 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     private void getData(final int index,
                          String restUrl,
-                         final BaseLayoutInfo appLayoutInfo,
+                         final BaseLayoutInfo layoutInfo,
                          final boolean refresh) {
         if (baseStatusUrl != null) {
             restUrl = baseStatusUrl;
         }
+        final BaseLayoutInfo currentAppLayoutInfo = layoutInfo.getChildLayout(index);
         Action1<Integer> dataLoadSubscriber = new Action1<Integer>() {
             @Override
             public void call(Integer dataLoadResult) {
@@ -416,26 +417,26 @@ public class ServerAppsActivity extends AppCompatActivity implements
                             getString(R.string.data_load_failure_alert_body)
                                     + "\n"
                                     + "Application: "
-                                    + appLayoutInfo.getFriendlyName()
+                                    + currentAppLayoutInfo.getFriendlyName()
                                     +"\n"
                                     + "URL: "
-                                    + appLayoutInfo.getUrl(),
+                                    + currentAppLayoutInfo.getUrl(),
                             false);
                 } else if (dataLoadResult == ServerDataRestTask.DATA_LOAD_SUCCESS) {
                     stopServerRefreshService(index);
-                    startServerRefreshService(index, appLayoutInfo);
+                    startServerRefreshService(index, layoutInfo);
                 }
             }
         };
         Action1<Map<String, Object>> appDataSubscriber = new Action1<Map<String, Object>>() {
             @Override
             public void call(Map<String, Object> appData) {
-                applyAppDataToLayout(appLayoutInfo, appData);
+                applyDataToLayout(currentAppLayoutInfo, appData);
                 if (index == curAppLayoutInfoPosition) {
                     if (refresh) {
-                        refreshCurrentFrame(appLayoutInfo);
+                        refreshCurrentFrame(layoutInfo);
                     } else {
-                        populateCurrentFrame(appLayoutInfo);
+                        open(currentAppLayoutInfo);
                     }
                 }
             }
@@ -447,63 +448,108 @@ public class ServerAppsActivity extends AppCompatActivity implements
                     getString(R.string.data_load_failure_alert_body)
                             + "\n"
                             + "Application: "
-                            + appLayoutInfo.getFriendlyName()
+                            + currentAppLayoutInfo.getFriendlyName()
                             +"\n"
                             + "URL: "
                             + restUrl,
                     false);
         }
-
     }
 
-    private void populateCurrentFrame(BaseLayoutInfo appLayoutInfo) {
+    private void populateCurrentFrame(BaseLayoutInfo parentLayoutInfo, BaseLayoutInfo layoutInfo) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         LayoutFragment layoutFragment = LayoutFragment.newInstance(this,
-                appLayoutInfo,
-                appLayoutInfo.getAppData(),
-                false);
-        fragmentTransaction.replace(R.id.app_fragment_view, layoutFragment);
+                parentLayoutInfo);
+        fragmentTransaction.replace(R.id.app_fragment_view,
+                layoutFragment,
+                getString(R.string.app_fragment_tag));
         fragmentTransaction.addToBackStack(getString(R.string.app_fragment_tag));
         fragmentTransaction.commit();
-        if (appFilter.size() == 0) {
-            setTitle(appLayoutInfo.getFriendlyName());
+        if (appFilter.size() == 0 || appFilter.size() == 1) {
+            setTitle(layoutInfo.getFriendlyName());
+            getSupportActionBar().setSubtitle("");
         } else {
-            getSupportActionBar().setSubtitle(appLayoutInfo.getFriendlyName());
+            getSupportActionBar().setSubtitle(concatAppFilter());
         }
     }
 
     private void refreshCurrentFrame(BaseLayoutInfo appLayoutInfo) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        List<Fragment> currentFragments = fragmentManager.getFragments();
-        if (currentFragments.size() > 0) {
-            ((LayoutFragment) currentFragments.get(currentFragments.size() - 1))
-                    .updateAppData(appLayoutInfo, filterData(appLayoutInfo.getAppData()));
-        }
+        LayoutFragment layoutFragment = (LayoutFragment)
+                fragmentManager.findFragmentByTag(getString(R.string.app_fragment_tag));
+        BaseLayoutInfo filteredLayout = filterData(appLayoutInfo);
+        layoutFragment.updateAppData(filteredLayout
+                .getParentLayout()
+                .filteredLayout(filteredLayout.getKey()));
     }
 
-    private Map<String, Object> filterData(Map<String, Object> appData) {
-        Map<String, Object> filteredData = appData;
-        if (appFilter != null && appFilter.size() > 0) {
-            Map<String, Object> childAppData = filteredData;
-            for (String filter : appFilter) {
-                childAppData = (Map<String, Object>) childAppData.get(filter);
+    private BaseLayoutInfo filterData(BaseLayoutInfo layoutInfo) {
+        BaseLayoutInfo currentLayout = layoutInfo;
+        if (appFilter != null) {
+            for (String appKey : appFilter) {
+                List<BaseLayoutInfo> childrenLayouts = currentLayout.getChildrenLayouts();
+                int index = 0;
+                boolean foundChild = false;
+                while (index < childrenLayouts.size() && !foundChild) {
+                    BaseLayoutInfo childLayout = childrenLayouts.get(index);
+                    if (childLayout.getKey().equals(appKey)) {
+                        currentLayout = childLayout;
+                        foundChild = true;
+                    }
+                    index++;
+                }
             }
-            filteredData = new HashMap<>();
-            filteredData.put(appFilter.get(appFilter.size() - 1), childAppData);
         }
-        return filteredData;
+        return currentLayout;
     }
 
     private void populateDrawerFrame(BaseLayoutInfo appLayoutInfo) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         DrawerFragment drawerFragment = DrawerFragment.newInstance(this, appLayoutInfo);
-        fragmentTransaction.replace(R.id.drawer_fragment_view, drawerFragment);
+        fragmentTransaction.replace(R.id.drawer_fragment_view,
+                drawerFragment,
+                getString(R.string.drawer_fragment_tag));
         fragmentTransaction.commit();
     }
 
-    private void applyAppDataToLayout(BaseLayoutInfo layoutinfo, Map<String, Object> appData) {
+    private void applyDataToLayout(BaseLayoutInfo layoutinfo, Map<String, Object> appData) {
         layoutinfo.setAppData(appData);
+        List<BaseLayoutInfo> childrenLayouts = layoutinfo.getChildrenLayouts();
+        if (childrenLayouts != null) {
+            for (BaseLayoutInfo childLayout : childrenLayouts) {
+                Object childAppData = appData.get(childLayout.getKey());
+                if (childAppData != null) {
+                    applyDataToLayout(childLayout, (Map<String, Object>) childAppData);
+                }
+            }
+        }
+    }
+
+    private void addLayoutKeyToAppFilter(BaseLayoutInfo layoutInfo) {
+        if (appFilter != null) {
+            if (appFilter.size() > 0) {
+                String lastKey = appFilter.get(appFilter.size() - 1);
+                if (lastKey != layoutInfo.getKey()) {
+                    appFilter.add(layoutInfo.getKey());
+                }
+            } else {
+                appFilter.add(layoutInfo.getKey());
+            }
+        }
+    }
+
+    private String concatAppFilter() {
+        StringBuffer sb = new StringBuffer();
+        int index = 0;
+        for (String value : appFilter) {
+            sb.append(value);
+            if (index < appFilter.size() - 1) {
+                sb.append(" / ");
+            }
+            index++;
+        }
+        return sb.toString();
     }
 }

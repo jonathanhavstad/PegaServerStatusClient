@@ -12,12 +12,9 @@ import android.view.ViewGroup;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.adapters.FragmentListAdapter;
 import com.cisco.pegaserverstatusclient.binders.LayoutInfoBinder;
-import com.cisco.pegaserverstatusclient.binders.ServerDataBinder;
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.decoractors.DividerItemDecoration;
-
-import java.util.Map;
+import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,16 +25,13 @@ import butterknife.ButterKnife;
 
 public class LayoutFragment extends Fragment {
     private BaseLayoutInfo appLayoutInfo;
-    private Map<String, Object> appData;
-    private boolean isChildLayout;
+    private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
 
     @BindView(R.id.landing_fragment_list)
     RecyclerView landingFragmentList;
 
     public static LayoutFragment newInstance(Context context,
-                                             BaseLayoutInfo appLayoutInfo,
-                                             Map<String, Object> fragmentData,
-                                             boolean isChildLayout) {
+                                             BaseLayoutInfo appLayoutInfo) {
         LayoutFragment layoutFragment = new LayoutFragment();
 
         Bundle args = new Bundle();
@@ -45,12 +39,6 @@ public class LayoutFragment extends Fragment {
         LayoutInfoBinder layoutInfoBinder = new LayoutInfoBinder();
         layoutInfoBinder.setBaseLayoutInfo(appLayoutInfo);
         args.putBinder(context.getString(R.string.app_layout_info_bundle_key), layoutInfoBinder);
-
-        ServerDataBinder serverDataBinder = new ServerDataBinder();
-        serverDataBinder.setAppData(fragmentData);
-        args.putBinder(context.getString(R.string.app_binder_data_bundle_key), serverDataBinder);
-
-        args.putBoolean(context.getString(R.string.child_layout_bundle_key), isChildLayout);
 
         layoutFragment.setArguments(args);
 
@@ -60,6 +48,9 @@ public class LayoutFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnOpenMenuItemClickListener) {
+            this.onOpenMenuItemClickListener = (OnOpenMenuItemClickListener) context;
+        }
     }
 
     @Override
@@ -73,14 +64,6 @@ public class LayoutFragment extends Fragment {
                 appLayoutInfo = layoutInfoBinder.getBaseLayoutInfo();
                 appLayoutInfo.readFromNetwork(null);
             }
-
-            ServerDataBinder binder =
-                    (ServerDataBinder) args.getBinder(getString(R.string.app_binder_data_bundle_key));
-            if (binder != null) {
-                appData = (Map<String, Object>) binder.getAppData();
-            }
-
-            isChildLayout = args.getBoolean(getString(R.string.child_layout_bundle_key));
         }
     }
 
@@ -89,25 +72,21 @@ public class LayoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = null;
+        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
-        if (isChildLayout) {
-
-        } else {
-            rootView = inflater.inflate(R.layout.fragment_list, container, false);
-
-            ButterKnife.bind(this, rootView);
-            FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo);
-            landingFragmentList.setAdapter(adapter);
-            landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
-                    DividerItemDecoration.HORIZONTAL_LIST));
-        }
+        ButterKnife.bind(this, rootView);
+        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo,
+                onOpenMenuItemClickListener);
+        landingFragmentList.setAdapter(adapter);
+        landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.HORIZONTAL_LIST));
 
         return rootView;
     }
 
-    public void updateAppData(BaseLayoutInfo appLayoutInfo, Map<String, Object> appData) {
-        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo);
+    public void updateAppData(BaseLayoutInfo appLayoutInfo) {
+        FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo,
+                onOpenMenuItemClickListener);
         landingFragmentList.swapAdapter(adapter, false);
     }
 }

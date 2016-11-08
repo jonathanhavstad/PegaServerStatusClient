@@ -21,29 +21,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/loading_fragment_list_headers"
-            app:layoutManager="GridLayoutManager"
-            android:paddingTop="@dimen/root_element_vertical_padding"
-            android:paddingBottom="@dimen/root_element_vertical_padding"
-            android:paddingLeft="@dimen/child_element_horizontal_padding"
-            android:paddingRight="@dimen/child_element_horizontal_padding"
-            android:orientation="vertical"
+        <LinearLayout
+            android:id="@+id/loading_fragment_main_item_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/landing_fragment_list_item"
-            app:layoutManager="GridLayoutManager"
-            android:paddingTop="@dimen/root_element_vertical_padding"
-            android:paddingBottom="@dimen/root_element_vertical_padding"
-            android:paddingLeft="@dimen/child_element_horizontal_padding"
-            android:paddingRight="@dimen/child_element_horizontal_padding"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/loading_fragment_list_headers"
+                app:layoutManager="GridLayoutManager"
+                android:paddingTop="@dimen/root_element_vertical_padding"
+                android:paddingBottom="@dimen/root_element_vertical_padding"
+                android:paddingLeft="@dimen/child_element_horizontal_padding"
+                android:paddingRight="@dimen/child_element_horizontal_padding"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/landing_fragment_list_item"
+                app:layoutManager="GridLayoutManager"
+                android:layout_gravity="end"
+                android:paddingTop="@dimen/root_element_vertical_padding"
+                android:paddingBottom="@dimen/root_element_vertical_padding"
+                android:paddingLeft="@dimen/child_element_horizontal_padding"
+                android:paddingRight="@dimen/child_element_horizontal_padding"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
 
     </LinearLayout>
 

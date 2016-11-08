@@ -1,18 +1,17 @@
 package com.cisco.pegaserverstatusclient.adapters;
 
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.KeyMapping;
-
-import java.util.List;
-import java.util.Map;
+import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,17 +22,20 @@ import butterknife.ButterKnife;
 
 public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapter.ViewHolder> {
     private BaseLayoutInfo appLayoutInfo;
-    private Map<String, Object> appData;
-    private List<String> orderedKeySet;
+    private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
 
-    public FragmentListAdapter(BaseLayoutInfo appLayoutInfo) {
-        init(appLayoutInfo);
+    public FragmentListAdapter(BaseLayoutInfo appLayoutInfo,
+                               OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
+        init(appLayoutInfo, onOpenMenuItemClickListener);
     }
 
-    private void init(BaseLayoutInfo appLayoutInfo) {
-        this.appLayoutInfo  = appLayoutInfo;
-        this.appData = appLayoutInfo.getAppData();
-        this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
+    private void init(BaseLayoutInfo appLayoutInfo,
+                      OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
+        this.appLayoutInfo = appLayoutInfo;
+        this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
+        if (this.appLayoutInfo.getChildrenLayouts() == null) {
+            this.appLayoutInfo.readFromNetwork(null);
+        }
     }
 
     @Override
@@ -46,37 +48,106 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String key = orderedKeySet.get(position);
-        String friendlyName = KeyMapping.getFriendlyName(key);
-        if (friendlyName == null) {
-            friendlyName = key;
+        BaseLayoutInfo childLayout = appLayoutInfo.getDetailLayout(position);
+
+        String friendlyName = childLayout.getFriendlyName();
+        holder.landingFragmentListTitle.setTypeface(holder.landingFragmentListTitle.getTypeface(), 1);
+        holder.landingFragmentListTitle.setText(friendlyName);
+
+        if (appLayoutInfo.isGridLayout()) {
+            holder
+                    .loadingFragmentListHeaders
+                    .setLayoutManager(new StaggeredGridLayoutManager(
+                            appLayoutInfo.getHeaderColsList().length,
+                            StaggeredGridLayoutManager.VERTICAL));
+
+            holder
+                    .landingFragmentListItem
+                    .setLayoutManager(new StaggeredGridLayoutManager(
+                            appLayoutInfo.getHeaderColsList().length,
+                            StaggeredGridLayoutManager.VERTICAL));
+
+            holder
+                    .loadingFragmentMainItemList
+                    .setOrientation(LinearLayout.VERTICAL);
+            holder
+                    .loadingFragmentListHeaders
+                    .setLayoutParams(getColumnListLayoutParams(false));
+            holder
+                    .landingFragmentListItem
+                    .setLayoutParams(getColumnListLayoutParams(false));
+        } else {
+            if (appLayoutInfo.isVerticalLayout()) {
+                holder
+                        .loadingFragmentListHeaders
+                        .setLayoutManager(new LinearLayoutManager(
+                                holder.itemView.getContext(),
+                                LinearLayoutManager.VERTICAL,
+                                false));
+                holder
+                        .landingFragmentListItem
+                        .setLayoutManager(new LinearLayoutManager(
+                                holder.itemView.getContext(),
+                                LinearLayoutManager.VERTICAL,
+                                false));
+                holder
+                        .loadingFragmentMainItemList
+                        .setOrientation(LinearLayout.HORIZONTAL);
+                holder
+                        .loadingFragmentListHeaders
+                        .setLayoutParams(getColumnListLayoutParams(true));
+                holder
+                        .landingFragmentListItem
+                        .setLayoutParams(getColumnListLayoutParams(true));
+            } else if (appLayoutInfo.isHorizontalLayout()) {
+                holder
+                        .loadingFragmentListHeaders
+                        .setLayoutManager(new LinearLayoutManager(
+                                holder.itemView.getContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false));
+                holder
+                        .landingFragmentListItem
+                        .setLayoutManager(new LinearLayoutManager(
+                                holder.itemView.getContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false));
+                holder
+                        .loadingFragmentMainItemList
+                        .setOrientation(LinearLayout.VERTICAL);
+                holder
+                        .loadingFragmentListHeaders
+                        .setLayoutParams(getColumnListLayoutParams(false));
+                holder
+                        .landingFragmentListItem
+                        .setLayoutParams(getColumnListLayoutParams(false));
+            }
         }
-        holder.landringFragmentListTitle.setTypeface(holder.landringFragmentListTitle.getTypeface(), 1);
-        holder.landringFragmentListTitle.setText(friendlyName);
 
         String[] headers = appLayoutInfo.getHeaderDescList();
-        FragmentListHeaderAdapter headerAdapter = new FragmentListHeaderAdapter(headers);
-        ((GridLayoutManager) holder.loadingFragmentListHeaders.getLayoutManager())
-                .setSpanCount(appLayoutInfo.getHeaderColsList().length);
-        holder.loadingFragmentListHeaders.setAdapter(headerAdapter);
+        if (headers != null && headers.length > 0) {
+            FragmentListHeaderAdapter headerAdapter = new FragmentListHeaderAdapter(headers);
+            holder.loadingFragmentListHeaders.setAdapter(headerAdapter);
+        }
 
-        BaseLayoutInfo childLayout = appLayoutInfo.getChildLayout(position);
-        FragmentListItemAdapter adapter = new FragmentListItemAdapter(childLayout);
-        ((GridLayoutManager) holder.landingFragmentListItem.getLayoutManager())
-                .setSpanCount(appLayoutInfo.getHeaderColsList().length);
+        FragmentListItemAdapter adapter = new FragmentListItemAdapter(childLayout,
+                onOpenMenuItemClickListener);
         holder.landingFragmentListItem.setAdapter(adapter);
     }
 
     @Override
     public int getItemCount() {
-        return (orderedKeySet != null ? orderedKeySet.size() : 0);
+        return (appLayoutInfo != null ? appLayoutInfo.size() : 0);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private View itemView;
 
         @BindView(R.id.landing_fragment_list_title)
-        TextView landringFragmentListTitle;
+        TextView landingFragmentListTitle;
+
+        @BindView(R.id.loading_fragment_main_item_list)
+        LinearLayout loadingFragmentMainItemList;
 
         @BindView(R.id.loading_fragment_list_headers)
         RecyclerView loadingFragmentListHeaders;
@@ -89,5 +160,15 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    private LinearLayout.LayoutParams getColumnListLayoutParams(boolean isVertical) {
+        LinearLayout.LayoutParams layoutParams = null;
+        if (isVertical) {
+            layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        } else {
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+        }
+        return layoutParams;
     }
 }

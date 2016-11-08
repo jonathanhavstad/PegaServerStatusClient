@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="data_refresh_timeout_ms">300000</integer>
+    <integer name="data_refresh_timeout_ms">60000</integer>
 </resources>

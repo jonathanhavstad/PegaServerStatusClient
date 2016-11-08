@@ -60,10 +60,20 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
     public Object getValue(Map<String, Object> appData, String childValue) {
         if (appData != null) {
             return appData.get(key);
         }
         return null;
+    }
+
+    @Override
+    public String getShortName() {
+        return key;
     }
 }

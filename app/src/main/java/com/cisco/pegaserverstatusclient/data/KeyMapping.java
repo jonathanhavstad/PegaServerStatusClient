@@ -14,9 +14,11 @@ public class KeyMapping {
     public static final List<String> IGNORE_LIST = new ArrayList<>();
 
     static {
+
+
         KEY_MAPPING.put("prod", "Production");
         KEY_MAPPING.put("stage", "Stage");
-        KEY_MAPPING.put("lt", "Load Testing");
+        KEY_MAPPING.put("lt", "Load Test");
         KEY_MAPPING.put("dev", "Development");
 
         IGNORE_LIST.add("poc");
@@ -45,9 +47,11 @@ public class KeyMapping {
 
     public static List<String> populateOrderedKeySet(Map<String, Object> appData) {
         List<String> orderedKeySet = new ArrayList<>();
-        for (String key : appData.keySet()) {
-            if (!shouldIgnoreKey(key)) {
-                orderedKeySet.add(key);
+        if (appData != null) {
+            for (String key : appData.keySet()) {
+                if (!shouldIgnoreKey(key)) {
+                    orderedKeySet.add(key);
+                }
             }
         }
         return orderedKeySet;

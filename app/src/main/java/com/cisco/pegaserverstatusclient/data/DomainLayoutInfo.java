@@ -12,12 +12,32 @@ import java.util.Map;
  */
 
 public class DomainLayoutInfo extends BaseLayoutInfo {
-    public DomainLayoutInfo(BaseLayoutInfo parentLayout) {
-        super(parentLayout);
+    private int size;
+
+    public DomainLayoutInfo(BaseLayoutInfo parentLayoutInfo) {
+        super(parentLayoutInfo);
 
         // TODO: Remove these when the app layout become available on the network
         headerColumns = "APPS, STATUS, DateTime, ProxyURL";
         headerDesc = "Applications, Status, Date & Time, Proxy URL";
+
+        splitHeaderCols();
+        splitHeaderDesc();
+        size = 1;
+    }
+
+    public DomainLayoutInfo(BaseLayoutInfo parentLayoutInfo,
+                            Map<String, Object> appData,
+                            String key,
+                            int size) {
+        this(parentLayoutInfo);
+        setKey(key);
+        setAppData(appData);
+        setFriendlyName(getFriendlyName(key, false));
+        setLayout("GRID");
+        splitHeaderCols();
+        splitHeaderDesc();
+        this.size = size;
     }
 
     @Override
@@ -45,6 +65,11 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
     @Override
     public String getFriendlyName() {
         return friendlyName;
+    }
+
+    @Override
+    public String getShortName() {
+        return key;
     }
 
     @Override
@@ -76,12 +101,23 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo getChildLayout(int index) {
+        if (index >= 0 && index < childrenLayouts.size()) {
+            return childrenLayouts.get(index);
+        }
         return null;
     }
 
     @Override
     public boolean readFromNetwork(InputStream in) {
-        return false;
+        ArrayList<BaseLayoutInfo> filteredChildrenLayout = new ArrayList<>();
+
+        for (String childKey : headerColsList) {
+            BasicLayoutInfo childLayoutInfo = new BasicLayoutInfo(this, childKey, appData.get(childKey));
+            filteredChildrenLayout.add(childLayoutInfo);
+        }
+        setChildrenLayouts(filteredChildrenLayout);
+
+        return true;
     }
 
     @Override
@@ -92,5 +128,33 @@ public class DomainLayoutInfo extends BaseLayoutInfo {
     @Override
     public BaseLayoutInfo filteredLayout(String filter) {
         return null;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public BaseLayoutInfo getDetailLayout(int position) {
+        return new DomainLayoutInfo(getParentLayout(),
+                appData,
+                getKey(),
+                headerColsList.length);
+    }
+
+    @Override
+    public boolean isColBold(int colIndex) {
+        return false;
+    }
+
+    @Override
+    public boolean isClickable(int colIndex) {
+        return false;
+    }
+
+    @Override
+    public String getKeyFromPosition(int position) {
+        return orderedKeySet.get(position);
     }
 }

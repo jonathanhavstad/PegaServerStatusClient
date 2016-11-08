@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
 
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

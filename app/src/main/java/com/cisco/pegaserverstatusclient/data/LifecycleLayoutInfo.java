@@ -23,7 +23,7 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
 
     public static final String PROD_FRIENDLY_NAME = "Production";
     public static final String STAGE_FRIENDLY_NAME = "Stage";
-    public static final String LT_FRIENDLY_NAME = "Load Testing";
+    public static final String LT_FRIENDLY_NAME = "Load Test";
     public static final String DEV_FRIENDLY_NAME = "Development";
 
     public static final String[] LC_KEY_ORDER = new String[NUM_LC_VALUES];
@@ -53,16 +53,13 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
         return null;
     }
 
-    @Override
-    public Object getValue(Map<String, Object> appData, String childValue) {
-        if (appData != null) {
-            return appData.get(key);
-        }
-        return null;
-    }
-
     public String getFriendlyName() {
         return friendlyName;
+    }
+
+    @Override
+    public String getShortName() {
+        return key;
     }
 
     @Override
@@ -98,12 +95,10 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
         if (appData != null) {
             orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
             for (String key : orderedKeySet) {
-                DomainLayoutInfo layoutInfo = new DomainLayoutInfo(this);
-                layoutInfo.setKey(key);
-                layoutInfo.setAppData((Map<String, Object>) appData.get(key));
-                layoutInfo.setFriendlyName(layoutInfo.getFriendlyName(key, false));
-                layoutInfo.splitHeaderCols();
-                layoutInfo.splitHeaderDesc();
+                DomainLayoutInfo layoutInfo = new DomainLayoutInfo(this,
+                        (Map<String, Object>) appData.get(key),
+                        key,
+                        1);
                 layoutList.add(layoutInfo);
             }
             setChildrenLayouts(layoutList);
@@ -120,6 +115,24 @@ public class LifecycleLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo filteredLayout(String filter) {
+        for (BaseLayoutInfo childLayout : childrenLayouts) {
+            if (childLayout.getKey().equals(filter)) {
+                return childLayout;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int size() {
+        return orderedKeySet.size() * headerColsList.length;
+    }
+
+    @Override
+    public Object getValue(Map<String, Object> appData, String childValue) {
+        if (appData != null) {
+            return appData.get(key);
+        }
         return null;
     }
 }

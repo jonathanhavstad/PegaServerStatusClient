@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.stream.JsonReader;
 
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -34,6 +33,11 @@ public class AppsLayoutInfo extends BaseLayoutInfo {
     @Override
     public String getFriendlyName() {
         return FRIENDLY_NAME;
+    }
+
+    @Override
+    public String getShortName() {
+        return key;
     }
 
     @Override
@@ -71,17 +75,20 @@ public class AppsLayoutInfo extends BaseLayoutInfo {
             JsonReader jsonReader = new JsonReader(new InputStreamReader(in));
             JsonArray jsonArray = gson.fromJson(jsonReader, JsonArray.class);
             List<BaseLayoutInfo> layoutList = new ArrayList<>();
+            Map<String, Object> appsData = new HashMap<>();
             for (int i = 0; i < jsonArray.size(); i++) {
-                AppLayoutInfo appLayoutInfo =
-                        gson.fromJson(jsonArray.get(i), AppLayoutInfo.class);
+                AppLayoutInfo appLayoutInfo = gson.fromJson(jsonArray.get(i), AppLayoutInfo.class);
                 appLayoutInfo.setParentLayout(this);
                 appLayoutInfo.splitHeaderCols();
                 appLayoutInfo.splitHeaderDesc();
                 appLayoutInfo.setParentLayout(this);
-                appLayoutInfo.setKey(appLayoutInfo.getAppName());
+                appLayoutInfo.setKey(appLayoutInfo.getAppId());
                 layoutList.add(appLayoutInfo);
+                appsData.put(appLayoutInfo.getAppName(), null);
             }
             setChildrenLayouts(layoutList);
+            setAppData(appsData);
+
             return true;
         }
 
@@ -118,5 +125,10 @@ public class AppsLayoutInfo extends BaseLayoutInfo {
             }
         }
         return this;
+    }
+
+    @Override
+    public int size() {
+        return childrenLayouts.size();
     }
 }

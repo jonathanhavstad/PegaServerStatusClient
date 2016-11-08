@@ -60,7 +60,7 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
 
     @Override
     public int getItemCount() {
-        return appLayoutInfo.size();
+        return appLayoutInfo.getChildrenLayouts().size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

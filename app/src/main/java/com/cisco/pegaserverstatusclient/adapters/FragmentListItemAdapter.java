@@ -4,18 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
 import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.KeyMapping;
-
-import java.util.List;
-import java.util.Map;
+import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,15 +19,17 @@ import butterknife.ButterKnife;
 
 public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListItemAdapter.ViewHolder> {
     private BaseLayoutInfo appLayoutInfo;
-    private Map<String, Object> appData;
-    private List<String> orderedKeySet;
+    private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
     private int size;
 
-    public FragmentListItemAdapter(BaseLayoutInfo appLayoutInfo) {
+    public FragmentListItemAdapter(BaseLayoutInfo appLayoutInfo,
+                                   OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
         this.appLayoutInfo = appLayoutInfo;
-        this.appData = appLayoutInfo.getAppData();
-        this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
-        this.size = this.orderedKeySet.size() * this.appLayoutInfo.getHeaderDescList().length;
+        this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
+        this.size = appLayoutInfo.size();
+        if (this.appLayoutInfo.getChildrenLayouts() == null) {
+            this.appLayoutInfo.readFromNetwork(null);
+        }
     }
 
     @Override
@@ -48,25 +43,33 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String[] headerColumnList = appLayoutInfo.getHeaderColsList();
-        String key = orderedKeySet.get(position / headerColumnList.length);
-        Map<String, Object> childAppData = (Map<String, Object>) appData.get(key);
-        int colIndex = position % headerColumnList.length;
+        String key = appLayoutInfo.getKeyFromPosition(position);
         holder.landingFragmentListChildItem.setClickable(false);
         holder.landingFragmentListChildItem.setText("");
         holder.landingFragmentListChildItem.setTextAppearance(holder.itemView.getContext(),
                 R.style.DefaultItemTextStyle);
-        if (colIndex == 0) {
+
+        int colIndex = position % headerColumnList.length;
+
+        if (appLayoutInfo.isColBold(colIndex)) {
             holder.landingFragmentListChildItem.setClickable(true);
             holder
                     .landingFragmentListChildItem
                     .setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
-            holder.landingFragmentListChildItem.setText(key);
-        } else {
-            String header = headerColumnList[colIndex];
-            for (String headerKey : childAppData.keySet()) {
-                if (headerKey.equalsIgnoreCase(header)) {
-                    holder.landingFragmentListChildItem.setText(childAppData.get(headerKey).toString());
-                }
+        }
+        int index = appLayoutInfo.getKeyIndex(key);
+        if (index != -1) {
+            final BaseLayoutInfo childLayoutInfo = appLayoutInfo.getChildLayout(index);
+            holder
+                    .landingFragmentListChildItem
+                    .setText(childLayoutInfo.getKeyedValue(colIndex, key));
+            if (appLayoutInfo.isClickable(colIndex)) {
+                holder.landingFragmentListChildItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onOpenMenuItemClickListener.open(childLayoutInfo);
+                    }
+                });
             }
         }
     }

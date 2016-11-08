@@ -1,7 +1,5 @@
 package com.cisco.pegaserverstatusclient.data;
 
-import android.content.Context;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -28,9 +26,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     @Expose
     @SerializedName("Screen")
     private String screen;
-    @Expose
-    @SerializedName("Layout")
-    private String layout;
     @Expose
     @SerializedName("Method")
     private String method;
@@ -75,14 +70,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
         this.screen = screen;
     }
 
-    public String getLayout() {
-        return layout;
-    }
-
-    public void setLayout(String layout) {
-        this.layout = layout;
-    }
-
     @Override
     public boolean readFromNetwork(InputStream in) {
         List<BaseLayoutInfo> layoutList = new ArrayList<>();
@@ -95,6 +82,7 @@ public class AppLayoutInfo extends BaseLayoutInfo {
                 lifecycleLayoutInfo.setFriendlyName(lifecycleLayoutInfo.getFriendlyName(key, false));
                 lifecycleLayoutInfo.setHeaderColumns(getHeaderColumns());
                 lifecycleLayoutInfo.setHeaderDesc(getHeaderDesc());
+                lifecycleLayoutInfo.setLayout(layout);
                 lifecycleLayoutInfo.splitHeaderCols();
                 lifecycleLayoutInfo.splitHeaderDesc();
                 lifecycleLayoutInfo.setKey(key);
@@ -127,6 +115,7 @@ public class AppLayoutInfo extends BaseLayoutInfo {
             AppLayoutInfo appLayoutInfo = new AppLayoutInfo(getParentLayout());
 
             ArrayList<BaseLayoutInfo> filteredChildrenLayout = new ArrayList<>();
+
             for (BaseLayoutInfo childLayout : childrenLayouts) {
                 if (childLayout.getKey().equals(filter)) {
                     filteredChildrenLayout.add(childLayout);
@@ -150,11 +139,17 @@ public class AppLayoutInfo extends BaseLayoutInfo {
 
             Map<String, Object> filteredAppData = new HashMap<>();
             filteredAppData.put(filter, appData.get(filter));
-            appLayoutInfo.setAppData(filteredAppData);
+            appLayoutInfo.appData = filteredAppData;
+            appLayoutInfo.orderedKeySet = KeyMapping.populateOrderedKeySet(filteredAppData);
 
             return appLayoutInfo;
         }
         return this;
+    }
+
+    @Override
+    public int size() {
+        return orderedKeySet.size();
     }
 
     public String getMethod() {
@@ -172,6 +167,11 @@ public class AppLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public String getFriendlyName() {
+        return appId;
+    }
+
+    @Override
+    public String getShortName() {
         if (friendlyName == null && appId != null) {
             int firstWordEndIndex = appId.indexOf(" ");
             if (firstWordEndIndex < 0) {
@@ -208,5 +208,11 @@ public class AppLayoutInfo extends BaseLayoutInfo {
             return childrenLayouts.get(index);
         }
         return null;
+    }
+
+    @Override
+    public void setAppData(Map<String, Object> appData) {
+        super.setAppData(appData);
+        getParentLayout().getAppData().put(getAppName(), appData);
     }
 }

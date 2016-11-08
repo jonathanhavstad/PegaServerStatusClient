@@ -17,6 +17,9 @@ import java.util.Map;
 
 public abstract class BaseLayoutInfo {
     @Expose
+    @SerializedName("Layout")
+    protected String layout;
+    @Expose
     @SerializedName("HeaderColumn")
     protected String headerColumns;
     @Expose
@@ -70,6 +73,14 @@ public abstract class BaseLayoutInfo {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getLayout() {
+        return layout;
+    }
+
+    public void setLayout(String layout) {
+        this.layout = layout;
     }
 
     public void splitHeaderDesc() {
@@ -133,13 +144,6 @@ public abstract class BaseLayoutInfo {
         return childrenLayouts;
     }
 
-    public int size() {
-        if (childrenLayouts != null) {
-            return childrenLayouts.size();
-        }
-        return 0;
-    }
-
     public BaseLayoutInfo getParentLayout() {
         return parentLayout;
     }
@@ -148,8 +152,82 @@ public abstract class BaseLayoutInfo {
         this.parentLayout = parentLayout;
     }
 
+    public String getKeyedValue(int colIndex, String key) {
+        if (colIndex == 0) {
+            return key;
+        }
+
+        String header = headerColsList[colIndex];
+        for (String headerKey : appData.keySet()) {
+            if (headerKey.equalsIgnoreCase(header)) {
+                return appData.get(headerKey).toString();
+            }
+        }
+
+        return null;
+    }
+
+    public boolean isColBold(int colIndex) {
+        if (colIndex == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isClickable(int colIndex) {
+        if (colIndex == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public int getKeyIndex(String key) {
+        if (orderedKeySet.contains(key)) {
+            return orderedKeySet.indexOf(key);
+        }
+        return -1;
+    }
+
+    public List<String> getOrderedKeySet() {
+        return orderedKeySet;
+    }
+
+    public void setOrderedKeySet(List<String> orderedKeySet) {
+        this.orderedKeySet = orderedKeySet;
+    }
+
+    public BaseLayoutInfo getDetailLayout(int position) {
+        return getChildLayout(position);
+    }
+
+    public String getKeyFromPosition(int position) {
+        return orderedKeySet.get(position / headerColsList.length);
+    }
+
+    public boolean isGridLayout() {
+        if (layout != null && layout.equalsIgnoreCase("GRID")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isVerticalLayout() {
+        if (layout != null && layout.equalsIgnoreCase("VERTICAL")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isHorizontalLayout() {
+        if (layout != null && layout.equalsIgnoreCase("HORIZONTAL")) {
+            return true;
+        }
+        return false;
+    }
+
     public abstract Object getValue(Map<String, Object> appData, String childKey);
     public abstract String getFriendlyName();
+    public abstract String getShortName();
     public abstract void setFriendlyName(String friendlyName);
     public abstract String getKey();
     public abstract void setKey(String key);
@@ -158,6 +236,7 @@ public abstract class BaseLayoutInfo {
     public abstract boolean readFromNetwork(InputStream in);
     public abstract List<String> getDataUrls();
     public abstract BaseLayoutInfo filteredLayout(String filter);
+    public abstract int size();
 
     @Override
     public String toString() {

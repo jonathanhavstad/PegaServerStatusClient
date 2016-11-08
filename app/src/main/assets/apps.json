@@ -9,5 +9,16 @@
         "URL" : "http://www.elkimanteam.com/demo/status.json",
         "HeaderColumn" : "Domain, Status",
         "HeaderDesc" : "Domain, Status"
+    },
+    {
+        "AppId" : "iBPM Status",
+        "AppName" : "Application to display the status of iBPM Apps",
+        "Action" : "",
+        "Screen" : "Page1",
+        "Layout" : "GRID",
+        "Method" : "PULL",
+        "URL" : "",
+        "HeaderColumn" : "Domain, Status",
+        "HeaderDesc" : "Domain, Status"
     }
 ]
