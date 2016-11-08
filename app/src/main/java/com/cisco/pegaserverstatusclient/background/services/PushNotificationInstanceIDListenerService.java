@@ -9,7 +9,7 @@ import com.google.android.gms.iid.InstanceIDListenerService;
  * Created by jonathanhavstad on 10/24/16.
  */
 
-public class PushNotificationInstanceIDListenerService extends com.google.android.gms.iid.InstanceIDListenerService {
+public class PushNotificationInstanceIDListenerService extends InstanceIDListenerService {
     private static final String TAG = "PegaListenerService";
 
     @Override

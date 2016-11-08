@@ -1,4 +1,4 @@
-package com.cisco.pegaserverstatusclient.data;
+package com.cisco.pegaserverstatusclient.layouts;
 
 import java.io.InputStream;
 import java.util.List;

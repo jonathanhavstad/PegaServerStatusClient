@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.adapters.FragmentDrawerListAdapter;
 import com.cisco.pegaserverstatusclient.binders.LayoutInfoBinder;
-import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.listeners.OnBackPressedClickListener;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 import com.cisco.pegaserverstatusclient.listeners.OnSelectMenuItemClickListener;

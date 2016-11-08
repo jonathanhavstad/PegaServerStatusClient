@@ -1,4 +1,4 @@
-package com.cisco.pegaserverstatusclient.data;
+package com.cisco.pegaserverstatusclient.utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,18 +10,30 @@ import java.util.Map;
  */
 
 public class KeyMapping {
+    public static final int NUM_LC_VALUES = 4;
+
+    public static final String PROD_KEY = "prod";
+    public static final String STAGE_KEY = "stage";
+    public static final String LT_KEY = "lt";
+    public static final String DEV_KEY = "dev";
+    public static final String POC_KEY = "poc";
+
+    public static final String[] LC_KEY_ORDER = new String[NUM_LC_VALUES];
     public static final Map<String, String> KEY_MAPPING = new HashMap<>();
     public static final List<String> IGNORE_LIST = new ArrayList<>();
 
     static {
+        LC_KEY_ORDER[0] = PROD_KEY;
+        LC_KEY_ORDER[1] = STAGE_KEY;
+        LC_KEY_ORDER[2] = LT_KEY;
+        LC_KEY_ORDER[3] = DEV_KEY;
 
+        KEY_MAPPING.put(PROD_KEY, "Production");
+        KEY_MAPPING.put(STAGE_KEY, "Stage");
+        KEY_MAPPING.put(LT_KEY, "Load Test");
+        KEY_MAPPING.put(DEV_KEY, "Development");
 
-        KEY_MAPPING.put("prod", "Production");
-        KEY_MAPPING.put("stage", "Stage");
-        KEY_MAPPING.put("lt", "Load Test");
-        KEY_MAPPING.put("dev", "Development");
-
-        IGNORE_LIST.add("poc");
+        IGNORE_LIST.add(POC_KEY);
     }
 
     public static String getFriendlyName(String key) {

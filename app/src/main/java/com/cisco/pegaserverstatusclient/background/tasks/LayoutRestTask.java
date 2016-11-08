@@ -3,11 +3,10 @@ package com.cisco.pegaserverstatusclient.background.tasks;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;

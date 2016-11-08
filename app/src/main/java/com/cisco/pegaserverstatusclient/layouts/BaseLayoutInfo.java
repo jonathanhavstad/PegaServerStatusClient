@@ -1,12 +1,10 @@
-package com.cisco.pegaserverstatusclient.data;
+package com.cisco.pegaserverstatusclient.layouts;
 
-import android.content.Context;
-
+import com.cisco.pegaserverstatusclient.utilities.KeyMapping;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

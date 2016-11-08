@@ -5,14 +5,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.data.DomainAppLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.DomainLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.ServerLayoutInfo;
 import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
-import com.cisco.pegaserverstatusclient.rest.services.OauthAccessService;
-import com.cisco.pegaserverstatusclient.rest.services.OauthRedirectService;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -41,7 +34,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
 /**

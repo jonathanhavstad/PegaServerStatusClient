@@ -1,6 +1,4 @@
-package com.cisco.pegaserverstatusclient.data;
-
-import android.content.Context;
+package com.cisco.pegaserverstatusclient.layouts;
 
 import java.io.InputStream;
 import java.util.ArrayList;

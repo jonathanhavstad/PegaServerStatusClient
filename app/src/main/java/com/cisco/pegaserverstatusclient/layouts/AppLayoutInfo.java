@@ -1,5 +1,6 @@
-package com.cisco.pegaserverstatusclient.data;
+package com.cisco.pegaserverstatusclient.layouts;
 
+import com.cisco.pegaserverstatusclient.utilities.KeyMapping;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -93,8 +94,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
         } else if (childrenLayouts != null) {
             return true;
         }
-
-        // TODO: Change to a REST call to read from the network
 
         return false;
     }

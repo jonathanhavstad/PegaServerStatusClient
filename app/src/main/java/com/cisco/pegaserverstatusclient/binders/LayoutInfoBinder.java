@@ -2,7 +2,7 @@ package com.cisco.pegaserverstatusclient.binders;
 
 import android.os.Binder;
 
-import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 
 /**
  * Created by jonathanhavstad on 10/25/16.

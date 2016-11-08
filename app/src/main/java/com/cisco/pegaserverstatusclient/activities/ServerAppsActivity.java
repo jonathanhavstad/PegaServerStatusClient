@@ -25,8 +25,8 @@ import com.cisco.pegaserverstatusclient.background.services.ServerRefreshService
 import com.cisco.pegaserverstatusclient.background.tasks.LayoutRestTask;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
-import com.cisco.pegaserverstatusclient.data.AppsLayoutInfo;
-import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.layouts.AppsLayoutInfo;
+import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.fragments.DrawerFragment;
 import com.cisco.pegaserverstatusclient.fragments.LayoutFragment;
 import com.cisco.pegaserverstatusclient.listeners.OnBackPressedClickListener;

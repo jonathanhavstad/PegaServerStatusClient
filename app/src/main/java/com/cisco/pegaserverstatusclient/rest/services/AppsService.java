@@ -1,7 +1,6 @@
 package com.cisco.pegaserverstatusclient.rest.services;
 
-import com.cisco.pegaserverstatusclient.data.AppLayoutInfo;
-import com.google.gson.JsonArray;
+import com.cisco.pegaserverstatusclient.layouts.AppLayoutInfo;
 
 import java.util.List;
 

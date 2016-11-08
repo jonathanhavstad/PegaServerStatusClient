@@ -1,4 +1,4 @@
-package com.cisco.pegaserverstatusclient.data;
+package com.cisco.pegaserverstatusclient.messages;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

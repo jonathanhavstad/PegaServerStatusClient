@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.adapters.FragmentListAdapter;
 import com.cisco.pegaserverstatusclient.binders.LayoutInfoBinder;
-import com.cisco.pegaserverstatusclient.data.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.decoractors.DividerItemDecoration;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 
