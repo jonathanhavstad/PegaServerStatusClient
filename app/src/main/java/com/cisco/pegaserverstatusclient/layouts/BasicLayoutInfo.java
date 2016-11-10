@@ -1,6 +1,10 @@
 package com.cisco.pegaserverstatusclient.layouts;
 
+import com.cisco.pegaserverstatusclient.utilities.KeyMapping;
+
 import java.io.InputStream;
+import java.security.Key;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +13,14 @@ import java.util.Map;
  */
 
 public class BasicLayoutInfo extends BaseLayoutInfo {
-    private String data;
-
-    public BasicLayoutInfo(BaseLayoutInfo parentLayout, String key, Object data) {
+    public BasicLayoutInfo(BaseLayoutInfo parentLayout, String key, String data) {
         super(parentLayout);
-        this.headerColumns = "\"\", \"\"";
-        this.headerDesc = "\"\", \"\"";
-        this.splitHeaderCols();
-        this.splitHeaderDesc();
         this.key = key;
-        this.data = getConcatData(data);
+        this.appData = data;
+        this.friendlyName = KeyMapping.getFriendlyName(key);
+        this.orderedKeySet = new ArrayList<>();
+        this.orderedKeySet.add(data);
+        this.childrenLayouts = new ArrayList<>();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class BasicLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public String getShortName() {
-        return data;
+        return appData.toString();
     }
 
     @Override
@@ -52,13 +54,8 @@ public class BasicLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public BaseLayoutInfo createChildLayout(String parentKey) {
-        return null;
-    }
-
-    @Override
     public BaseLayoutInfo getChildLayout(int index) {
-        return null;
+        return this;
     }
 
     @Override
@@ -88,50 +85,16 @@ public class BasicLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public String toString() {
-        return data;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
+        return appData.toString();
     }
 
     @Override
-    public String getKeyedValue(int colIndex, String key) {
-        if (key.equals(key)) {
-            return data;
-        }
-        return null;
+    public String getKeyedValue(int colIndex, String key, boolean headerIsKey) {
+        return appData.toString();
     }
 
-    private String getConcatData(Object data) {
-        StringBuffer sb = new StringBuffer();
-        int index = 0;
-        if (data instanceof Map<?,?>) {
-            Map<String, Object> mapData = (Map<String, Object>) data;
-            for (String childKey : mapData.keySet()) {
-                sb.append(childKey);
-                if (index < mapData.size() - 1) {
-                    sb.append("\n");
-                }
-                index++;
-            }
-        } else if (data instanceof List<?>) {
-            List<String> listData = (List<String>) data;
-            for (String item : listData) {
-                sb.append(item);
-                if (index < listData.size()) {
-                    sb.append("\n");
-                }
-            }
-        } else if (data instanceof String) {
-            sb.append(data);
-        } else {
-            sb.append("----");
-        }
-        return sb.toString();
+    @Override
+    public int getNumCols() {
+        return orderedKeySet.size();
     }
 }

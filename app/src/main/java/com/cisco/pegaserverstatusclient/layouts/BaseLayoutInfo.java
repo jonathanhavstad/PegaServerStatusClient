@@ -14,6 +14,45 @@ import java.util.Map;
  */
 
 public abstract class BaseLayoutInfo {
+    public static class LayoutPreferences {
+        public boolean isBold;
+        public boolean isClickable;
+        public boolean isUnderlined;
+
+        public boolean isBold() {
+            return isBold;
+        }
+
+        public void setBold(boolean bold) {
+            isBold = bold;
+        }
+
+        public boolean isClickable() {
+            return isClickable;
+        }
+
+        public void setClickable(boolean clickable) {
+            isClickable = clickable;
+        }
+
+        public boolean isUnderlined() {
+            return isUnderlined;
+        }
+
+        public void setUnderlined(boolean underlined) {
+            isUnderlined = underlined;
+        }
+    }
+
+    public static LayoutPreferences DEFAULT_LAYOUT_PREFERENCES;
+
+    static {
+        DEFAULT_LAYOUT_PREFERENCES = new LayoutPreferences();
+        DEFAULT_LAYOUT_PREFERENCES.setBold(false);
+        DEFAULT_LAYOUT_PREFERENCES.setClickable(false);
+        DEFAULT_LAYOUT_PREFERENCES.setUnderlined(false);
+    }
+
     @Expose
     @SerializedName("Layout")
     protected String layout;
@@ -35,7 +74,7 @@ public abstract class BaseLayoutInfo {
 
     private Map<String, String> headerMap;
 
-    protected Map<String, Object> appData;
+    protected Object appData;
 
     protected List<BaseLayoutInfo> childrenLayouts;
 
@@ -125,12 +164,15 @@ public abstract class BaseLayoutInfo {
         }
     }
 
-    public void setAppData(Map<String, Object> appData) {
+    public void setAppData(Object appData) {
         this.appData = appData;
-        this.orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
+        if (appData instanceof Map<?,?>) {
+            Map<String, Object> mapAppData = (Map<String, Object>) appData;
+            this.orderedKeySet = KeyMapping.populateOrderedKeySet(mapAppData);
+        }
     }
 
-    public Map<String, Object> getAppData() {
+    public Object getAppData() {
         return appData;
     }
 
@@ -150,15 +192,28 @@ public abstract class BaseLayoutInfo {
         this.parentLayout = parentLayout;
     }
 
-    public String getKeyedValue(int colIndex, String key) {
-        if (colIndex == 0) {
+    public Object getKeyedValue(int colIndex, String key, boolean headerIsKey) {
+        if (colIndex == 0 && headerIsKey) {
             return key;
         }
 
-        String header = headerColsList[colIndex];
-        for (String headerKey : appData.keySet()) {
-            if (headerKey.equalsIgnoreCase(header)) {
-                return appData.get(headerKey).toString();
+        if (appData instanceof Map<?,?>) {
+            Map<String, Object> mapAppData = (Map<String, Object>) appData;
+            if (headerColsList != null) {
+                String header = headerColsList[colIndex];
+                for (String headerKey : mapAppData.keySet()) {
+                    if (headerKey.equalsIgnoreCase(header)) {
+                        return mapAppData.get(headerKey);
+                    }
+                }
+            } else {
+                int index = 0;
+                for (String childkey : mapAppData.keySet()) {
+                    if (index == colIndex) {
+                        return mapAppData.get(childkey);
+                    }
+                    index++;
+                }
             }
         }
 
@@ -199,7 +254,14 @@ public abstract class BaseLayoutInfo {
     }
 
     public String getKeyFromPosition(int position) {
-        return orderedKeySet.get(position / headerColsList.length);
+        int index = 0;
+        if (headerColsList != null) {
+            index = position / headerColsList.length;
+        } else if (appData != null && appData instanceof Map<?,?>) {
+            Map<String, Object> mapAppData = (Map<String, Object>) appData;
+            index = position / mapAppData.size();
+        }
+        return orderedKeySet.get(index);
     }
 
     public boolean isGridLayout() {
@@ -223,13 +285,23 @@ public abstract class BaseLayoutInfo {
         return false;
     }
 
+    public LayoutPreferences getLayoutPrefrences(int childIndex) {
+        return DEFAULT_LAYOUT_PREFERENCES;
+    }
+
+    public int getNumCols() {
+        if (headerColsList != null) {
+            return headerColsList.length;
+        }
+        return 0;
+    }
+
     public abstract Object getValue(Map<String, Object> appData, String childKey);
     public abstract String getFriendlyName();
     public abstract String getShortName();
     public abstract void setFriendlyName(String friendlyName);
     public abstract String getKey();
     public abstract void setKey(String key);
-    public abstract BaseLayoutInfo createChildLayout(String parentKey);
     public abstract BaseLayoutInfo getChildLayout(int index);
     public abstract boolean readFromNetwork(InputStream in);
     public abstract List<String> getDataUrls();
@@ -239,5 +311,18 @@ public abstract class BaseLayoutInfo {
     @Override
     public String toString() {
         return getFriendlyName();
+    }
+
+    public static String concatListData(List<String> listData) {
+        StringBuffer sb = new StringBuffer();
+        int itemIndex = 0;
+        for (String item :listData) {
+            sb.append(item);
+            if (itemIndex < listData.size() - 1) {
+                sb.append("\n");
+            }
+            itemIndex++;
+        }
+        return sb.toString();
     }
 }

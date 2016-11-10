@@ -1,13 +1,13 @@
 package com.cisco.pegaserverstatusclient.background.tasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.cisco.pegaserverstatusclient.listeners.OnDataLoadedListener;
+import com.cisco.pegaserverstatusclient.rest.services.CiscoSSOWebService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -56,6 +49,12 @@ public class ServerDataRestTask {
     private boolean loadJsonObjectFinished;
     private boolean loadJsonArraySuccess;
     private boolean loadJsonObjectSuccess;
+
+    CiscoSSOWebService ciscoSSOWebService;
+
+    public ServerDataRestTask(Activity context) {
+        ciscoSSOWebService = new CiscoSSOWebService(context);
+    }
 
     private void loadFromFile(final Context context, final String filename) {
         final AssetManager assetManager = context.getAssets();
@@ -96,8 +95,8 @@ public class ServerDataRestTask {
     }
 
     public boolean loadStatusFromNetwork(String url,
-                                      Action1<Integer> loadStatusSubscriber,
-                                      Action1<Map<String, Object>> appDataSubscriber) {
+                                         Action1<Integer> loadStatusSubscriber,
+                                         Action1<Map<String, Object>> appDataSubscriber) {
         boolean initResult = false;
 
         this.loadStatusSubscriber = loadStatusSubscriber;
@@ -110,78 +109,25 @@ public class ServerDataRestTask {
 
         if (url != null && !url.isEmpty()) {
             initResult = true;
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(extractBaseUrl(url))
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            IBPMStatusService ibpmStatusService = retrofit.create(IBPMStatusService.class);
-            ibpmStatusService
-                    .getStatusWithJsonArray(extractPathUrl(url))
-                    .enqueue(new Callback<JsonArray>() {
-                        @Override
-                        public void onResponse(Call<JsonArray> call,
-                                               Response<JsonArray> response) {
-                            try {
-                                if (response.body() != null) {
-                                    Map<String, Object> appData = new HashMap<>();
-                                    JSONArray jsonArray = new JSONArray(response.body().toString());
-                                    parseJsonArray(appData, null, jsonArray);
-                                    loadJsonArraySuccess = true;
-                                    loadJsonArrayFinished = true;
-                                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
-                                    publishAppData(appData);
-                                } else {
-                                    Log.e(TAG, "Response body was null!");
-                                    loadJsonArrayFinished = true;
-                                    publishDataLoadStatus(DATA_LOAD_FAILURE);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                loadJsonArrayFinished = true;
-                                publishDataLoadStatus(DATA_LOAD_FAILURE);
-                            }
-                        }
+            ciscoSSOWebService.loadData(url, new OnDataLoadedListener() {
+                @Override
+                public void send(JSONArray jsonArray) {
+                    Map<String, Object> appData = new HashMap<>();
+                    parseJsonArray(appData, null, jsonArray);
+                    loadJsonArraySuccess = true;
+                    loadJsonArrayFinished = true;
+                    loadJsonArraySuccess = true;
+                    loadJsonArrayFinished = true;
+                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
+                    publishAppData(appData);
+                }
 
-                        @Override
-                        public void onFailure(Call<JsonArray> call, Throwable t) {
-                            Log.e(TAG, "Network failure: " + t.toString());
-                            loadJsonArrayFinished = true;
-                            publishDataLoadStatus(DATA_LOAD_FAILURE);
-                        }
-                    });
-            ibpmStatusService
-                    .getStatusWithJsonObject(extractPathUrl(url))
-                    .enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            try {
-                                if (response.body() != null) {
-                                    Map<String, Object> appData = new HashMap<>();
-                                    JSONObject jsonObject = new JSONObject(response.body().toString());
-                                    parseJsonObj(appData, jsonObject);
-                                    loadJsonObjectSuccess = true;
-                                    loadJsonObjectFinished = true;
-                                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
-                                    publishAppData(appData);
-                                } else {
-                                    Log.e(TAG, "Response body was null!");
-                                    loadJsonObjectFinished = true;
-                                    publishDataLoadStatus(DATA_LOAD_FAILURE);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                loadJsonObjectFinished = true;
-                                publishDataLoadStatus(DATA_LOAD_FAILURE);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e(TAG, "Network failure: " + t.toString());
-                            loadJsonObjectFinished = true;
-                            publishDataLoadStatus(DATA_LOAD_FAILURE);
-                        }
-                    });
+                @Override
+                public void error(String error) {
+                    loadJsonArrayFinished = true;
+                    publishDataLoadStatus(DATA_LOAD_FAILURE);
+                }
+            });
         }
         return initResult;
     }

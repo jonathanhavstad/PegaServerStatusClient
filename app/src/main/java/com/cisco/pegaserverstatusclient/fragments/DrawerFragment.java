@@ -109,4 +109,8 @@ public class DrawerFragment extends Fragment {
 
         return rootView;
     }
+
+    public BaseLayoutInfo getLayoutInfo() {
+        return appLayoutInfo;
+    }
 }

@@ -9,7 +9,9 @@ import android.util.Log;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
+import com.cisco.pegaserverstatusclient.views.CiscoSSOWebView;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -26,7 +28,6 @@ public class ServerRefreshService extends IntentService {
 
     private ServerDataRestTask task;
     private SubscriberBinder binder;
-    private String statusUrl;
     private boolean shouldExecute;
     private int refreshInterval;
 
@@ -38,7 +39,6 @@ public class ServerRefreshService extends IntentService {
                 refreshData();
             }
         });
-        task = new ServerDataRestTask();
     }
 
     @Override
@@ -55,10 +55,7 @@ public class ServerRefreshService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            statusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
-            shouldExecute = true;
-        }
+        shouldExecute = true;
         while (shouldExecute) {
             try {
                 Thread.sleep(refreshInterval);
@@ -76,20 +73,28 @@ public class ServerRefreshService extends IntentService {
     }
 
     private void refreshData() {
-        task.loadStatusFromNetwork(statusUrl,
-                new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        Log.e(TAG, "Failed to load data from URL: " + statusUrl);
-                    }
-                },
-                new Action1<Map<String, Object>>() {
-                    @Override
-                    public void call(Map<String, Object> appData) {
-                        binder.updateLastRefreshTime();
-                        binder.subscribeObservable(initObservable(appData));
-                    }
-                });
+        if (task == null && binder.getTask() != null) {
+            task = binder.getTask();
+        }
+        List<String> urls = binder.getUrls();
+        if (task != null) {
+            for (final String url : urls) {
+                task.loadStatusFromNetwork(url,
+                        new Action1<Integer>() {
+                            @Override
+                            public void call(Integer integer) {
+                                Log.e(TAG, "Failed to load data from URL: " + url);
+                            }
+                        },
+                        new Action1<Map<String, Object>>() {
+                            @Override
+                            public void call(Map<String, Object> appData) {
+                                binder.updateLastRefreshTime();
+                                binder.subscribeObservable(initObservable(appData));
+                            }
+                        });
+            }
+        }
     }
 
     private Observable initObservable(Map<String, Object> appData) {

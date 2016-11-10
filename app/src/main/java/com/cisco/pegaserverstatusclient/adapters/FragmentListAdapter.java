@@ -3,6 +3,7 @@ package com.cisco.pegaserverstatusclient.adapters;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,77 +55,30 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
         holder.landingFragmentListTitle.setTypeface(holder.landingFragmentListTitle.getTypeface(), 1);
         holder.landingFragmentListTitle.setText(friendlyName);
 
-        if (appLayoutInfo.isGridLayout()) {
-            holder
-                    .loadingFragmentListHeaders
-                    .setLayoutManager(new StaggeredGridLayoutManager(
-                            appLayoutInfo.getHeaderColsList().length,
-                            StaggeredGridLayoutManager.VERTICAL));
+        holder
+                .loadingFragmentListHeaders
+                .setLayoutManager(new StaggeredGridLayoutManager(
+                        appLayoutInfo.getNumCols(),
+                        StaggeredGridLayoutManager.VERTICAL));
 
-            holder
-                    .landingFragmentListItem
-                    .setLayoutManager(new StaggeredGridLayoutManager(
-                            appLayoutInfo.getHeaderColsList().length,
-                            StaggeredGridLayoutManager.VERTICAL));
+        holder
+                .landingFragmentListItem
+                .setLayoutManager(new StaggeredGridLayoutManager(
+                        appLayoutInfo.getNumCols(),
+                        StaggeredGridLayoutManager.VERTICAL));
 
-            holder
-                    .loadingFragmentMainItemList
-                    .setOrientation(LinearLayout.VERTICAL);
-            holder
-                    .loadingFragmentListHeaders
-                    .setLayoutParams(getColumnListLayoutParams(false));
-            holder
-                    .landingFragmentListItem
-                    .setLayoutParams(getColumnListLayoutParams(false));
-        } else {
-            if (appLayoutInfo.isVerticalLayout()) {
-                holder
-                        .loadingFragmentListHeaders
-                        .setLayoutManager(new LinearLayoutManager(
-                                holder.itemView.getContext(),
-                                LinearLayoutManager.VERTICAL,
-                                false));
-                holder
-                        .landingFragmentListItem
-                        .setLayoutManager(new LinearLayoutManager(
-                                holder.itemView.getContext(),
-                                LinearLayoutManager.VERTICAL,
-                                false));
-                holder
-                        .loadingFragmentMainItemList
-                        .setOrientation(LinearLayout.HORIZONTAL);
-                holder
-                        .loadingFragmentListHeaders
-                        .setLayoutParams(getColumnListLayoutParams(true));
-                holder
-                        .landingFragmentListItem
-                        .setLayoutParams(getColumnListLayoutParams(true));
-            } else if (appLayoutInfo.isHorizontalLayout()) {
-                holder
-                        .loadingFragmentListHeaders
-                        .setLayoutManager(new LinearLayoutManager(
-                                holder.itemView.getContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false));
-                holder
-                        .landingFragmentListItem
-                        .setLayoutManager(new LinearLayoutManager(
-                                holder.itemView.getContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false));
-                holder
-                        .loadingFragmentMainItemList
-                        .setOrientation(LinearLayout.VERTICAL);
-                holder
-                        .loadingFragmentListHeaders
-                        .setLayoutParams(getColumnListLayoutParams(false));
-                holder
-                        .landingFragmentListItem
-                        .setLayoutParams(getColumnListLayoutParams(false));
-            }
-        }
+        holder
+                .loadingFragmentMainItemList
+                .setOrientation(LinearLayout.VERTICAL);
 
-        String[] headers = appLayoutInfo.getHeaderDescList();
+        holder
+                .loadingFragmentListHeaders
+                .setLayoutParams(getLayoutParams(false));
+        holder
+                .landingFragmentListItem
+                .setLayoutParams(getLayoutParams(false));
+
+        String[] headers = childLayout.getHeaderDescList();
         if (headers != null && headers.length > 0) {
             FragmentListHeaderAdapter headerAdapter = new FragmentListHeaderAdapter(headers);
             holder.loadingFragmentListHeaders.setAdapter(headerAdapter);
@@ -132,7 +86,7 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
 
         FragmentListItemAdapter adapter = new FragmentListItemAdapter(childLayout,
                 onOpenMenuItemClickListener);
-        holder.landingFragmentListItem.setAdapter(adapter);
+        holder.landingFragmentListItem.swapAdapter(adapter, false);
     }
 
     @Override
@@ -162,12 +116,14 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
         }
     }
 
-    private LinearLayout.LayoutParams getColumnListLayoutParams(boolean isVertical) {
+    private LinearLayout.LayoutParams getLayoutParams(boolean isVertical) {
         LinearLayout.LayoutParams layoutParams = null;
         if (isVertical) {
-            layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
         } else {
-            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         return layoutParams;
     }

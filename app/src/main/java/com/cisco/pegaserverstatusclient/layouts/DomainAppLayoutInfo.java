@@ -15,32 +15,6 @@ public class DomainAppLayoutInfo extends BaseLayoutInfo {
         super(parentLayout);
     }
 
-    public String getFriendlyName() {
-        return friendlyName;
-    }
-
-    @Override
-    public String getShortName() {
-        return key;
-    }
-
-    public void setFriendlyName(String friendlyName) {
-        this.friendlyName = friendlyName;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    @Override
-    public BaseLayoutInfo createChildLayout(String parentKey) {
-        return new ServerLayoutInfo(this);
-    }
-
     @Override
     public BaseLayoutInfo getChildLayout(int index) {
         return null;
@@ -82,10 +56,11 @@ public class DomainAppLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public String getKeyedValue(int colIndex, String key) {
+    public String getKeyedValue(int colIndex, String key, boolean headerIsKey) {
         StringBuffer sb = new StringBuffer();
         int index = 0;
-        Object childAppData = appData.get(key);
+        Map<String, Object> mapAppData = (Map<String, Object>) appData;
+        Object childAppData = mapAppData.get(key);
         if (childAppData instanceof Map<?,?>) {
             Map<String, Object> childAppMapData = (Map<String, Object>) appData;
             for (String childKey : childAppMapData.keySet()) {
@@ -109,5 +84,26 @@ public class DomainAppLayoutInfo extends BaseLayoutInfo {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public String getShortName() {
+        return key;
+    }
+
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

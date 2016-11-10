@@ -74,12 +74,13 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     @Override
     public boolean readFromNetwork(InputStream in) {
         List<BaseLayoutInfo> layoutList = new ArrayList<>();
+        Map<String, Object> mapAppData = (Map<String, Object>) appData;
         if (appData != null && childrenLayouts ==  null) {
-            orderedKeySet = KeyMapping.populateOrderedKeySet(appData);
+            orderedKeySet = KeyMapping.populateOrderedKeySet(mapAppData);
             for (String key : orderedKeySet) {
                 LifecycleLayoutInfo lifecycleLayoutInfo = new LifecycleLayoutInfo(this);
                 lifecycleLayoutInfo.setKey(key);
-                lifecycleLayoutInfo.setAppData((Map<String, Object>) appData.get(key));
+                lifecycleLayoutInfo.setAppData((Map<String, Object>) mapAppData.get(key));
                 lifecycleLayoutInfo.setFriendlyName(lifecycleLayoutInfo.getFriendlyName(key, false));
                 lifecycleLayoutInfo.setHeaderColumns(getHeaderColumns());
                 lifecycleLayoutInfo.setHeaderDesc(getHeaderDesc());
@@ -107,10 +108,11 @@ public class AppLayoutInfo extends BaseLayoutInfo {
 
     @Override
     public BaseLayoutInfo filteredLayout(String filter) {
-        if (appData != null &&
+        Map<String, Object> mapAppData = (Map<String, Object>) appData;
+        if (mapAppData != null &&
                 filter != null &&
                 !KeyMapping.shouldIgnoreKey(filter) &&
-                appData.containsKey(filter)) {
+                mapAppData.containsKey(filter)) {
             AppLayoutInfo appLayoutInfo = new AppLayoutInfo(getParentLayout());
 
             ArrayList<BaseLayoutInfo> filteredChildrenLayout = new ArrayList<>();
@@ -137,7 +139,7 @@ public class AppLayoutInfo extends BaseLayoutInfo {
             appLayoutInfo.splitHeaderDesc();
 
             Map<String, Object> filteredAppData = new HashMap<>();
-            filteredAppData.put(filter, appData.get(filter));
+            filteredAppData.put(filter, mapAppData.get(filter));
             appLayoutInfo.appData = filteredAppData;
             appLayoutInfo.orderedKeySet = KeyMapping.populateOrderedKeySet(filteredAppData);
 
@@ -197,11 +199,6 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public BaseLayoutInfo createChildLayout(String parentKey) {
-        return null;
-    }
-
-    @Override
     public BaseLayoutInfo getChildLayout(int index) {
         if (index >= 0 && index < childrenLayouts.size()) {
             return childrenLayouts.get(index);
@@ -210,8 +207,9 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public void setAppData(Map<String, Object> appData) {
+    public void setAppData(Object appData) {
         super.setAppData(appData);
-        getParentLayout().getAppData().put(getAppName(), appData);
+        Map<String, Object> parentAppData = (Map<String, Object>) getParentLayout().getAppData();
+        parentAppData.put(getAppName(), appData);
     }
 }

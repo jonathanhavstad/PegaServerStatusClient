@@ -26,10 +26,10 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
                                    OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
         this.appLayoutInfo = appLayoutInfo;
         this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
-        this.size = appLayoutInfo.size();
         if (this.appLayoutInfo.getChildrenLayouts() == null) {
             this.appLayoutInfo.readFromNetwork(null);
         }
+        this.size = appLayoutInfo.size() * appLayoutInfo.getNumCols();
     }
 
     @Override
@@ -42,27 +42,28 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String[] headerColumnList = appLayoutInfo.getHeaderColsList();
         String key = appLayoutInfo.getKeyFromPosition(position);
         holder.landingFragmentListChildItem.setClickable(false);
         holder.landingFragmentListChildItem.setText("");
         holder.landingFragmentListChildItem.setTextAppearance(holder.itemView.getContext(),
                 R.style.DefaultItemTextStyle);
 
-        int colIndex = position % headerColumnList.length;
-
-        if (appLayoutInfo.isColBold(colIndex)) {
-            holder.landingFragmentListChildItem.setClickable(true);
-            holder
-                    .landingFragmentListChildItem
-                    .setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
-        }
         int index = appLayoutInfo.getKeyIndex(key);
         if (index != -1) {
             final BaseLayoutInfo childLayoutInfo = appLayoutInfo.getChildLayout(index);
+
+            int colIndex = position % appLayoutInfo.getNumCols();
+
+            if (appLayoutInfo.isColBold(colIndex)) {
+                holder.landingFragmentListChildItem.setClickable(true);
+                holder
+                        .landingFragmentListChildItem
+                        .setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
+            }
+
             holder
                     .landingFragmentListChildItem
-                    .setText(childLayoutInfo.getKeyedValue(colIndex, key));
+                    .setText(childLayoutInfo.getKeyedValue(colIndex, key, true).toString());
             if (appLayoutInfo.isClickable(colIndex)) {
                 holder.landingFragmentListChildItem.setOnClickListener(new View.OnClickListener() {
                     @Override

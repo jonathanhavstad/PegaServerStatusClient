@@ -6,7 +6,7 @@
         "Screen" : "Page1",
         "Layout" : "GRID",
         "Method" : "PULL",
-        "URL" : "http://www.elkimanteam.com/demo/status.json",
+        "URL" : "https://ibpm.cisco.com/prd2/brmsadmin/status",
         "HeaderColumn" : "Domain, Status",
         "HeaderDesc" : "Domain, Status"
     },

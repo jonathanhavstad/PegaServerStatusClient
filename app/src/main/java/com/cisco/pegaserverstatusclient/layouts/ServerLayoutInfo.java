@@ -15,27 +15,6 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
         super(parentLayout);
     }
 
-    public String getFriendlyName() {
-        return friendlyName;
-    }
-
-    public void setFriendlyName(String friendlyName) {
-        this.friendlyName = friendlyName;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    @Override
-    public BaseLayoutInfo createChildLayout(String parentKey) {
-        return null;
-    }
-
     @Override
     public BaseLayoutInfo getChildLayout(int index) {
         return null;
@@ -72,5 +51,21 @@ public class ServerLayoutInfo extends BaseLayoutInfo {
     @Override
     public String getShortName() {
         return key;
+    }
+
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

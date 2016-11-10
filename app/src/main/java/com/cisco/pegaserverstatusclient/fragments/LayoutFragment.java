@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,21 @@ public class LayoutFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
         ButterKnife.bind(this, rootView);
+
+        if (appLayoutInfo.isVerticalLayout()) {
+            landingFragmentList
+                    .setLayoutManager(new LinearLayoutManager(
+                            getContext(),
+                            LinearLayoutManager.VERTICAL,
+                            false));
+        } else {
+            landingFragmentList
+                    .setLayoutManager(new LinearLayoutManager(
+                            getContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false));
+        }
+
         FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo,
                 onOpenMenuItemClickListener);
         landingFragmentList.setAdapter(adapter);
@@ -88,5 +104,9 @@ public class LayoutFragment extends Fragment {
         FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo,
                 onOpenMenuItemClickListener);
         landingFragmentList.swapAdapter(adapter, false);
+    }
+
+    public BaseLayoutInfo getLayoutInfo() {
+        return appLayoutInfo;
     }
 }

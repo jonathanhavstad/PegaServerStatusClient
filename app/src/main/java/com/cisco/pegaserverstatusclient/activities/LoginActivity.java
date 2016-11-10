@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,21 +18,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.cisco.pegaserverstatusclient.background.services.RegistrationIntentService;
-import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
-import com.cisco.pegaserverstatusclient.rest.services.IBPMStatusService;
-import com.cisco.pegaserverstatusclient.views.CiscoLoginFormWebView;
+import com.cisco.pegaserverstatusclient.listeners.OnDataLoadedListener;
+import com.cisco.pegaserverstatusclient.rest.services.CiscoSSOWebService;
+import com.cisco.pegaserverstatusclient.views.CiscoSSOWebView;
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -46,11 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     private String SSO_COOKIE_KEY;
     private boolean beginLogin;
     private boolean beginAuthentication;
+    private boolean beginDataAcquisition;
     private boolean loadUrlFromIntent;
     private String statusUrl;
 
     @BindView(R.id.login_web_view)
-    CiscoLoginFormWebView webView;
+    CiscoSSOWebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,104 +61,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void init() {
-        loadWebValues();
-
-        enableSpecificWebSettings();
-
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                Log.d(TAG, "Loading URL: " + url);
-                Log.d(TAG, "Site cookie: " + CookieManager.getInstance().getCookie(url));
-                Log.d(TAG, "SSO Cookie: " + getSSOCookie(CookieManager.getInstance().getCookie(url)));
-                String ssoCookie = getSSOCookie(CookieManager.getInstance().getCookie(url));
-
-                CookieManager.getInstance().setAcceptCookie(true);
-
-                String newUrl = null;
-                if (url.equals(LOGOUT_COMPLETE_URL)) {
-                    newUrl = HOME_PAGE;
-                } else if (url.equals(HOME_PAGE)) {
-                    newUrl = LOGIN_URL;
-                } else if (url.equals(SSO_LOGIN_URL)) {
-                    beginLogin = true;
-                    beginAuthentication = false;
-                    view.setVisibility(View.VISIBLE);
-                } else if (beginLogin) {
-                    beginAuthentication = true;
-                    final String statusUrl = url;
-                    String baseUrl = ServerDataRestTask.extractBaseUrl(url);
-                    String pathUrl = ServerDataRestTask.extractPathUrl(url);
-                    Retrofit retrofit = new Retrofit
-                            .Builder()
-                            .baseUrl(baseUrl)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    IBPMStatusService service = retrofit.create(IBPMStatusService.class);
-                    service.getStatusWithJsonArray(pathUrl).enqueue(new Callback<JsonArray>() {
-                        @Override
-                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                            Log.d(TAG, "Received response");
-                            if (response != null &&
-                                    response.body() != null &&
-                                    response.body().isJsonArray()) {
-                                launchMainActivity(statusUrl);
-                                beginLogin = false;
-                                beginAuthentication = false;
-                            } else {
-                                Log.e(TAG, "Response body is not acceptable!");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonArray> call, Throwable t) {
-                            Log.e(TAG, "Received JSON error: " + t.toString());
-                        }
-                    });
-                    service.getStatusWithJsonObject(pathUrl).enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            Log.d(TAG, "Received response");
-                            if (response != null &&
-                                    response.body() != null &&
-                                    (response.body().isJsonObject())) {
-                                launchMainActivity(statusUrl);
-                                beginLogin = false;
-                                beginAuthentication = false;
-                            } else {
-                                Log.e(TAG, "Response body is not acceptable!");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e(TAG, "Received JSON error: " + t.toString());
-                        }
-                    });
-                }
-
-                if (newUrl != null) {
-                    Log.d(TAG, "Redirecting to: " + newUrl);
-                    view.loadUrl(newUrl);
-                } else {
-                    super.onPageStarted(view, url, favicon);
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                Log.d(TAG, "URL finished loading: " + url);
-                CookieManager.getInstance().setAcceptCookie(true);
-            }
-        });
-
         readIntent(getIntent());
 
-        beginLogin = false;
-        beginAuthentication = false;
-
         webView.setVisibility(View.INVISIBLE);
-        webView.loadUrl(LOGOUT_URL);
+
+        loadLoginUrl();
 
         Intent serviceIntent = new Intent(this, RegistrationIntentService.class);
         startService(serviceIntent);
@@ -169,32 +74,27 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACCESS_DATA_REQUEST_CODE) {
-            beginLogin = false;
-            beginAuthentication = false;
-            webView.clearCache(true);
-            webView.setVisibility(View.INVISIBLE);
-            webView.loadUrl(LOGOUT_URL);
+            loadLoginUrl();
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void loadWebValues() {
-        LOGOUT_URL = getString(R.string.cisco_logout_url);
-        HOME_PAGE = getString(R.string.cisco_home_page_url);
-        LOGIN_URL = getString(R.string.cisco_login_url);
-        SSO_LOGIN_URL = getString(R.string.cisco_sso_login_url);
-        LOGOUT_COMPLETE_URL = getString(R.string.cisco_logout_complete_url);
-        SSO_COOKIE_KEY = getString(R.string.sso_cookie_key);
-    }
+    private void loadLoginUrl() {
+        CiscoSSOWebService ciscoSSOWebService = new CiscoSSOWebService(this, webView);
+        ciscoSSOWebService.loadDataAfterLogout(getString(R.string.cisco_login_url),
+                new OnDataLoadedListener() {
+                    @Override
+                    public void send(JSONArray jsonArray) {
+                        Log.d(TAG, "Received JSON array: " + jsonArray.toString());
+                        launchMainActivity(getString(R.string.cisco_login_url));
+                    }
 
-    private void enableSpecificWebSettings() {
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-
-        webView.clearCache(true);
-
-        CookieManager.getInstance().setAcceptCookie(true);
+                    @Override
+                    public void error(String error) {
+                        Log.e(TAG, "Error receiving JSON data: " + error);
+                    }
+                });
     }
 
     private void launchMainActivity(String url) {

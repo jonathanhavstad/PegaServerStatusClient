@@ -57,11 +57,6 @@ public class AppsLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public BaseLayoutInfo createChildLayout(String parentKey) {
-        return new AppLayoutInfo(this);
-    }
-
-    @Override
     public BaseLayoutInfo getChildLayout(int index) {
         if (index >= 0 && index < childrenLayouts.size()) {
             return childrenLayouts.get(index);
@@ -105,8 +100,9 @@ public class AppsLayoutInfo extends BaseLayoutInfo {
         if (dataUrls == null) {
             if (appData != null) {
                 dataUrls = new ArrayList<>();
-                for (String key : appData.keySet()) {
-                    AppLayoutInfo childAppData = (AppLayoutInfo) appData.get(key);
+                Map<String, Object> mapAppData = (Map<String, Object>) appData;
+                for (String key : mapAppData.keySet()) {
+                    AppLayoutInfo childAppData = (AppLayoutInfo) mapAppData.get(key);
                     dataUrls.add(childAppData.getUrl());
                 }
                 return dataUrls;

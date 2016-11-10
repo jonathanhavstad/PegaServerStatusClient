@@ -54,16 +54,16 @@
 
         <activity android:name=".activities.ServerAppsActivity"
             android:label="@string/main_application_title">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name=".activities.LoginActivity"
             android:label="@string/main_app_label"
             android:launchMode="singleTask"
             android:taskAffinity="" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

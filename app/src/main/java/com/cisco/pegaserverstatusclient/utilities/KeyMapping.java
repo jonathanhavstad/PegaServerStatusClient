@@ -17,9 +17,15 @@ public class KeyMapping {
     public static final String LT_KEY = "lt";
     public static final String DEV_KEY = "dev";
     public static final String POC_KEY = "poc";
+    public static final String APPS_KEY = "APPS";
+    public static final String HOSTS_KEY = "HOSTS";
+    public static final String DATETIME_KEY = "DateTime";
+    public static final String STATUS_KEY = "Status";
+    public static final String PROXY_URL_KEY = "ProxyURL";
 
     public static final String[] LC_KEY_ORDER = new String[NUM_LC_VALUES];
     public static final Map<String, String> KEY_MAPPING = new HashMap<>();
+    public static final Map<String, String> HEADER_MAPPING = new HashMap<>();
     public static final List<String> IGNORE_LIST = new ArrayList<>();
 
     static {
@@ -32,6 +38,15 @@ public class KeyMapping {
         KEY_MAPPING.put(STAGE_KEY, "Stage");
         KEY_MAPPING.put(LT_KEY, "Load Test");
         KEY_MAPPING.put(DEV_KEY, "Development");
+        KEY_MAPPING.put(APPS_KEY, "Applications");
+        KEY_MAPPING.put(HOSTS_KEY, "Hosts");
+        KEY_MAPPING.put(DATETIME_KEY, "Date & Time");
+        KEY_MAPPING.put(STATUS_KEY, "Status");
+        KEY_MAPPING.put(PROXY_URL_KEY, "Proxy URL");
+
+        HEADER_MAPPING.put(APPS_KEY, "Application");
+        HEADER_MAPPING.put(STATUS_KEY, "Status");
+        HEADER_MAPPING.put(DATETIME_KEY, "Date & Time");
 
         IGNORE_LIST.add(POC_KEY);
     }
@@ -44,6 +59,15 @@ public class KeyMapping {
         }
         if (!shouldIgnoreKey(key)) {
             return key;
+        }
+        return null;
+    }
+
+    public static String getHeaderName(String key) {
+        for (String keyMapping : HEADER_MAPPING.keySet()) {
+            if (key.equalsIgnoreCase(keyMapping)) {
+                return HEADER_MAPPING.get(keyMapping);
+            }
         }
         return null;
     }
