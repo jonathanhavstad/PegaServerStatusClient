@@ -127,11 +127,13 @@ public class ContentDetailLayout extends BaseLayoutInfo {
                 String[] childHeaderColsList = headerColsList;
                 String[] childHeaderDescList = headerDescList;
 
+                boolean isAppsLayout = false;
                 if (childKey.equalsIgnoreCase(KeyMapping.APPS_KEY)) {
                     childHeaderColsList = headerColsList.clone();
                     childHeaderColsList[0] = childKey;
                     childHeaderDescList = headerDescList.clone();
                     childHeaderDescList[0] = KeyMapping.getHeaderName(childKey);
+                    isAppsLayout = true;
                 }
 
                 childLayoutInfo = new ContentDetailLayout(this,
@@ -140,6 +142,11 @@ public class ContentDetailLayout extends BaseLayoutInfo {
                         childHeaderColsList,
                         childHeaderDescList,
                         childHeaderColsList.length);
+
+                if (isAppsLayout) {
+                    childLayoutInfo.setShouldBeParent(false);
+                }
+
                 childrenList.add(childLayoutInfo);
             } else if (data instanceof List<?>) {
                 List<String> listData = (List<String>) data;

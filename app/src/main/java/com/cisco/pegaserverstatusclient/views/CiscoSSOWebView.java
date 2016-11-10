@@ -2,21 +2,14 @@ package com.cisco.pegaserverstatusclient.views;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebMessage;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.cisco.pegaserverstatusclient.R;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.Scanner;
 
 /**
  * Created by jonathanhavstad on 11/1/16.

@@ -84,8 +84,11 @@ public abstract class BaseLayoutInfo {
 
     private BaseLayoutInfo parentLayout;
 
+    protected boolean shouldBeParent;
+
     public BaseLayoutInfo(BaseLayoutInfo parentLayout) {
         this.parentLayout = parentLayout;
+        this.shouldBeParent = true;
     }
 
     public String getHeaderColumns() {
@@ -294,6 +297,14 @@ public abstract class BaseLayoutInfo {
             return headerColsList.length;
         }
         return 0;
+    }
+
+    public boolean isShouldBeParent() {
+        return shouldBeParent;
+    }
+
+    public void setShouldBeParent(boolean shouldBeParent) {
+        this.shouldBeParent = shouldBeParent;
     }
 
     public abstract Object getValue(Map<String, Object> appData, String childKey);

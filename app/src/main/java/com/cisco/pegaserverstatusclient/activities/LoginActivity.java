@@ -1,16 +1,10 @@
 package com.cisco.pegaserverstatusclient.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.ValueCallback;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.cisco.pegaserverstatusclient.R;
 
@@ -24,7 +18,6 @@ import com.cisco.pegaserverstatusclient.views.CiscoSSOWebView;
 import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.Set;
 

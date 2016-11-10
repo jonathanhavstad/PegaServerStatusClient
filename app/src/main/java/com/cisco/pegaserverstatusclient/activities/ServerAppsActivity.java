@@ -140,8 +140,13 @@ public class ServerAppsActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         DrawerFragment drawerFragment = (DrawerFragment)
                 fragmentManager.findFragmentByTag(getString(R.string.drawer_fragment_tag));
-        backPressed(drawerFragment.getLayoutInfo());
-        if (appFilter.size() == 0) {
+        BaseLayoutInfo currentLayoutInfo = drawerFragment.getLayoutInfo();
+        if (!currentLayoutInfo.getParentLayout().isShouldBeParent()) {
+            appFilter.remove(appFilter.size() - 1);
+            currentLayoutInfo = currentLayoutInfo.getParentLayout();
+        }
+        backPressed(currentLayoutInfo);
+        if (appFilter.size() <= 2) {
             stopServerRefreshServices();
             getSupportFragmentManager().popBackStackImmediate();
             finish();
@@ -184,10 +189,13 @@ public class ServerAppsActivity extends AppCompatActivity implements
     @Override
     public void open(BaseLayoutInfo layoutInfo) {
         layoutInfo.readFromNetwork(null);
-        addLayoutKeyToAppFilter(layoutInfo);
+        if (layoutInfo.isShouldBeParent()) {
+            addLayoutKeyToAppFilter(layoutInfo);
+            populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
+        } else {
+            appFilter.add(layoutInfo.getKey());
+        }
         populateDrawerFrame(layoutInfo);
-        populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()),
-                layoutInfo);
     }
 
     @Override
@@ -484,7 +492,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
     }
 
-    private void populateCurrentFrame(BaseLayoutInfo parentLayoutInfo, BaseLayoutInfo layoutInfo) {
+    private void populateCurrentFrame(BaseLayoutInfo parentLayoutInfo) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         LayoutFragment layoutFragment = LayoutFragment.newInstance(this,
@@ -506,6 +514,9 @@ public class ServerAppsActivity extends AppCompatActivity implements
         LayoutFragment layoutFragment = (LayoutFragment)
                 fragmentManager.findFragmentByTag(getString(R.string.app_fragment_tag));
         BaseLayoutInfo filteredLayout = filterData(appLayoutInfo);
+        if (!filteredLayout.isShouldBeParent()) {
+            filteredLayout = filteredLayout.getParentLayout();
+        }
         layoutFragment.updateAppData(filteredLayout
                 .getParentLayout()
                 .filteredLayout(filteredLayout.getKey()));

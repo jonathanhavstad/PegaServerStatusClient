@@ -9,7 +9,6 @@ import android.util.Log;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
-import com.cisco.pegaserverstatusclient.views.CiscoSSOWebView;
 
 import java.util.List;
 import java.util.Map;

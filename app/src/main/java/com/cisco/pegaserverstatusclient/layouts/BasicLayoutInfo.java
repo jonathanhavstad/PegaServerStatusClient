@@ -3,7 +3,6 @@ package com.cisco.pegaserverstatusclient.layouts;
 import com.cisco.pegaserverstatusclient.utilities.KeyMapping;
 
 import java.io.InputStream;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

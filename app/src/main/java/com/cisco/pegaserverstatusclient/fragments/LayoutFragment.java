@@ -63,7 +63,6 @@ public class LayoutFragment extends Fragment {
                     (LayoutInfoBinder) args.getBinder(getContext().getString(R.string.app_layout_info_bundle_key));
             if (layoutInfoBinder != null) {
                 appLayoutInfo = layoutInfoBinder.getBaseLayoutInfo();
-                appLayoutInfo.readFromNetwork(null);
             }
         }
     }
