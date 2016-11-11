@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loadLoginUrl() {
         CiscoSSOWebService ciscoSSOWebService = new CiscoSSOWebService(this, webView);
+
         ciscoSSOWebService.loadDataAfterLogout(getString(R.string.cisco_login_url),
                 new OnDataLoadedListener() {
                     @Override

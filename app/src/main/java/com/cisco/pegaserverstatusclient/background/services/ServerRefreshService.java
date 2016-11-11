@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cisco.pegaserverstatusclient.R;
-import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
+import com.cisco.pegaserverstatusclient.utilities.BgServiceConnection;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,6 @@ import rx.schedulers.Schedulers;
 public class ServerRefreshService extends IntentService {
     private static final String TAG = "PegaRefreshService";
 
-    private ServerDataRestTask task;
     private SubscriberBinder binder;
     private boolean shouldExecute;
     private int refreshInterval;
@@ -72,27 +71,24 @@ public class ServerRefreshService extends IntentService {
     }
 
     private void refreshData() {
-        if (task == null && binder.getTask() != null) {
-            task = binder.getTask();
-        }
-        List<String> urls = binder.getUrls();
-        if (task != null) {
-            for (final String url : urls) {
-                task.loadStatusFromNetwork(url,
-                        new Action1<Integer>() {
-                            @Override
-                            public void call(Integer integer) {
-                                Log.e(TAG, "Failed to load data from URL: " + url);
-                            }
-                        },
-                        new Action1<Map<String, Object>>() {
-                            @Override
-                            public void call(Map<String, Object> appData) {
+        List<BgServiceConnection> serviceConnectionList = binder.getServiceConnectionList();
+        for (final BgServiceConnection serviceConnection : serviceConnectionList) {
+            serviceConnection.getTask().loadStatusFromNetwork(serviceConnection.getUrl(),
+                    new Action1<Integer>() {
+                        @Override
+                        public void call(Integer integer) {
+                            Log.e(TAG, "Failed to load data from URL: " + serviceConnection.getUrl());
+                        }
+                    },
+                    new Action1<Map<String, Object>>() {
+                        @Override
+                        public void call(Map<String, Object> appData) {
+                            if (shouldExecute) {
                                 binder.updateLastRefreshTime();
                                 binder.subscribeObservable(initObservable(appData));
                             }
-                        });
-            }
+                        }
+                    });
         }
     }
 

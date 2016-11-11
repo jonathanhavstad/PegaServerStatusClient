@@ -2,7 +2,7 @@ package com.cisco.pegaserverstatusclient.binders;
 
 import android.os.Binder;
 
-import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
+import com.cisco.pegaserverstatusclient.utilities.BgServiceConnection;
 import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 
 import java.util.ArrayList;
@@ -15,8 +15,7 @@ import rx.functions.Action1;
 public class SubscriberBinder extends Binder {
     private long lastRefreshTime;
     private BaseLayoutInfo layoutInfo;
-    private ServerDataRestTask task;
-    private List<String> urls = new ArrayList<>();
+    private List<BgServiceConnection> serviceConnectionList = new ArrayList<>();
 
     public interface OnForceRefresh {
         void forceRefresh();
@@ -65,19 +64,11 @@ public class SubscriberBinder extends Binder {
         this.layoutInfo = layoutInfo;
     }
 
-    public ServerDataRestTask getTask() {
-        return task;
+    public List<BgServiceConnection> getServiceConnectionList() {
+        return serviceConnectionList;
     }
 
-    public void setTask(ServerDataRestTask task) {
-        this.task = task;
-    }
-
-    public void addUrl(String url) {
-        urls.add(url);
-    }
-
-    public List<String> getUrls() {
-        return urls;
+    public void addServiceConnection(BgServiceConnection bgServiceConnection) {
+        serviceConnectionList.add(bgServiceConnection);
     }
 }

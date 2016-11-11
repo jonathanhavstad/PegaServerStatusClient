@@ -40,7 +40,8 @@
     <string name="rest_auth_success_log_message">Successfully authorized with REST service!</string>
     <string name="rest_access_token_error_log_message">Access token failure!</string>
     <string name="js_interface_obj_name">jsObject</string>
-    <string name="js_interface_js_text_fname">login.js</string>
+    <string name="js_interface_js_login_filename">login.js</string>
+    <string name="js_interface_js_json_reader_filename">json_reader.js</string>
     <string name="js_interface_js_prefix">javascript:</string>
     <string name="js_interface_js_obj_method_call">.parseHeaders(headers);</string>
     <string name="app_layout_info_bundle_key">app_layout_info</string>
@@ -60,4 +61,5 @@
     <string name="cisco_sso_login_url">https://sso.cisco.com/autho/forms/CDClogin.html</string>
     <string name="cisco_logout_complete_url">http://www.cisco.com/web/siteassets/logout/logout.html</string>
     <string name="sso_cookie_key">SSOCookie</string>
+    <string name="app_filter_bundle_key">app_filter</string>
 </resources>

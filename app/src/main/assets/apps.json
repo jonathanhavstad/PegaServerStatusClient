@@ -15,7 +15,7 @@
         "AppName" : "Application to display the status of iBPM Apps",
         "Action" : "",
         "Screen" : "Page1",
-        "Layout" : "GRID",
+        "Layout" : "VERTICAL",
         "Method" : "PULL",
         "URL" : "",
         "HeaderColumn" : "Domain, Status",

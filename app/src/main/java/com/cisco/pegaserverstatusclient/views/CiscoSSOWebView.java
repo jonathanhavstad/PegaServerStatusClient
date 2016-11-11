@@ -10,14 +10,13 @@ import com.cisco.pegaserverstatusclient.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Scanner;
 
 /**
  * Created by jonathanhavstad on 11/1/16.
  */
 
 public class CiscoSSOWebView extends WebView {
-    private static final String TAG = "LoginWebView";
-
     private String jsObjectName;
     private String jsText;
     private JsObject jsObject;
@@ -52,14 +51,13 @@ public class CiscoSSOWebView extends WebView {
             public void run() {
                 InputStream in = null;
                 try {
-                    jsText = "javascript:jsObject.setJsonBody(document.body.getElementsByTagName('pre')[0].innerHTML);";
-                    in = assetManager.open(getContext().getString(R.string.js_interface_js_text_fname));
-//                    Scanner scanner = new Scanner(in);
-//                    StringBuffer sb = new StringBuffer();
-//                    sb.append(getContext().getString(R.string.js_interface_js_prefix));
-//                    sb.append(scanner.nextLine());
-//                    jsText = sb.toString();
-//                    scanner.close();
+                    in = assetManager.open(getContext().getString(R.string.js_interface_js_json_reader_filename));
+
+                    Scanner scanner = new Scanner(in);
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(scanner.nextLine());
+                    jsText = sb.toString();
+                    scanner.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

@@ -126,9 +126,12 @@ public class CiscoSSOWebService {
                         public void onReceiveValue(String value) {
                             if (onDataLoadedListener != null) {
                                 try {
-                                    JSONArray jsonArray =
-                                            new JSONArray(webView.getJsObject().getJsonBody());
-                                    onDataLoadedListener.send(jsonArray);
+                                    String jsonBody = webView.getJsObject().getJsonBody();
+                                    if (jsonBody != null) {
+                                        JSONArray jsonArray =
+                                                new JSONArray(webView.getJsObject().getJsonBody());
+                                        onDataLoadedListener.send(jsonArray);
+                                    }
                                 } catch (JSONException e){
                                     onDataLoadedListener.error(e.toString());
                                 }

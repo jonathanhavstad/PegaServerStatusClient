@@ -1,12 +1,9 @@
 package com.cisco.pegaserverstatusclient.activities;
 
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -24,14 +21,19 @@ import com.cisco.pegaserverstatusclient.background.services.RegistrationIntentSe
 import com.cisco.pegaserverstatusclient.background.services.ServerRefreshService;
 import com.cisco.pegaserverstatusclient.background.tasks.LayoutRestTask;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
-import com.cisco.pegaserverstatusclient.binders.SubscriberBinder;
+import com.cisco.pegaserverstatusclient.binders.LayoutFilterBinder;
+import com.cisco.pegaserverstatusclient.listeners.OnDataReadyListener;
+import com.cisco.pegaserverstatusclient.utilities.BgServiceConnection;
+import com.cisco.pegaserverstatusclient.utilities.BgServiceInfo;
 import com.cisco.pegaserverstatusclient.layouts.AppsLayoutInfo;
 import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.fragments.DrawerFragment;
 import com.cisco.pegaserverstatusclient.fragments.LayoutFragment;
 import com.cisco.pegaserverstatusclient.listeners.OnBackPressedClickListener;
+import com.cisco.pegaserverstatusclient.listeners.OnBgDataReadyListener;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 import com.cisco.pegaserverstatusclient.listeners.OnSelectMenuItemClickListener;
+import com.cisco.pegaserverstatusclient.utilities.DataCallbackHolder;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -39,6 +41,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,44 +63,15 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    private static class BgServiceInfo {
-        ServiceConnection connection;
-        Action1<Map<String, Object>> subscriber;
-        SubscriberBinder binder;
-        boolean bgServiceStarted;
-    }
-
-    private static class BgServiceConnection implements ServiceConnection {
-        private ServerDataRestTask task;
-        private BgServiceInfo bgServiceInfo;
-        private String url;
-
-        public BgServiceConnection(ServerDataRestTask task, BgServiceInfo bgServiceInfo, String url) {
-            this.task = task;
-            this.bgServiceInfo = bgServiceInfo;
-            this.url = url;
-        }
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            bgServiceInfo.binder = ((SubscriberBinder) service);
-            bgServiceInfo.binder.setTask(task);
-            bgServiceInfo.binder.addSubscriber(bgServiceInfo.subscriber);
-            bgServiceInfo.binder.addUrl(url);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bgServiceInfo.binder.removeSubscriber(bgServiceInfo.subscriber);
-        }
-    }
-
     private BgServiceInfo[] bgServiceInfoList;
 
-    private List<String> appFilter = new ArrayList<>();
+    private DataCallbackHolder[] dataCallbackHolderList;
+
+    private Stack<BaseLayoutInfo> layoutFilter = new Stack<>();
 
     private String baseStatusUrl;
 
-    private ServerDataRestTask task;
+    private ServerDataRestTask[] bgTasks;
 
     @BindView(R.id.app_toolbar)
     Toolbar pegaToolbar;
@@ -118,15 +92,22 @@ public class ServerAppsActivity extends AppCompatActivity implements
         Fabric.with(this, new Crashlytics());
         ButterKnife.bind(this);
         init();
+        initLayout(false);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // TODO: Create a means to determine what kind of layout has been parsed and create an appropriate instance of LayoutInfo
-        AppsLayoutInfo layoutInfo = new AppsLayoutInfo(null);
-        layoutInfo.setUrl(layoutUrl);
-        getLayout(layoutInfo);
+    protected void onRestart() {
+        super.onRestart();
+        init();
+        reInitLayoutFilter();
+        if (layoutFilter.size() > 0) {
+            BaseLayoutInfo appsLayoutInfo = layoutFilter.get(0);
+            List<BaseLayoutInfo> childrenLayouts = appsLayoutInfo.getChildrenLayouts();
+            for (int i = 0; i < childrenLayouts.size(); i++) {
+                getData(i, childrenLayouts.get(i).getUrl(), appsLayoutInfo, true);
+            }
+            refreshCurrentFrame(layoutFilter.peek());
+        }
     }
 
     @Override
@@ -142,11 +123,11 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 fragmentManager.findFragmentByTag(getString(R.string.drawer_fragment_tag));
         BaseLayoutInfo currentLayoutInfo = drawerFragment.getLayoutInfo();
         if (!currentLayoutInfo.getParentLayout().isShouldBeParent()) {
-            appFilter.remove(appFilter.size() - 1);
+            layoutFilter.remove(layoutFilter.size() - 1);
             currentLayoutInfo = currentLayoutInfo.getParentLayout();
         }
         backPressed(currentLayoutInfo);
-        if (appFilter.size() <= 2) {
+        if (layoutFilter.size() <= 1) {
             stopServerRefreshServices();
             getSupportFragmentManager().popBackStackImmediate();
             finish();
@@ -178,22 +159,32 @@ public class ServerAppsActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+        LayoutFilterBinder layoutFilterBinder = new LayoutFilterBinder();
+        layoutFilterBinder.setBaseLayoutInfoStack(layoutFilter);
+        outState.putBinder(getString(R.string.app_filter_bundle_key), layoutFilterBinder);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+        LayoutFilterBinder layoutFilterBinder = (LayoutFilterBinder)
+                savedInstanceState.getBinder(getString(R.string.app_filter_bundle_key));
+        if (layoutFilterBinder != null) {
+            layoutFilter = layoutFilterBinder.getBaseLayoutInfoStack();
+        }
+        if (layoutFilter == null) {
+            layoutFilter = new Stack<>();
+        }
     }
 
     @Override
     public void open(BaseLayoutInfo layoutInfo) {
+        swipeRefreshLayout.setRefreshing(false);
         layoutInfo.readFromNetwork(null);
+        applyLayoutToLayoutFilter(layoutInfo);
         if (layoutInfo.isShouldBeParent()) {
-            addLayoutKeyToAppFilter(layoutInfo);
             populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
-        } else {
-            appFilter.add(layoutInfo.getKey());
         }
         populateDrawerFrame(layoutInfo);
     }
@@ -205,25 +196,16 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     @Override
     public void backPressed(BaseLayoutInfo baseLayoutInfo) {
-        if (appFilter != null && appFilter.size() > 0) {
-            String lastFilter = appFilter.get(appFilter.size() - 1);
-            if (lastFilter.equals(baseLayoutInfo.getKey())) {
-                BaseLayoutInfo parentLayout = baseLayoutInfo.getParentLayout();
-                if (parentLayout != null) {
-                    if (appFilter.size() > 2) {
-                        appFilter.remove(appFilter.size() - 1);
-                        if (appFilter.get(appFilter.size() - 1).equals(parentLayout.getKey())) {
-                            appFilter.remove(appFilter.size() - 1);
-                        }
-                        if (parentLayout.getParentLayout() != null) {
-                            open(parentLayout);
-                        } else {
-                            getSupportActionBar().setSubtitle("");
-                        }
-                    } else {
-                        populateDrawerFrame(parentLayout);
-                    }
+        if (layoutFilter != null && layoutFilter.size() > 0) {
+            if (layoutFilter.size() > 2) {
+                BaseLayoutInfo lastFilter = layoutFilter.pop();
+                if (lastFilter.size() > 1) {
+                    open(layoutFilter.pop());
+                } else {
+                    getSupportActionBar().setSubtitle("");
                 }
+            } else {
+                populateDrawerFrame(baseLayoutInfo.getParentLayout());
             }
         }
     }
@@ -233,7 +215,14 @@ public class ServerAppsActivity extends AppCompatActivity implements
         startInstanceIDService();
         initToolbar();
         readIntent();
+    }
+
+    private void initLayout(boolean refresh) {
         curAppLayoutInfoPosition = 0;
+
+        AppsLayoutInfo layoutInfo = new AppsLayoutInfo(null);
+        layoutInfo.setUrl(layoutUrl);
+        getLayout(layoutInfo, refresh);
     }
 
     private boolean verifyGooglePlayServices() {
@@ -310,37 +299,50 @@ public class ServerAppsActivity extends AppCompatActivity implements
         alertDialog.show();
     }
 
-    private void startServerRefreshService(final int index,
-                                           final BaseLayoutInfo layoutInfo) {
+    private void startServerRefreshService(int index, final BaseLayoutInfo layoutInfo) {
         BgServiceInfo bgServiceInfo = null;
 
         if (index < bgServiceInfoList.length && bgServiceInfoList[index] != null) {
             bgServiceInfo = bgServiceInfoList[index];
         } else {
-            bgServiceInfo = new BgServiceInfo();
+            bgServiceInfo = new BgServiceInfo(index,
+                    layoutInfo,
+                    new OnBgDataReadyListener() {
+                        @Override
+                        public void send(BgServiceInfo bgServiceInfo, Map<String, Object> appData) {
+                            BaseLayoutInfo appLayout =
+                                    bgServiceInfo
+                                            .getLayoutInfo()
+                                            .getChildLayout(bgServiceInfo.getIndex());
+                            applyDataToLayout(appLayout, appData);
+                            if (bgServiceInfo.getIndex() == curAppLayoutInfoPosition) {
+                                refreshCurrentFrame(layoutFilter.peek());
+                            }
+                        }
+                    });
             bgServiceInfoList[index] = bgServiceInfo;
         }
 
-        bgServiceInfo.subscriber = new Action1<Map<String, Object>>() {
-            @Override
-            public void call(Map<String, Object> appData) {
-                BaseLayoutInfo appLayout = layoutInfo.getChildLayout(index);
-                applyDataToLayout(appLayout, appData);
-                if (index == curAppLayoutInfoPosition) {
-                    refreshCurrentFrame(getChildLayoutFromAppFilter(layoutInfo));
-                }
-            }
-        };
+        bgServiceInfo.setIndex(index);
 
-        final BaseLayoutInfo currentAppLayoutInfo = layoutInfo.getChildLayout(index);
+        BaseLayoutInfo currentAppLayoutInfo = layoutInfo.getChildLayout(index);
 
-        bgServiceInfo.connection = new BgServiceConnection(task,
+        ServerDataRestTask task = null;
+
+        if (index < bgTasks.length && bgTasks[index] != null) {
+            task = bgTasks[index];
+        } else {
+            task = new ServerDataRestTask(this);
+            bgTasks[index] = task;
+        }
+
+        bgServiceInfo.setConnection(new BgServiceConnection(task,
                 bgServiceInfo,
-                currentAppLayoutInfo.getUrl());
+                currentAppLayoutInfo.getUrl()));
         Intent intent = new Intent(this, ServerRefreshService.class);
-        bindService(intent, bgServiceInfo.connection, BIND_AUTO_CREATE);
+        bindService(intent, bgServiceInfo.getConnection(), BIND_AUTO_CREATE);
         startService(intent);
-        bgServiceInfo.bgServiceStarted = true;
+        bgServiceInfo.setBgServiceStarted(true);
     }
 
     private void stopServerRefreshServices() {
@@ -352,17 +354,17 @@ public class ServerAppsActivity extends AppCompatActivity implements
     private void stopServerRefreshService(int index) {
         if (index < bgServiceInfoList.length && bgServiceInfoList[index] != null) {
             BgServiceInfo bgServiceInfo = bgServiceInfoList[index];
-            if (bgServiceInfo.bgServiceStarted) {
-                bgServiceInfo.binder.removeSubscriber(bgServiceInfo.subscriber);
-                unbindService(bgServiceInfo.connection);
-                bgServiceInfo.bgServiceStarted = false;
+            if (bgServiceInfo.isBgServiceStarted()) {
+                bgServiceInfo.getBinder().removeSubscriber(bgServiceInfo.getSubscriber());
+                unbindService(bgServiceInfo.getConnection());
+                bgServiceInfo.setBgServiceStarted(false);
             }
         }
         Intent intent = new Intent(this, ServerRefreshService.class);
         stopService(intent);
     }
 
-    private void getLayout(BaseLayoutInfo layoutInfo) {
+    private void getLayout(BaseLayoutInfo layoutInfo, final boolean refresh) {
         this.layoutUrl = layoutInfo.getUrl();
         swipeRefreshLayout.setRefreshing(true);
         LayoutRestTask task = new LayoutRestTask();
@@ -382,29 +384,42 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 new Action1<BaseLayoutInfo>() {
                     @Override
                     public void call(BaseLayoutInfo layoutInfo) {
-                        processLayout(layoutInfo);
+                        processLayout(layoutInfo, refresh);
                     }
                 });
     }
 
-    private void processLayout(BaseLayoutInfo layoutInfo) {
+    private void processLayout(BaseLayoutInfo layoutInfo, boolean refresh) {
         initBgServiceInfoList(layoutInfo);
-        initData(layoutInfo);
+        initDataCallbackHolderList(layoutInfo);
+        initBgTasks(layoutInfo);
+        initData(layoutInfo, refresh);
         initRefreshView(layoutInfo);
         populateDrawerFrame(layoutInfo);
+        if (refresh) {
+            reInitLayoutFilter();
+        }
     }
 
     private void initBgServiceInfoList(BaseLayoutInfo layoutInfo) {
         bgServiceInfoList = new BgServiceInfo[layoutInfo.size()];
     }
 
-    private void initData(BaseLayoutInfo layoutInfo) {
+    public void initDataCallbackHolderList(BaseLayoutInfo layoutInfo) {
+        dataCallbackHolderList = new DataCallbackHolder[layoutInfo.size()];
+    }
+
+    public void initBgTasks(BaseLayoutInfo layoutInfo) {
+        bgTasks = new ServerDataRestTask[layoutInfo.size()];
+    }
+
+    private void initData(BaseLayoutInfo layoutInfo, boolean refresh) {
         if (layoutInfo.size() > 0) {
             swipeRefreshLayout.setRefreshing(true);
         }
         for (int i = 0; i < layoutInfo.size(); i++) {
             BaseLayoutInfo childLayout = layoutInfo.getChildLayout(i);
-            getData(i, childLayout.getUrl(), layoutInfo, false);
+            getData(i, childLayout.getUrl(), layoutInfo, refresh);
         }
     }
 
@@ -434,57 +449,89 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
     }
 
-    private void getData(final int index,
+    private void getData(int index,
                          String restUrl,
-                         final BaseLayoutInfo layoutInfo,
-                         final boolean refresh) {
+                         BaseLayoutInfo layoutInfo,
+                         boolean refresh) {
         if (baseStatusUrl != null) {
             restUrl = baseStatusUrl;
         }
-        final BaseLayoutInfo currentAppLayoutInfo = layoutInfo.getChildLayout(index);
-        task = new ServerDataRestTask(this);
-        Action1<Integer> dataLoadSubscriber = new Action1<Integer>() {
-            @Override
-            public void call(Integer dataLoadResult) {
-                swipeRefreshLayout.setRefreshing(false);
-                if (dataLoadResult == ServerDataRestTask.DATA_LOAD_FAILURE) {
-                    showAlert(getString(R.string.data_load_failure_alert_title),
-                            getString(R.string.data_load_failure_alert_body)
-                                    + "\n"
-                                    + "Application: "
-                                    + currentAppLayoutInfo.getFriendlyName()
-                                    +"\n"
-                                    + "URL: "
-                                    + currentAppLayoutInfo.getUrl(),
-                            false);
-                } else if (dataLoadResult == ServerDataRestTask.DATA_LOAD_SUCCESS) {
-                    stopServerRefreshService(index);
-                    startServerRefreshService(index, layoutInfo);
-                }
-            }
-        };
-        Action1<Map<String, Object>> appDataSubscriber = new Action1<Map<String, Object>>() {
-            @Override
-            public void call(Map<String, Object> appData) {
-                applyDataToLayout(currentAppLayoutInfo, appData);
-                if (index == curAppLayoutInfoPosition) {
-                    if (refresh) {
-                        refreshCurrentFrame(getChildLayoutFromAppFilter(layoutInfo));
-                    } else {
-                        open(currentAppLayoutInfo);
-                    }
-                }
-            }
-        };
+
+        ServerDataRestTask task = null;
+
+        if (index < bgTasks.length && bgTasks[index] != null) {
+            task = bgTasks[index];
+        } else {
+            task = new ServerDataRestTask(this);
+            bgTasks[index] = task;
+        }
+
+        DataCallbackHolder dataCallbackHolder = null;
+        if (index < dataCallbackHolderList.length && dataCallbackHolderList[index] != null) {
+            dataCallbackHolder = dataCallbackHolderList[index];
+            dataCallbackHolder.setRefresh(refresh);
+        } else {
+            dataCallbackHolder = new DataCallbackHolder(layoutInfo,
+                    index,
+                    refresh,
+                    new OnDataReadyListener() {
+                        @Override
+                        public void sendDataLoadResult(DataCallbackHolder dataCallbackHolder,
+                                                       int dataLoadResult) {
+                            BaseLayoutInfo currentAppLayoutInfo =
+                                    dataCallbackHolder
+                                            .getLayoutInfo()
+                                            .getChildLayout(dataCallbackHolder.getIndex());
+
+                            swipeRefreshLayout.setRefreshing(false);
+
+                            if (dataLoadResult == ServerDataRestTask.DATA_LOAD_FAILURE) {
+                                showAlert(getString(R.string.data_load_failure_alert_title),
+                                        getString(R.string.data_load_failure_alert_body)
+                                                + "\n"
+                                                + "Application: "
+                                                + currentAppLayoutInfo.getFriendlyName()
+                                                +"\n"
+                                                + "URL: "
+                                                + currentAppLayoutInfo.getUrl(),
+                                        false);
+                            } else if (dataLoadResult == ServerDataRestTask.DATA_LOAD_SUCCESS) {
+                                stopServerRefreshService(dataCallbackHolder.getIndex());
+                                startServerRefreshService(dataCallbackHolder.getIndex(),
+                                        dataCallbackHolder.getLayoutInfo());
+                            }
+                        }
+
+                        @Override
+                        public void sendData(DataCallbackHolder dataCallbackHolder,
+                                             Map<String, Object> appData) {
+                            BaseLayoutInfo currentAppLayoutInfo =
+                                    dataCallbackHolder
+                                            .getLayoutInfo()
+                                            .getChildLayout(dataCallbackHolder.getIndex());
+                            applyDataToLayout(currentAppLayoutInfo, appData);
+                            if (dataCallbackHolder.getIndex() == curAppLayoutInfoPosition) {
+                                if (dataCallbackHolder.isRefresh()) {
+                                    refreshCurrentFrame(layoutFilter.peek());
+                                } else {
+                                    open(currentAppLayoutInfo);
+                                }
+                            }
+                        }
+                    });
+            dataCallbackHolderList[index] = dataCallbackHolder;
+        }
+        dataCallbackHolder.setLayoutInfo(layoutInfo);
+
         if (!task.loadStatusFromNetwork(restUrl,
-                dataLoadSubscriber,
-                appDataSubscriber)) {
+                dataCallbackHolder.getDataLoadSubscriber(),
+                dataCallbackHolder.getAppDataSubscriber())) {
             swipeRefreshLayout.setRefreshing(false);
             showAlert(getString(R.string.data_load_failure_alert_title),
                     getString(R.string.data_load_failure_alert_body)
                             + "\n"
                             + "Application: "
-                            + currentAppLayoutInfo.getFriendlyName()
+                            + layoutInfo.getChildLayout(index).getFriendlyName()
                             +"\n"
                             + "URL: "
                             + restUrl,
@@ -502,7 +549,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 getString(R.string.app_fragment_tag));
         fragmentTransaction.addToBackStack(getString(R.string.app_fragment_tag));
         fragmentTransaction.commit();
-        if (appFilter.size() == 0 || appFilter.size() == 1) {
+        if (layoutFilter.size() == 0 || layoutFilter.size() == 1) {
             getSupportActionBar().setSubtitle("");
         } else {
             getSupportActionBar().setSubtitle(concatAppFilter());
@@ -513,33 +560,13 @@ public class ServerAppsActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         LayoutFragment layoutFragment = (LayoutFragment)
                 fragmentManager.findFragmentByTag(getString(R.string.app_fragment_tag));
-        BaseLayoutInfo filteredLayout = filterData(appLayoutInfo);
+        BaseLayoutInfo filteredLayout = appLayoutInfo; //filterData(appLayoutInfo);
         if (!filteredLayout.isShouldBeParent()) {
             filteredLayout = filteredLayout.getParentLayout();
         }
         layoutFragment.updateAppData(filteredLayout
                 .getParentLayout()
                 .filteredLayout(filteredLayout.getKey()));
-    }
-
-    private BaseLayoutInfo filterData(BaseLayoutInfo layoutInfo) {
-        BaseLayoutInfo currentLayout = layoutInfo;
-        if (appFilter != null) {
-            for (String appKey : appFilter) {
-                List<BaseLayoutInfo> childrenLayouts = currentLayout.getChildrenLayouts();
-                int index = 0;
-                boolean foundChild = false;
-                while (index < childrenLayouts.size() && !foundChild) {
-                    BaseLayoutInfo childLayout = childrenLayouts.get(index);
-                    if (childLayout.getKey().equals(appKey)) {
-                        currentLayout = childLayout;
-                        foundChild = true;
-                    }
-                    index++;
-                }
-            }
-        }
-        return currentLayout;
     }
 
     private void populateDrawerFrame(BaseLayoutInfo appLayoutInfo) {
@@ -577,58 +604,39 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
     }
 
-    private void addLayoutKeyToAppFilter(BaseLayoutInfo layoutInfo) {
-        if (appFilter != null) {
-            BaseLayoutInfo parentLayoutInfo = layoutInfo.getParentLayout();
-            int parentIndex = appFilter.size() - 1;
-            if ((parentIndex == -1 && parentLayoutInfo != null) ||
-                    !appFilter.get(parentIndex).equals(parentLayoutInfo.getKey()) &&
-                    !appFilter.get(parentIndex).equals(layoutInfo.getKey())) {
-                appFilter.add(parentLayoutInfo.getKey());
-            }
-            if (appFilter.size() > 0) {
-                if (appFilter.size() == 1) {
-                    setTitle(layoutInfo.getFriendlyName());
-                }
-                String lastKey = appFilter.get(appFilter.size() - 1);
-                if (!lastKey.equals(layoutInfo.getKey())) {
-                    appFilter.add(layoutInfo.getKey());
-                }
-            } else {
-                appFilter.add(layoutInfo.getKey());
-            }
-        }
-    }
-
-    private BaseLayoutInfo getChildLayoutFromAppFilter(BaseLayoutInfo layoutInfo) {
-        BaseLayoutInfo childLayoutInfo = layoutInfo;
-
-        for (String app : appFilter) {
-            boolean foundNextChild = false;
-            int childIndex = 0;
-            List<BaseLayoutInfo> childrenLayouts = layoutInfo.getChildrenLayouts();
-            while (!foundNextChild && childIndex < childrenLayouts.size()) {
-                if (childrenLayouts.get(childIndex).getKey().equals(app)) {
-                    foundNextChild = true;
-                    childLayoutInfo = childrenLayouts.get(childIndex);
-                }
-                childIndex++;
-            }
-        }
-
-        return childLayoutInfo;
-    }
-
     private String concatAppFilter() {
         StringBuffer sb = new StringBuffer();
         int index = 0;
-        for (String value : appFilter) {
-            sb.append(value);
-            if (index < appFilter.size() - 1) {
+        for (BaseLayoutInfo value : layoutFilter) {
+            sb.append(value.getKey());
+            if (index < layoutFilter.size() - 1) {
                 sb.append(" / ");
             }
             index++;
         }
         return sb.toString();
+    }
+
+    private void reInitLayoutFilter() {
+        for (int i = 0; i < layoutFilter.size(); i++) {
+            layoutFilter.get(i).readFromNetwork(null);
+        }
+    }
+
+    private void applyLayoutToLayoutFilter(BaseLayoutInfo layoutInfo) {
+        List<BaseLayoutInfo> reverseLayoutFilter = new ArrayList<>();
+        BaseLayoutInfo currentLayoutInfo = layoutInfo;
+        while (currentLayoutInfo != null) {
+            reverseLayoutFilter.add(currentLayoutInfo);
+            currentLayoutInfo = currentLayoutInfo.getParentLayout();
+        }
+
+        layoutFilter.clear();
+        for (int i = reverseLayoutFilter.size() - 1; i >= 0; i--) {
+            layoutFilter.push(reverseLayoutFilter.get(i));
+            if (i == reverseLayoutFilter.size() - 2) {
+                setTitle(reverseLayoutFilter.get(i).getFriendlyName());
+            }
+        }
     }
 }

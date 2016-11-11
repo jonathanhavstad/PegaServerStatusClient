@@ -1,0 +1,1 @@
+javascript:jsObject.setJsonBody(document.body.getElementsByTagName('pre')[0].innerHTML);

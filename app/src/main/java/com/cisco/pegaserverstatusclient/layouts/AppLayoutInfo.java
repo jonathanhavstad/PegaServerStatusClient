@@ -75,20 +75,31 @@ public class AppLayoutInfo extends BaseLayoutInfo {
     public boolean readFromNetwork(InputStream in) {
         List<BaseLayoutInfo> layoutList = new ArrayList<>();
         Map<String, Object> mapAppData = (Map<String, Object>) appData;
-        if (appData != null && childrenLayouts ==  null) {
+        if (appData != null && childrenLayouts == null) {
             orderedKeySet = KeyMapping.populateOrderedKeySet(mapAppData);
             for (String key : orderedKeySet) {
-                LifecycleLayoutInfo lifecycleLayoutInfo = new LifecycleLayoutInfo(this);
-                lifecycleLayoutInfo.setKey(key);
-                lifecycleLayoutInfo.setAppData((Map<String, Object>) mapAppData.get(key));
-                lifecycleLayoutInfo.setFriendlyName(lifecycleLayoutInfo.getFriendlyName(key, false));
-                lifecycleLayoutInfo.setHeaderColumns(getHeaderColumns());
-                lifecycleLayoutInfo.setHeaderDesc(getHeaderDesc());
-                lifecycleLayoutInfo.setLayout(layout);
-                lifecycleLayoutInfo.splitHeaderCols();
-                lifecycleLayoutInfo.splitHeaderDesc();
-                lifecycleLayoutInfo.setKey(key);
-                layoutList.add(lifecycleLayoutInfo);
+                if (layout.equalsIgnoreCase(KeyMapping.GRID_LAYOUT_KEY)) {
+                    LifecycleLayoutInfo lifecycleLayoutInfo = new LifecycleLayoutInfo(this);
+                    lifecycleLayoutInfo.setKey(key);
+                    lifecycleLayoutInfo.setAppData((Map<String, Object>) mapAppData.get(key));
+                    lifecycleLayoutInfo.setFriendlyName(lifecycleLayoutInfo.getFriendlyName(key, false));
+                    lifecycleLayoutInfo.setHeaderColumns(getHeaderColumns());
+                    lifecycleLayoutInfo.setHeaderDesc(getHeaderDesc());
+                    lifecycleLayoutInfo.setLayout(layout);
+                    lifecycleLayoutInfo.splitHeaderCols();
+                    lifecycleLayoutInfo.splitHeaderDesc();
+                    lifecycleLayoutInfo.setKey(key);
+                    layoutList.add(lifecycleLayoutInfo);
+                } else if (layout.equalsIgnoreCase(KeyMapping.VERTICAL_LAYOUT_KEY)) {
+                    ContentDetailLayout contentDetailLayout =
+                            new ContentDetailLayout(this,
+                                    (Map<String, Object>) appData,
+                                    key,
+                                    headerColsList,
+                                    headerDescList,
+                                    headerColsList.length);
+                    layoutList.add(contentDetailLayout);
+                }
             }
             setChildrenLayouts(layoutList);
             return true;

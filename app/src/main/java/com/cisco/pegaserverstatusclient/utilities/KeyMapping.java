@@ -23,6 +23,9 @@ public class KeyMapping {
     public static final String STATUS_KEY = "Status";
     public static final String PROXY_URL_KEY = "ProxyURL";
 
+    public static final String GRID_LAYOUT_KEY = "GRID";
+    public static final String VERTICAL_LAYOUT_KEY = "VERTICAL";
+
     public static final String[] LC_KEY_ORDER = new String[NUM_LC_VALUES];
     public static final Map<String, String> KEY_MAPPING = new HashMap<>();
     public static final Map<String, String> HEADER_MAPPING = new HashMap<>();
