@@ -11,6 +11,9 @@ import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 import com.cisco.pegaserverstatusclient.listeners.OnSelectMenuItemClickListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,6 +25,7 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
     private BaseLayoutInfo appLayoutInfo;
     private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
     private OnSelectMenuItemClickListener onSelectMenuItemClickListener;
+    private List<BaseLayoutInfo> filteredChildrenLayoutList;
 
     public FragmentDrawerListAdapter(BaseLayoutInfo appLayoutInfo,
                                      OnOpenMenuItemClickListener onOpenMenuItemClickListener,
@@ -29,6 +33,7 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
         this.appLayoutInfo = appLayoutInfo;
         this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
         this.onSelectMenuItemClickListener = onSelectMenuItemClickListener;
+        createFilteredChildrenLayoutList();
     }
 
     @Override
@@ -41,7 +46,7 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final BaseLayoutInfo childLayout = appLayoutInfo.getChildLayout(position);
+        final BaseLayoutInfo childLayout = filteredChildrenLayoutList.get(position);
         holder.fragmentDrawerItem.setText(childLayout.getFriendlyName());
         holder.fragmentDrawerItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +65,7 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
 
     @Override
     public int getItemCount() {
-        return appLayoutInfo.getChildrenLayouts().size();
+        return filteredChildrenLayoutList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,6 +78,20 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
+        }
+    }
+
+    private void createFilteredChildrenLayoutList() {
+        filteredChildrenLayoutList = new ArrayList<>();
+        List<BaseLayoutInfo> childrenLayoutInfoList = appLayoutInfo.getChildrenLayouts();
+        for (BaseLayoutInfo childLayoutInfo : childrenLayoutInfoList) {
+            if (childLayoutInfo.getChildrenLayouts() == null) {
+                childLayoutInfo.readFromNetwork(null);
+            }
+            if (childLayoutInfo.getChildrenLayouts() != null &&
+                    childLayoutInfo.getChildrenLayouts().size() > 0) {
+                filteredChildrenLayoutList.add(childLayoutInfo);
+            }
         }
     }
 }

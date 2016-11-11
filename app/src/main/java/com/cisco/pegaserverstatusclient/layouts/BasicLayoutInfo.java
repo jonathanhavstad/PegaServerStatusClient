@@ -96,4 +96,14 @@ public class BasicLayoutInfo extends BaseLayoutInfo {
     public int getNumCols() {
         return orderedKeySet.size();
     }
+
+    @Override
+    public boolean isClickable(int colIndex) {
+        return false;
+    }
+
+    @Override
+    public boolean isColBold(int colIndex) {
+        return false;
+    }
 }

@@ -182,11 +182,16 @@ public class ServerAppsActivity extends AppCompatActivity implements
     public void open(BaseLayoutInfo layoutInfo) {
         swipeRefreshLayout.setRefreshing(false);
         layoutInfo.readFromNetwork(null);
+        if (!hasGrandChildren(layoutInfo)) {
+            populateDrawerFrame(layoutInfo.getParentLayout());
+            drawerLayout.closeDrawers();
+        } else {
+            populateDrawerFrame(layoutInfo);
+        }
         applyLayoutToLayoutFilter(layoutInfo);
         if (layoutInfo.isShouldBeParent()) {
             populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
         }
-        populateDrawerFrame(layoutInfo);
     }
 
     @Override
@@ -199,6 +204,9 @@ public class ServerAppsActivity extends AppCompatActivity implements
         if (layoutFilter != null && layoutFilter.size() > 0) {
             if (layoutFilter.size() > 2) {
                 BaseLayoutInfo lastFilter = layoutFilter.pop();
+                if (!layoutFilter.peek().isShouldBeParent() && layoutFilter.size() > 2) {
+                    lastFilter = layoutFilter.pop();
+                }
                 if (lastFilter.size() > 1) {
                     open(layoutFilter.pop());
                 } else {
@@ -638,5 +646,20 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 setTitle(reverseLayoutFilter.get(i).getFriendlyName());
             }
         }
+    }
+
+    private boolean hasGrandChildren(BaseLayoutInfo layoutInfo) {
+        List<BaseLayoutInfo> childrenLayoutInfoList = layoutInfo.getChildrenLayouts();
+        if (childrenLayoutInfoList != null) {
+            for (BaseLayoutInfo childLayoutInfo : childrenLayoutInfoList) {
+                childLayoutInfo.readFromNetwork(null);
+                List<BaseLayoutInfo> grandchildrenLayoutInfoList =
+                        childLayoutInfo.getChildrenLayouts();
+                if (grandchildrenLayoutInfoList != null && grandchildrenLayoutInfoList.size() > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
