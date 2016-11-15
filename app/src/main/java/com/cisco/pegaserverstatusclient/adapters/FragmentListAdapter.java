@@ -1,5 +1,6 @@
 package com.cisco.pegaserverstatusclient.adapters;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -55,15 +56,15 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
 
         holder
                 .loadingFragmentListHeaders
-                .setLayoutManager(new StaggeredGridLayoutManager(
-                        appLayoutInfo.getNumCols(),
-                        StaggeredGridLayoutManager.VERTICAL));
+                .setLayoutManager(new GridLayoutManager(
+                        holder.itemView.getContext(),
+                        appLayoutInfo.getNumCols()));
 
         holder
                 .landingFragmentListItem
-                .setLayoutManager(new StaggeredGridLayoutManager(
-                        appLayoutInfo.getNumCols(),
-                        StaggeredGridLayoutManager.VERTICAL));
+                .setLayoutManager(new GridLayoutManager(
+                        holder.itemView.getContext(),
+                        appLayoutInfo.getNumCols()));
 
         holder
                 .loadingFragmentMainItemList

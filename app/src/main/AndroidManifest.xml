@@ -57,9 +57,7 @@
         </activity>
 
         <activity android:name=".activities.LoginActivity"
-            android:label="@string/main_app_label"
-            android:launchMode="singleTask"
-            android:taskAffinity="" >
+            android:label="@string/main_app_label" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

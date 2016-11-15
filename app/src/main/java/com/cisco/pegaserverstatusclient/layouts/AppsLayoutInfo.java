@@ -73,14 +73,26 @@ public class AppsLayoutInfo extends BaseLayoutInfo {
             List<BaseLayoutInfo> layoutList = new ArrayList<>();
             Map<String, Object> appsData = new HashMap<>();
             for (int i = 0; i < jsonArray.size(); i++) {
-                AppLayoutInfo appLayoutInfo = gson.fromJson(jsonArray.get(i), AppLayoutInfo.class);
-                appLayoutInfo.setParentLayout(this);
-                appLayoutInfo.splitHeaderCols();
-                appLayoutInfo.splitHeaderDesc();
-                appLayoutInfo.setParentLayout(this);
-                appLayoutInfo.setKey(appLayoutInfo.getAppId());
-                layoutList.add(appLayoutInfo);
-                appsData.put(appLayoutInfo.getAppName(), null);
+                if (i == 0) {
+                    MonitorAppLayoutInfo appLayoutInfo =
+                            gson.fromJson(jsonArray.get(i), MonitorAppLayoutInfo.class);
+                    appLayoutInfo.setParentLayout(this);
+                    appLayoutInfo.splitHeaderCols();
+                    appLayoutInfo.splitHeaderDesc();
+                    appLayoutInfo.setParentLayout(this);
+                    appLayoutInfo.setKey(appLayoutInfo.getAppId());
+                    layoutList.add(appLayoutInfo);
+                    appsData.put(appLayoutInfo.getAppName(), null);
+                } else if (i == 1) {
+                    StatusAppLayoutInfo statusAppLayoutInfo =
+                            gson.fromJson(jsonArray.get(i), StatusAppLayoutInfo.class);
+                    statusAppLayoutInfo.setParentLayout(this);
+                    statusAppLayoutInfo.splitHeaderCols();
+                    statusAppLayoutInfo.splitHeaderDesc();
+                    statusAppLayoutInfo.setKey(statusAppLayoutInfo.getAppId());
+                    layoutList.add(statusAppLayoutInfo);
+                    appsData.put(statusAppLayoutInfo.getAppName(), null);
+                }
             }
             setChildrenLayouts(layoutList);
             setAppData(appsData);

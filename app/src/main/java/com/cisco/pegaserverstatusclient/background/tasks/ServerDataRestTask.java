@@ -8,6 +8,7 @@ import android.util.Log;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.listeners.OnDataLoadedListener;
 import com.cisco.pegaserverstatusclient.rest.services.CiscoSSOWebService;
+import com.cisco.pegaserverstatusclient.utilities.KeyMapping;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +57,7 @@ public class ServerDataRestTask {
         ciscoSSOWebService = new CiscoSSOWebService(context);
     }
 
-    private void loadFromFile(final Context context, final String filename) {
+    private void loadFromFile(final Context context, final String filename, final boolean isJsonArray) {
         final AssetManager assetManager = context.getAssets();
 
         new Thread(new Runnable() {
@@ -71,11 +72,25 @@ public class ServerDataRestTask {
                     while (scanner.hasNextLine()) {
                         sb.append(scanner.nextLine());
                     }
-                    JSONArray jsonArray = new JSONArray(sb.toString());
-                    parseJsonArray(appData, null, jsonArray);
+                    if (isJsonArray) {
+                        JSONArray jsonArray = new JSONArray(sb.toString());
+                        parseJsonArray(appData, null, jsonArray);
+                    } else {
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+                        appData = parseJsonObj(appData, jsonObject);
+                    }
+
+                    loadJsonArraySuccess = true;
+                    loadJsonArrayFinished = true;
+                    loadJsonArraySuccess = true;
+                    loadJsonArrayFinished = true;
                     publishDataLoadStatus(DATA_LOAD_SUCCESS);
+                    publishAppData(appData);
+
                 } catch (JSONException | IOException e) {
                     Log.e(TAG, e.toString());
+                    loadJsonArrayFinished = true;
+                    publishDataLoadStatus(DATA_LOAD_FAILURE);
                 } finally {
                     try {
                         if (inputStream != null) {
@@ -91,12 +106,14 @@ public class ServerDataRestTask {
 
     public void loadStatusFromFile(Context context, Action1<Integer> dataSubscriber) {
         this.loadStatusSubscriber = dataSubscriber;
-        loadFromFile(context, context.getString(R.string.status_json_filename));
+        loadFromFile(context, context.getString(R.string.status_json_filename), true);
     }
 
-    public boolean loadStatusFromNetwork(String url,
+    public boolean loadStatusFromNetwork(Context context,
+                                         String url,
                                          Action1<Integer> loadStatusSubscriber,
-                                         Action1<Map<String, Object>> appDataSubscriber) {
+                                         Action1<Map<String, Object>> appDataSubscriber,
+                                         boolean isJsonArray) {
         boolean initResult = false;
 
         this.loadStatusSubscriber = loadStatusSubscriber;
@@ -108,26 +125,32 @@ public class ServerDataRestTask {
         this.loadJsonObjectFinished = false;
 
         if (url != null && !url.isEmpty()) {
-            initResult = true;
-            ciscoSSOWebService.loadData(url, new OnDataLoadedListener() {
-                @Override
-                public void send(JSONArray jsonArray) {
-                    Map<String, Object> appData = new HashMap<>();
-                    parseJsonArray(appData, null, jsonArray);
-                    loadJsonArraySuccess = true;
-                    loadJsonArrayFinished = true;
-                    loadJsonArraySuccess = true;
-                    loadJsonArrayFinished = true;
-                    publishDataLoadStatus(DATA_LOAD_SUCCESS);
-                    publishAppData(appData);
-                }
+            if (isUrlFile(url)) {
+                initResult = true;
+                loadFromFile(context, extractScheme(url), isJsonArray);
+            } else {
+                initResult = true;
+                ciscoSSOWebService.loadData(url, new OnDataLoadedListener() {
+                    @Override
+                    public void send(JSONArray jsonArray) {
+                        Map<String, Object> appData = new HashMap<>();
+                        parseJsonArray(appData, null, jsonArray);
+                        loadJsonArraySuccess = true;
+                        loadJsonArrayFinished = true;
+                        loadJsonObjectSuccess = true;
+                        loadJsonObjectFinished = true;
+                        publishDataLoadStatus(DATA_LOAD_SUCCESS);
+                        publishAppData(appData);
+                    }
 
-                @Override
-                public void error(String error) {
-                    loadJsonArrayFinished = true;
-                    publishDataLoadStatus(DATA_LOAD_FAILURE);
-                }
-            });
+                    @Override
+                    public void error(String error) {
+                        loadJsonArrayFinished = true;
+                        loadJsonObjectFinished = true;
+                        publishDataLoadStatus(DATA_LOAD_FAILURE);
+                    }
+                });
+            }
         }
         return initResult;
     }
@@ -168,7 +191,7 @@ public class ServerDataRestTask {
                     if (key == null) {
                         parseJsonObj(values, (JSONObject) value);
                     } else {
-                        array.add(parseJsonObj(values, (JSONObject) values));
+                        array.add(parseJsonObj(values, (JSONObject) value));
                     }
                 } else {
                     if (key == null) {
@@ -234,5 +257,27 @@ public class ServerDataRestTask {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(appDataSubscriber);
+    }
+
+    private boolean isUrlFile(String url) {
+        if (url.contains(KeyMapping.FILE_URI_KEY)) {
+            return true;
+        }
+        return false;
+    }
+
+    private String extractScheme(String url) {
+        if (url != null && !url.isEmpty()) {
+            try {
+                URI uri = new URI(url);
+                String scheme = uri.getScheme() + "://";
+                int schemeIndex = url.indexOf(scheme);
+                return url.substring(schemeIndex + scheme.length());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return url;
     }
 }

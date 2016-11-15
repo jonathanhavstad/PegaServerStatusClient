@@ -52,25 +52,32 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
         if (index != -1) {
             final BaseLayoutInfo childLayoutInfo = appLayoutInfo.getChildLayout(index);
 
-            int colIndex = position % appLayoutInfo.getNumCols();
+            if (childLayoutInfo != null) {
 
-            if (appLayoutInfo.isColBold(colIndex)) {
-                holder.landingFragmentListChildItem.setClickable(true);
-                holder
-                        .landingFragmentListChildItem
-                        .setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
-            }
+                int colIndex = position % appLayoutInfo.getNumCols();
 
-            holder
-                    .landingFragmentListChildItem
-                    .setText(childLayoutInfo.getKeyedValue(colIndex, key, true).toString());
-            if (appLayoutInfo.isClickable(colIndex)) {
-                holder.landingFragmentListChildItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onOpenMenuItemClickListener.open(childLayoutInfo);
+                if (appLayoutInfo.isColBold(colIndex)) {
+                    holder.landingFragmentListChildItem.setClickable(true);
+                    holder
+                            .landingFragmentListChildItem
+                            .setTypeface(holder.landingFragmentListChildItem.getTypeface(), 1);
+                }
+
+                Object value = childLayoutInfo.getKeyedValue(colIndex, key, true);
+
+                if (value != null) {
+                    holder.landingFragmentListChildItem.setText(value.toString());
+                    if (appLayoutInfo.isClickable(colIndex)) {
+                        holder.landingFragmentListChildItem.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                onOpenMenuItemClickListener.open(childLayoutInfo);
+                            }
+                        });
                     }
-                });
+                } else {
+                    holder.landingFragmentListChildItem.setText("");
+                }
             }
         }
     }

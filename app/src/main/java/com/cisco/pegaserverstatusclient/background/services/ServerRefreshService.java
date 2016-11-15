@@ -72,8 +72,13 @@ public class ServerRefreshService extends IntentService {
 
     private void refreshData() {
         List<BgServiceConnection> serviceConnectionList = binder.getServiceConnectionList();
+        int index = 0;
         for (final BgServiceConnection serviceConnection : serviceConnectionList) {
-            serviceConnection.getTask().loadStatusFromNetwork(serviceConnection.getUrl(),
+            boolean isJsonArray = true;
+            if (index == 1) {
+                isJsonArray = false;
+            }
+            serviceConnection.getTask().loadStatusFromNetwork(this, serviceConnection.getUrl(),
                     new Action1<Integer>() {
                         @Override
                         public void call(Integer integer) {
@@ -88,7 +93,8 @@ public class ServerRefreshService extends IntentService {
                                 binder.subscribeObservable(initObservable(appData));
                             }
                         }
-                    });
+                    }, isJsonArray);
+            index++;
         }
     }
 

@@ -196,31 +196,30 @@ public abstract class BaseLayoutInfo {
     }
 
     public Object getKeyedValue(int colIndex, String key, boolean headerIsKey) {
+        Object keyedValue = key;
         if (colIndex == 0 && headerIsKey) {
-            return key;
-        }
-
-        if (appData instanceof Map<?,?>) {
+            keyedValue = key;
+        } else if (appData instanceof Map<?,?>) {
             Map<String, Object> mapAppData = (Map<String, Object>) appData;
             if (headerColsList != null) {
                 String header = headerColsList[colIndex];
                 for (String headerKey : mapAppData.keySet()) {
                     if (headerKey.equalsIgnoreCase(header)) {
-                        return mapAppData.get(headerKey);
+                        keyedValue = mapAppData.get(headerKey);
                     }
                 }
             } else {
                 int index = 0;
                 for (String childkey : mapAppData.keySet()) {
                     if (index == colIndex) {
-                        return mapAppData.get(childkey);
+                        keyedValue = mapAppData.get(childkey);
                     }
                     index++;
                 }
             }
         }
 
-        return null;
+        return keyedValue;
     }
 
     public boolean isColBold(int colIndex) {
@@ -335,5 +334,9 @@ public abstract class BaseLayoutInfo {
             itemIndex++;
         }
         return sb.toString();
+    }
+
+    public boolean forceDrawerLayout() {
+        return false;
     }
 }

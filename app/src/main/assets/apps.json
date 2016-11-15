@@ -6,9 +6,9 @@
         "Screen" : "Page1",
         "Layout" : "GRID",
         "Method" : "PULL",
-        "URL" : "https://ibpm.cisco.com/prd2/brmsadmin/status",
-        "HeaderColumn" : "Domain, Status",
-        "HeaderDesc" : "Domain, Status"
+        "URL" : "https://ibpm.cisco.com/prd2/brmsadmin/status/gssc",
+        "HeaderColumn" : "Domain, Status, DateTime",
+        "HeaderDesc" : "Domain, Status, Date & Time"
     },
     {
         "AppId" : "iBPM Status",
@@ -17,8 +17,8 @@
         "Screen" : "Page1",
         "Layout" : "VERTICAL",
         "Method" : "PULL",
-        "URL" : "",
-        "HeaderColumn" : "Domain, Status",
-        "HeaderDesc" : "Domain, Status"
+        "URL" : "file://cpe_cs_RS-441.json",
+        "HeaderColumn" : "_id, pyStatusWork",
+        "HeaderDesc" : "ID, Status Work"
     }
 ]

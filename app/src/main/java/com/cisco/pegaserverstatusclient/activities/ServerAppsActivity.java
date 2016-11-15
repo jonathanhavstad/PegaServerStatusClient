@@ -61,6 +61,8 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     private static final int PLAY_SERVICE_RESOLUTION_REQUEST = 10000;
 
+    public static final int RESULT_CLOSED = 9999;
+
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private BgServiceInfo[] bgServiceInfoList;
@@ -72,6 +74,8 @@ public class ServerAppsActivity extends AppCompatActivity implements
     private String baseStatusUrl;
 
     private ServerDataRestTask[] bgTasks;
+
+    private boolean stopRefresh;
 
     @BindView(R.id.app_toolbar)
     Toolbar pegaToolbar;
@@ -98,21 +102,16 @@ public class ServerAppsActivity extends AppCompatActivity implements
     @Override
     protected void onRestart() {
         super.onRestart();
+        stopServerRefreshServices();
+        stopRefresh = false;
         init();
-        reInitLayoutFilter();
-        if (layoutFilter.size() > 0) {
-            BaseLayoutInfo appsLayoutInfo = layoutFilter.get(0);
-            List<BaseLayoutInfo> childrenLayouts = appsLayoutInfo.getChildrenLayouts();
-            for (int i = 0; i < childrenLayouts.size(); i++) {
-                getData(i, childrenLayouts.get(i).getUrl(), appsLayoutInfo, true);
-            }
-            refreshCurrentFrame(layoutFilter.peek());
-        }
+        initLayout(false);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        stopRefresh = true;
         stopServerRefreshServices();
     }
 
@@ -122,14 +121,16 @@ public class ServerAppsActivity extends AppCompatActivity implements
         DrawerFragment drawerFragment = (DrawerFragment)
                 fragmentManager.findFragmentByTag(getString(R.string.drawer_fragment_tag));
         BaseLayoutInfo currentLayoutInfo = drawerFragment.getLayoutInfo();
-        if (!currentLayoutInfo.getParentLayout().isShouldBeParent()) {
+        if (currentLayoutInfo != null &&
+                !currentLayoutInfo.getParentLayout().isShouldBeParent()) {
             layoutFilter.remove(layoutFilter.size() - 1);
             currentLayoutInfo = currentLayoutInfo.getParentLayout();
         }
         backPressed(currentLayoutInfo);
-        if (layoutFilter.size() <= 1) {
+        if (layoutFilter.size() <= 2) {
             stopServerRefreshServices();
             getSupportFragmentManager().popBackStackImmediate();
+            setResult(RESULT_CLOSED);
             finish();
             super.onBackPressed();
         }
@@ -182,11 +183,14 @@ public class ServerAppsActivity extends AppCompatActivity implements
     public void open(BaseLayoutInfo layoutInfo) {
         swipeRefreshLayout.setRefreshing(false);
         layoutInfo.readFromNetwork(null);
-        if (!hasGrandChildren(layoutInfo)) {
+        if (!hasGrandChildren(layoutInfo) && !layoutInfo.forceDrawerLayout()) {
             populateDrawerFrame(layoutInfo.getParentLayout());
             drawerLayout.closeDrawers();
         } else {
             populateDrawerFrame(layoutInfo);
+            if (layoutInfo.forceDrawerLayout()) {
+                drawerLayout.closeDrawers();
+            }
         }
         applyLayoutToLayoutFilter(layoutInfo);
         if (layoutInfo.isShouldBeParent()) {
@@ -293,7 +297,8 @@ public class ServerAppsActivity extends AppCompatActivity implements
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(body)
-                .setNeutralButton(R.string.alert_dialog_confirm_btn_txt, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.alert_dialog_confirm_btn_txt,
+                        new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -323,7 +328,8 @@ public class ServerAppsActivity extends AppCompatActivity implements
                                             .getLayoutInfo()
                                             .getChildLayout(bgServiceInfo.getIndex());
                             applyDataToLayout(appLayout, appData);
-                            if (bgServiceInfo.getIndex() == curAppLayoutInfoPosition) {
+                            if (bgServiceInfo.getIndex() == curAppLayoutInfoPosition &&
+                                    !stopRefresh) {
                                 refreshCurrentFrame(layoutFilter.peek());
                             }
                         }
@@ -342,6 +348,10 @@ public class ServerAppsActivity extends AppCompatActivity implements
         } else {
             task = new ServerDataRestTask(this);
             bgTasks[index] = task;
+        }
+
+        if (index == 0 && baseStatusUrl != null) {
+            currentAppLayoutInfo.setUrl(baseStatusUrl);
         }
 
         bgServiceInfo.setConnection(new BgServiceConnection(task,
@@ -461,9 +471,6 @@ public class ServerAppsActivity extends AppCompatActivity implements
                          String restUrl,
                          BaseLayoutInfo layoutInfo,
                          boolean refresh) {
-        if (baseStatusUrl != null) {
-            restUrl = baseStatusUrl;
-        }
 
         ServerDataRestTask task = null;
 
@@ -472,6 +479,10 @@ public class ServerAppsActivity extends AppCompatActivity implements
         } else {
             task = new ServerDataRestTask(this);
             bgTasks[index] = task;
+        }
+
+        if (index == 0 && baseStatusUrl != null) {
+            restUrl = baseStatusUrl;
         }
 
         DataCallbackHolder dataCallbackHolder = null;
@@ -519,7 +530,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
                                             .getChildLayout(dataCallbackHolder.getIndex());
                             applyDataToLayout(currentAppLayoutInfo, appData);
                             if (dataCallbackHolder.getIndex() == curAppLayoutInfoPosition) {
-                                if (dataCallbackHolder.isRefresh()) {
+                                if (dataCallbackHolder.isRefresh() && !stopRefresh) {
                                     refreshCurrentFrame(layoutFilter.peek());
                                 } else {
                                     open(currentAppLayoutInfo);
@@ -531,9 +542,16 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
         dataCallbackHolder.setLayoutInfo(layoutInfo);
 
-        if (!task.loadStatusFromNetwork(restUrl,
+        boolean isJsonArray = true;
+        if (index == 1) {
+            isJsonArray = false;
+        }
+
+        if (!task.loadStatusFromNetwork(this,
+                restUrl,
                 dataCallbackHolder.getDataLoadSubscriber(),
-                dataCallbackHolder.getAppDataSubscriber())) {
+                dataCallbackHolder.getAppDataSubscriber(),
+                isJsonArray)) {
             swipeRefreshLayout.setRefreshing(false);
             showAlert(getString(R.string.data_load_failure_alert_title),
                     getString(R.string.data_load_failure_alert_body)
@@ -568,13 +586,12 @@ public class ServerAppsActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         LayoutFragment layoutFragment = (LayoutFragment)
                 fragmentManager.findFragmentByTag(getString(R.string.app_fragment_tag));
-        BaseLayoutInfo filteredLayout = appLayoutInfo; //filterData(appLayoutInfo);
-        if (!filteredLayout.isShouldBeParent()) {
-            filteredLayout = filteredLayout.getParentLayout();
+        if (!appLayoutInfo.isShouldBeParent()) {
+            appLayoutInfo = appLayoutInfo.getParentLayout();
         }
-        layoutFragment.updateAppData(filteredLayout
+        layoutFragment.updateAppData(appLayoutInfo
                 .getParentLayout()
-                .filteredLayout(filteredLayout.getKey()));
+                .filteredLayout(appLayoutInfo.getKey()));
     }
 
     private void populateDrawerFrame(BaseLayoutInfo appLayoutInfo) {

@@ -49,7 +49,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Fabric.with(this, new Crashlytics());
         ButterKnife.bind(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         init();
     }
 
@@ -58,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
         webView.setVisibility(View.INVISIBLE);
 
-        loadLoginUrl();
+        loadData(statusUrl);
 
         Intent serviceIntent = new Intent(this, RegistrationIntentService.class);
         startService(serviceIntent);
@@ -67,21 +71,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACCESS_DATA_REQUEST_CODE) {
-            loadLoginUrl();
+            if (resultCode == ServerAppsActivity.RESULT_CLOSED) {
+                finish();
+            } else {
+                init();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void loadLoginUrl() {
+    private void loadData(final String url) {
         CiscoSSOWebService ciscoSSOWebService = new CiscoSSOWebService(this, webView);
 
-        ciscoSSOWebService.loadDataAfterLogout(getString(R.string.cisco_login_url),
+        ciscoSSOWebService.loadData(url,
                 new OnDataLoadedListener() {
                     @Override
                     public void send(JSONArray jsonArray) {
                         Log.d(TAG, "Received JSON array: " + jsonArray.toString());
-                        launchMainActivity(getString(R.string.cisco_login_url));
+                        launchMainActivity(url);
                     }
 
                     @Override
@@ -137,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void readIntent(Intent intent) {
+        statusUrl = getString(R.string.cisco_login_url);
         if (intent != null) {
             Bundle extras = intent.getExtras();
             if (extras != null) {

@@ -22,6 +22,10 @@ public class KeyMapping {
     public static final String DATETIME_KEY = "DateTime";
     public static final String STATUS_KEY = "Status";
     public static final String PROXY_URL_KEY = "ProxyURL";
+    public static final String STATUS_ID_KEY = "_id";
+    public static final String STATUS_WORK_KEY = "pyStatusWork";
+    public static final String FILE_URI_KEY = "file://";
+    public static final String WEB_URI_KEY = "https://";
 
     public static final String GRID_LAYOUT_KEY = "GRID";
     public static final String VERTICAL_LAYOUT_KEY = "VERTICAL";

@@ -3,6 +3,6 @@
     android:id="@+id/landing_fragment_list_child_item"
     android:foreground="?android:attr/selectableItemBackground"
     android:textAppearance="@style/DefaultItemTextStyle"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 </TextView>

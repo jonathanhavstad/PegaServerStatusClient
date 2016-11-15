@@ -49,10 +49,11 @@ public class CiscoSSOWebService {
         });
     }
 
-    public CiscoSSOWebService(Context context,
+    public CiscoSSOWebService(Activity context,
                               CiscoSSOWebView webView) {
+        this.context = context;
         this.webView = webView;
-        this.launchFromBgThread = false;
+        this.launchFromBgThread = true;
         init(context);
     }
 
