@@ -58,7 +58,7 @@ public class BasicLayoutInfo extends BaseLayoutInfo {
     }
 
     @Override
-    public boolean readFromNetwork(InputStream in) {
+    public boolean readFromInputStream(InputStream in) {
         return false;
     }
 

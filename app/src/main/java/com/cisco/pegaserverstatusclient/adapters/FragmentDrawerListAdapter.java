@@ -86,10 +86,11 @@ public class FragmentDrawerListAdapter extends RecyclerView.Adapter<FragmentDraw
         List<BaseLayoutInfo> childrenLayoutInfoList = appLayoutInfo.getChildrenLayouts();
         for (BaseLayoutInfo childLayoutInfo : childrenLayoutInfoList) {
             if (childLayoutInfo.getChildrenLayouts() == null) {
-                childLayoutInfo.readFromNetwork(null);
+                childLayoutInfo.readFromInputStream(null);
             }
-            if (childLayoutInfo.getChildrenLayouts() != null &&
-                    childLayoutInfo.getChildrenLayouts().size() > 0) {
+            if ((childLayoutInfo.getChildrenLayouts() != null &&
+                    childLayoutInfo.getChildrenLayouts().size() > 0) ||
+                    childLayoutInfo.forceDrawerLayout()) {
                 filteredChildrenLayoutList.add(childLayoutInfo);
             }
         }

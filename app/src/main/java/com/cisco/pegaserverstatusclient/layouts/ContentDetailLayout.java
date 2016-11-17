@@ -87,7 +87,7 @@ public class ContentDetailLayout extends BaseLayoutInfo {
     }
 
     @Override
-    public boolean readFromNetwork(InputStream in) {
+    public boolean readFromInputStream(InputStream in) {
         populateChildrenData();
         this.size = childrenLayouts.size();
         return true;

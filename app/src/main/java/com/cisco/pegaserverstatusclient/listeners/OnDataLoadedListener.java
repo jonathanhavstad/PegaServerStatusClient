@@ -8,5 +8,6 @@ import org.json.JSONArray;
 
 public interface OnDataLoadedListener {
     void send(JSONArray jsonArray);
+    void waitForLogin();
     void error(String error);
 }

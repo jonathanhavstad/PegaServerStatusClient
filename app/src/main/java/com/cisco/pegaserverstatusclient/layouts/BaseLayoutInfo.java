@@ -86,9 +86,12 @@ public abstract class BaseLayoutInfo {
 
     protected boolean shouldBeParent;
 
+    protected int layoutIndex;
+
     public BaseLayoutInfo(BaseLayoutInfo parentLayout) {
         this.parentLayout = parentLayout;
         this.shouldBeParent = true;
+        this.layoutIndex = -1;
     }
 
     public String getHeaderColumns() {
@@ -313,7 +316,7 @@ public abstract class BaseLayoutInfo {
     public abstract String getKey();
     public abstract void setKey(String key);
     public abstract BaseLayoutInfo getChildLayout(int index);
-    public abstract boolean readFromNetwork(InputStream in);
+    public abstract boolean readFromInputStream(InputStream in);
     public abstract List<String> getDataUrls();
     public abstract BaseLayoutInfo filteredLayout(String filter);
     public abstract int size();
@@ -338,5 +341,23 @@ public abstract class BaseLayoutInfo {
 
     public boolean forceDrawerLayout() {
         return false;
+    }
+
+    public int getLayoutIndex() {
+        return layoutIndex;
+    }
+
+    public void setLayoutIndex(int layoutIndex) {
+        this.layoutIndex = layoutIndex;
+    }
+
+    public static BaseLayoutInfo getRoot(BaseLayoutInfo currentLayoutInfo) {
+        BaseLayoutInfo root = currentLayoutInfo;
+
+        while (root.getParentLayout() != null) {
+            root = root.getParentLayout();
+        }
+
+        return root;
     }
 }

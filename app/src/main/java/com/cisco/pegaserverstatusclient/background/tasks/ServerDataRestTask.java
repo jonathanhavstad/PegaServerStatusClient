@@ -51,7 +51,7 @@ public class ServerDataRestTask {
     private boolean loadJsonArraySuccess;
     private boolean loadJsonObjectSuccess;
 
-    CiscoSSOWebService ciscoSSOWebService;
+    private CiscoSSOWebService ciscoSSOWebService;
 
     public ServerDataRestTask(Activity context) {
         ciscoSSOWebService = new CiscoSSOWebService(context);
@@ -141,6 +141,11 @@ public class ServerDataRestTask {
                         loadJsonObjectFinished = true;
                         publishDataLoadStatus(DATA_LOAD_SUCCESS);
                         publishAppData(appData);
+                    }
+
+                    @Override
+                    public void waitForLogin() {
+
                     }
 
                     @Override

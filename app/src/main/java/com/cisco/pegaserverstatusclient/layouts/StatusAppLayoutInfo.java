@@ -18,7 +18,7 @@ public class StatusAppLayoutInfo extends AppLayoutInfo {
     }
 
     @Override
-    public boolean readFromNetwork(InputStream in) {
+    public boolean readFromInputStream(InputStream in) {
         if (appData != null) {
             Map<String, Object> mapAppData = (Map<String, Object>) appData;
             ArrayList<BaseLayoutInfo> childrenList = new ArrayList<>();
@@ -44,11 +44,6 @@ public class StatusAppLayoutInfo extends AppLayoutInfo {
     @Override
     public BaseLayoutInfo filteredLayout(String filter) {
         return this;
-    }
-
-    @Override
-    public boolean forceDrawerLayout() {
-        return true;
     }
 
     @Override

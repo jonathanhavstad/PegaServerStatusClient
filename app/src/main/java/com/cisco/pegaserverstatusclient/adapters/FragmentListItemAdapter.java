@@ -27,7 +27,7 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
         this.appLayoutInfo = appLayoutInfo;
         this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
         if (this.appLayoutInfo.getChildrenLayouts() == null) {
-            this.appLayoutInfo.readFromNetwork(null);
+            this.appLayoutInfo.readFromInputStream(null);
         }
         this.size = appLayoutInfo.size() * appLayoutInfo.getNumCols();
     }

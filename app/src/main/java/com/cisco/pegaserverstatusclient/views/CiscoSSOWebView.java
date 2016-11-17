@@ -18,7 +18,8 @@ import java.util.Scanner;
 
 public class CiscoSSOWebView extends WebView {
     private String jsObjectName;
-    private String jsText;
+    private String jsJsonText;
+    private String jsStatusCodeText;
     private JsObject jsObject;
 
     public CiscoSSOWebView(Context context) {
@@ -44,7 +45,7 @@ public class CiscoSSOWebView extends WebView {
     }
 
     private void loadJsText() {
-        jsText = "";
+        jsJsonText = "";
         final AssetManager assetManager = getResources().getAssets();
         new Thread(new Runnable() {
             @Override
@@ -56,7 +57,33 @@ public class CiscoSSOWebView extends WebView {
                     Scanner scanner = new Scanner(in);
                     StringBuffer sb = new StringBuffer();
                     sb.append(scanner.nextLine());
-                    jsText = sb.toString();
+                    jsJsonText = sb.toString();
+                    scanner.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }).start();
+
+        jsStatusCodeText = "";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                InputStream in = null;
+                try {
+                    in = assetManager.open(getContext().getString(R.string.js_interface_js_status_code_filename));
+                    Scanner scanner = new Scanner(in);
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(scanner.nextLine());
+                    jsStatusCodeText = sb.toString();
                     scanner.close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -73,8 +100,12 @@ public class CiscoSSOWebView extends WebView {
         }).start();
     }
 
-    public String getJsText() {
-        return jsText;
+    public String getJsJsonText() {
+        return jsJsonText;
+    }
+
+    public String getJsStatusCodeText() {
+        return jsStatusCodeText;
     }
 
     public JsObject getJsObject() {
@@ -84,6 +115,7 @@ public class CiscoSSOWebView extends WebView {
     public static class JsObject {
         private String jsonBody;
         private String username;
+        private int statusCode;
         @JavascriptInterface
         public void setJsonBody(String jsonBody) {
             this.jsonBody = jsonBody;
@@ -92,6 +124,13 @@ public class CiscoSSOWebView extends WebView {
         public void setUsername(String username) {
             this.username = username;
         }
+        @JavascriptInterface
+        public void setStatusCode(int statusCode) {
+            this.statusCode = statusCode;
+        }
         public String getJsonBody() { return jsonBody; }
+        public int getStatusCode() {
+            return statusCode;
+        }
     }
 }

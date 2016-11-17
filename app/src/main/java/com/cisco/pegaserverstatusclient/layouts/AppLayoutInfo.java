@@ -135,4 +135,9 @@ public abstract class AppLayoutInfo extends BaseLayoutInfo {
         Map<String, Object> parentAppData = (Map<String, Object>) getParentLayout().getAppData();
         parentAppData.put(getAppName(), appData);
     }
+
+    @Override
+    public boolean forceDrawerLayout() {
+        return true;
+    }
 }

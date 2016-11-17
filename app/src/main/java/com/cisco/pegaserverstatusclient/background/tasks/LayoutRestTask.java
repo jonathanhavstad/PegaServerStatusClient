@@ -44,7 +44,7 @@ public class LayoutRestTask {
                 InputStream in = null;
                 try {
                     in = assetManager.open(filename);
-                    if (layoutInfo.readFromNetwork(in)) {
+                    if (layoutInfo.readFromInputStream(in)) {
                         publishAppsLoadStatus(LOAD_SUCCESS);
                         publishLayout(layoutInfo);
                     } else {

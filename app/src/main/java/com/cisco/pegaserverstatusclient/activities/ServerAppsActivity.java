@@ -3,6 +3,7 @@ package com.cisco.pegaserverstatusclient.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -63,6 +64,8 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     public static final int RESULT_CLOSED = 9999;
 
+    public static final int RESULT_LOGIN = 9998;
+
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private BgServiceInfo[] bgServiceInfoList;
@@ -95,6 +98,9 @@ public class ServerAppsActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_apps);
         Fabric.with(this, new Crashlytics());
         ButterKnife.bind(this);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
         init();
         initLayout(false);
     }
@@ -117,6 +123,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        int preBackLayoutFilterSize = layoutFilter.size();
         FragmentManager fragmentManager = getSupportFragmentManager();
         DrawerFragment drawerFragment = (DrawerFragment)
                 fragmentManager.findFragmentByTag(getString(R.string.drawer_fragment_tag));
@@ -127,7 +134,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
             currentLayoutInfo = currentLayoutInfo.getParentLayout();
         }
         backPressed(currentLayoutInfo);
-        if (layoutFilter.size() <= 2) {
+        if (preBackLayoutFilterSize <= 2) {
             stopServerRefreshServices();
             getSupportFragmentManager().popBackStackImmediate();
             setResult(RESULT_CLOSED);
@@ -182,19 +189,31 @@ public class ServerAppsActivity extends AppCompatActivity implements
     @Override
     public void open(BaseLayoutInfo layoutInfo) {
         swipeRefreshLayout.setRefreshing(false);
-        layoutInfo.readFromNetwork(null);
-        if (!hasGrandChildren(layoutInfo) && !layoutInfo.forceDrawerLayout()) {
-            populateDrawerFrame(layoutInfo.getParentLayout());
-            drawerLayout.closeDrawers();
-        } else {
-            populateDrawerFrame(layoutInfo);
-            if (layoutInfo.forceDrawerLayout()) {
+        if (layoutInfo.readFromInputStream(null)) {
+            if (!hasGrandChildren(layoutInfo) && !layoutInfo.forceDrawerLayout()) {
+                populateDrawerFrame(layoutInfo.getParentLayout());
                 drawerLayout.closeDrawers();
+            } else {
+                populateDrawerFrame(layoutInfo);
+                if (layoutInfo.forceDrawerLayout()) {
+                    drawerLayout.closeDrawers();
+                }
             }
+            applyLayoutToLayoutFilter(layoutInfo);
+            if (layoutInfo.isShouldBeParent()) {
+                populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
+            }
+        } else if (layoutInfo.getLayoutIndex() != -1) {
+            swipeRefreshLayout.setRefreshing(true);
+            drawerLayout.closeDrawers();
+            getData(layoutInfo.getLayoutIndex(),
+                    layoutInfo.getUrl(),
+                    BaseLayoutInfo.getRoot(layoutInfo),
+                    false);
         }
-        applyLayoutToLayoutFilter(layoutInfo);
-        if (layoutInfo.isShouldBeParent()) {
-            populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
+
+        if (layoutInfo.getLayoutIndex() != -1) {
+            curAppLayoutInfoPosition = layoutInfo.getLayoutIndex();
         }
     }
 
@@ -211,7 +230,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 if (!layoutFilter.peek().isShouldBeParent() && layoutFilter.size() > 2) {
                     lastFilter = layoutFilter.pop();
                 }
-                if (lastFilter.size() > 1) {
+                if (layoutFilter.size() > 1) {
                     open(layoutFilter.pop());
                 } else {
                     getSupportActionBar().setSubtitle("");
@@ -290,6 +309,14 @@ public class ServerAppsActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         if (intent != null) {
             baseStatusUrl = intent.getStringExtra(getString(R.string.status_url_bundle_key));
+
+            boolean stopActivity =
+                    intent.getBooleanExtra(getString(R.string.stop_activity_bundle_key), false);
+
+            if (stopActivity) {
+                setResult(RESULT_LOGIN);
+                finish();
+            }
         }
     }
 
@@ -435,9 +462,9 @@ public class ServerAppsActivity extends AppCompatActivity implements
         if (layoutInfo.size() > 0) {
             swipeRefreshLayout.setRefreshing(true);
         }
-        for (int i = 0; i < layoutInfo.size(); i++) {
-            BaseLayoutInfo childLayout = layoutInfo.getChildLayout(i);
-            getData(i, childLayout.getUrl(), layoutInfo, refresh);
+        if (layoutInfo.size() > 0) {
+            BaseLayoutInfo childLayout = layoutInfo.getChildLayout(0);
+            getData(0, childLayout.getUrl(), layoutInfo, refresh);
         }
     }
 
@@ -644,7 +671,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     private void reInitLayoutFilter() {
         for (int i = 0; i < layoutFilter.size(); i++) {
-            layoutFilter.get(i).readFromNetwork(null);
+            layoutFilter.get(i).readFromInputStream(null);
         }
     }
 
@@ -657,11 +684,20 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
 
         layoutFilter.clear();
+        String appName = "";
+        String currentLevelName = "";
         for (int i = reverseLayoutFilter.size() - 1; i >= 0; i--) {
             layoutFilter.push(reverseLayoutFilter.get(i));
             if (i == reverseLayoutFilter.size() - 2) {
-                setTitle(reverseLayoutFilter.get(i).getFriendlyName());
+                appName = reverseLayoutFilter.get(i).getFriendlyName();
+            } else if (i == 0) {
+                currentLevelName = reverseLayoutFilter.get(i).getFriendlyName();
             }
+        }
+        if (!appName.isEmpty() && !currentLevelName.isEmpty()) {
+            setTitle(appName + " (" + currentLevelName + ")");
+        } else if (!appName.isEmpty()) {
+            setTitle(appName);
         }
     }
 
@@ -669,7 +705,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
         List<BaseLayoutInfo> childrenLayoutInfoList = layoutInfo.getChildrenLayouts();
         if (childrenLayoutInfoList != null) {
             for (BaseLayoutInfo childLayoutInfo : childrenLayoutInfoList) {
-                childLayoutInfo.readFromNetwork(null);
+                childLayoutInfo.readFromInputStream(null);
                 List<BaseLayoutInfo> grandchildrenLayoutInfoList =
                         childLayoutInfo.getChildrenLayouts();
                 if (grandchildrenLayoutInfoList != null && grandchildrenLayoutInfoList.size() > 0) {

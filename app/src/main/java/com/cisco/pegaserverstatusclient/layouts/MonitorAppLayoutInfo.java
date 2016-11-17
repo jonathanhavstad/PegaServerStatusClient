@@ -20,7 +20,7 @@ public class MonitorAppLayoutInfo extends AppLayoutInfo {
     }
 
     @Override
-    public boolean readFromNetwork(InputStream in) {
+    public boolean readFromInputStream(InputStream in) {
         List<BaseLayoutInfo> layoutList = new ArrayList<>();
         Map<String, Object> mapAppData = (Map<String, Object>) appData;
         if (appData != null && childrenLayouts == null) {

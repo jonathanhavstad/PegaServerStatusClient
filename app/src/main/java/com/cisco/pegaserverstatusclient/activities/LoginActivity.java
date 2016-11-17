@@ -1,6 +1,7 @@
 package com.cisco.pegaserverstatusclient.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,12 +34,12 @@ public class LoginActivity extends AppCompatActivity {
     private String LOGIN_URL;
     private String SSO_LOGIN_URL;
     private String LOGOUT_COMPLETE_URL;
-    private String SSO_COOKIE_KEY;
     private boolean beginLogin;
     private boolean beginAuthentication;
     private boolean beginDataAcquisition;
     private boolean loadUrlFromIntent;
     private String statusUrl;
+    private boolean appsActivityLaunched;
 
     @BindView(R.id.login_web_view)
     CiscoSSOWebView webView;
@@ -49,6 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Fabric.with(this, new Crashlytics());
         ButterKnife.bind(this);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
     }
 
     @Override
@@ -73,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == ACCESS_DATA_REQUEST_CODE) {
             if (resultCode == ServerAppsActivity.RESULT_CLOSED) {
                 finish();
-            } else {
+            } else if (resultCode != ServerAppsActivity.RESULT_LOGIN) {
                 init();
             }
         } else {
@@ -90,6 +94,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void send(JSONArray jsonArray) {
                         Log.d(TAG, "Received JSON array: " + jsonArray.toString());
                         launchMainActivity(url);
+                        appsActivityLaunched = true;
+                    }
+
+                    @Override
+                    public void waitForLogin() {
                     }
 
                     @Override
@@ -105,43 +114,11 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
     }
 
-    private String getSSOCookie(String cookie) {
-        if (cookie != null) {
-            int startIndex = cookie.indexOf(SSO_COOKIE_KEY) + SSO_COOKIE_KEY.length() + 1;
-            int endIndex = cookie.length();
-            if (startIndex >= 0) {
-                int tempEndIndex = cookie.indexOf(";", startIndex);
-                if (tempEndIndex >= 0) {
-                    endIndex = tempEndIndex;
-                }
-            }
-            return cookie.substring(startIndex, endIndex);
-        }
-        return null;
-    }
-
-    private String setSSOCookie(String cookie, String newSSOCookie) {
-        if (cookie != null && newSSOCookie != null) {
-            String ssoCookie = getSSOCookie(cookie);
-            if (newSSOCookie.isEmpty()) {
-                if (cookie.contains(SSO_COOKIE_KEY)) {
-                    int startIndex = cookie.indexOf(SSO_COOKIE_KEY);
-                    return cookie.substring(0, startIndex);
-                }
-                return cookie;
-            } else if (ssoCookie != null && ssoCookie.length() > 0) {
-                return cookie.replaceAll(ssoCookie, newSSOCookie);
-            } else if (cookie.contains(SSO_COOKIE_KEY)) {
-                int startIndex = cookie.indexOf(SSO_COOKIE_KEY) + SSO_COOKIE_KEY.length() + 1;
-                if (startIndex < cookie.length()) {
-                    return cookie.substring(0, startIndex) + newSSOCookie + cookie.substring(startIndex);
-                } else {
-                    return cookie.substring(0, startIndex) + newSSOCookie;
-                }
-            }
-            return cookie + SSO_COOKIE_KEY + "=" + newSSOCookie;
-        }
-        return null;
+    private void cancelMainActivity(String url) {
+        Intent intent = new Intent(this, ServerAppsActivity.class);
+        intent.putExtra(getString(R.string.status_url_bundle_key), url);
+        intent.putExtra(getString(R.string.stop_activity_bundle_key), url);
+        startActivityForResult(intent, ACCESS_DATA_REQUEST_CODE);
     }
 
     private void readIntent(Intent intent) {

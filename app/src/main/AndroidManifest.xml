@@ -53,7 +53,8 @@
         <service android:name=".background.services.ServerRefreshService" android:exported="false" />
 
         <activity android:name=".activities.ServerAppsActivity"
-            android:label="@string/main_application_title">
+            android:label="@string/main_application_title"
+            android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".activities.LoginActivity"
