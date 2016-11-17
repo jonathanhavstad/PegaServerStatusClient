@@ -40,7 +40,7 @@
             </android.support.v7.widget.RecyclerView>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/landing_fragment_list_item"
+                android:id="@+id/loading_fragment_list_item"
                 app:layoutManager="GridLayoutManager"
                 android:layout_gravity="end"
                 android:paddingTop="@dimen/root_element_vertical_padding"

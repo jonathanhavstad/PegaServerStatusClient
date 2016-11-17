@@ -16,6 +16,7 @@ import com.cisco.pegaserverstatusclient.binders.LayoutInfoBinder;
 import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.decoractors.DividerItemDecoration;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
+import com.cisco.pegaserverstatusclient.listeners.OnPositionVisibleListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 public class LayoutFragment extends Fragment {
     private BaseLayoutInfo appLayoutInfo;
     private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
+    private OnPositionVisibleListener onPositionVisibleListener;
 
     @BindView(R.id.landing_fragment_list)
     RecyclerView landingFragmentList;
@@ -51,6 +53,9 @@ public class LayoutFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnOpenMenuItemClickListener) {
             this.onOpenMenuItemClickListener = (OnOpenMenuItemClickListener) context;
+        }
+        if (context instanceof OnPositionVisibleListener) {
+            this.onPositionVisibleListener = (OnPositionVisibleListener) context;
         }
     }
 
@@ -91,7 +96,8 @@ public class LayoutFragment extends Fragment {
         }
 
         FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo,
-                onOpenMenuItemClickListener);
+                onOpenMenuItemClickListener,
+                onPositionVisibleListener);
         landingFragmentList.setAdapter(adapter);
         landingFragmentList.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.HORIZONTAL_LIST));
@@ -101,7 +107,8 @@ public class LayoutFragment extends Fragment {
 
     public void updateAppData(BaseLayoutInfo appLayoutInfo) {
         FragmentListAdapter adapter = new FragmentListAdapter(appLayoutInfo,
-                onOpenMenuItemClickListener);
+                onOpenMenuItemClickListener,
+                onPositionVisibleListener);
         landingFragmentList.swapAdapter(adapter, false);
     }
 

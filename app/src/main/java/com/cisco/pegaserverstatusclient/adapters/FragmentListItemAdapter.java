@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
+import com.cisco.pegaserverstatusclient.listeners.OnPositionVisibleListener;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
 
 import butterknife.BindView;
@@ -20,12 +21,15 @@ import butterknife.ButterKnife;
 public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListItemAdapter.ViewHolder> {
     private BaseLayoutInfo appLayoutInfo;
     private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
+    private OnPositionVisibleListener onPositionVisibleListener;
     private int size;
 
     public FragmentListItemAdapter(BaseLayoutInfo appLayoutInfo,
-                                   OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
+                                   OnOpenMenuItemClickListener onOpenMenuItemClickListener,
+                                   OnPositionVisibleListener onPositionVisibleListener) {
         this.appLayoutInfo = appLayoutInfo;
         this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
+        this.onPositionVisibleListener = onPositionVisibleListener;
         if (this.appLayoutInfo.getChildrenLayouts() == null) {
             this.appLayoutInfo.readFromInputStream(null);
         }
@@ -79,6 +83,10 @@ public class FragmentListItemAdapter extends RecyclerView.Adapter<FragmentListIt
                     holder.landingFragmentListChildItem.setText("");
                 }
             }
+        }
+
+        if (position == 0 && onPositionVisibleListener != null) {
+            onPositionVisibleListener.positionVisible(position);
         }
     }
 

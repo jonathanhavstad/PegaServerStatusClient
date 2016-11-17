@@ -25,6 +25,7 @@ import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.LayoutFilterBinder;
 import com.cisco.pegaserverstatusclient.binders.BgServiceInfoBinder;
 import com.cisco.pegaserverstatusclient.listeners.OnDataReadyListener;
+import com.cisco.pegaserverstatusclient.listeners.OnPositionVisibleListener;
 import com.cisco.pegaserverstatusclient.utilities.BgServiceConnection;
 import com.cisco.pegaserverstatusclient.utilities.BgServiceInfo;
 import com.cisco.pegaserverstatusclient.layouts.AppsLayoutInfo;
@@ -59,7 +60,8 @@ import rx.functions.Action1;
 public class ServerAppsActivity extends AppCompatActivity implements
         OnOpenMenuItemClickListener,
         OnSelectMenuItemClickListener,
-        OnBackPressedClickListener {
+        OnBackPressedClickListener,
+        OnPositionVisibleListener {
 
     private static final int PLAY_SERVICE_RESOLUTION_REQUEST = 10000;
 
@@ -267,6 +269,15 @@ public class ServerAppsActivity extends AppCompatActivity implements
             } else {
                 populateDrawerFrame(baseLayoutInfo.getParentLayout());
             }
+        }
+    }
+
+    @Override
+    public void positionVisible(int position) {
+        if (position == 0) {
+            swipeRefreshLayout.setEnabled(true);
+        } else {
+            swipeRefreshLayout.setEnabled(false);
         }
     }
 

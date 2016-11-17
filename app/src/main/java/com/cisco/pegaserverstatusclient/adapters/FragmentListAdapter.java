@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.cisco.pegaserverstatusclient.R;
 import com.cisco.pegaserverstatusclient.layouts.BaseLayoutInfo;
 import com.cisco.pegaserverstatusclient.listeners.OnOpenMenuItemClickListener;
+import com.cisco.pegaserverstatusclient.listeners.OnPositionVisibleListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,16 +23,20 @@ import butterknife.ButterKnife;
 public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapter.ViewHolder> {
     private BaseLayoutInfo appLayoutInfo;
     private OnOpenMenuItemClickListener onOpenMenuItemClickListener;
+    private OnPositionVisibleListener onPositionVisibleListener;
 
     public FragmentListAdapter(BaseLayoutInfo appLayoutInfo,
-                               OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
-        init(appLayoutInfo, onOpenMenuItemClickListener);
+                               OnOpenMenuItemClickListener onOpenMenuItemClickListener,
+                               OnPositionVisibleListener onPositionVisibleListener) {
+        init(appLayoutInfo, onOpenMenuItemClickListener, onPositionVisibleListener);
     }
 
     private void init(BaseLayoutInfo appLayoutInfo,
-                      OnOpenMenuItemClickListener onOpenMenuItemClickListener) {
+                      OnOpenMenuItemClickListener onOpenMenuItemClickListener,
+                      OnPositionVisibleListener onPositionVisibleListener) {
         this.appLayoutInfo = appLayoutInfo;
         this.onOpenMenuItemClickListener = onOpenMenuItemClickListener;
+        this.onPositionVisibleListener = onPositionVisibleListener;
         if (this.appLayoutInfo.getChildrenLayouts() == null) {
             this.appLayoutInfo.readFromInputStream(null);
         }
@@ -83,7 +88,8 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
         }
 
         FragmentListItemAdapter adapter = new FragmentListItemAdapter(childLayout,
-                onOpenMenuItemClickListener);
+                onOpenMenuItemClickListener,
+                onPositionVisibleListener);
         holder.landingFragmentListItem.swapAdapter(adapter, false);
     }
 
@@ -104,7 +110,7 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
         @BindView(R.id.loading_fragment_list_headers)
         RecyclerView loadingFragmentListHeaders;
 
-        @BindView(R.id.landing_fragment_list_item)
+        @BindView(R.id.loading_fragment_list_item)
         RecyclerView landingFragmentListItem;
 
         ViewHolder(View itemView) {
