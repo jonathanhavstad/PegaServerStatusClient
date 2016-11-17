@@ -65,4 +65,7 @@
     <string name="stop_activity_bundle_key">stop_activity</string>
     <string name="js_interface_js_status_code_filename">status_code.js</string>
     <string name="sso_loggedout_value">loggedout</string>
+    <string name="bg_serviceinfo_list_bundle_key">bg_serviceinfo_list</string>
+    <string name="refresh_error_alert_title">Refresh Error</string>
+    <string name="refresh_error_alert_body">Refreshing data timed out!</string>
 </resources>

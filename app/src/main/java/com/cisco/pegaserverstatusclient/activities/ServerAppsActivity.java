@@ -23,6 +23,7 @@ import com.cisco.pegaserverstatusclient.background.services.ServerRefreshService
 import com.cisco.pegaserverstatusclient.background.tasks.LayoutRestTask;
 import com.cisco.pegaserverstatusclient.background.tasks.ServerDataRestTask;
 import com.cisco.pegaserverstatusclient.binders.LayoutFilterBinder;
+import com.cisco.pegaserverstatusclient.binders.BgServiceInfoBinder;
 import com.cisco.pegaserverstatusclient.listeners.OnDataReadyListener;
 import com.cisco.pegaserverstatusclient.utilities.BgServiceConnection;
 import com.cisco.pegaserverstatusclient.utilities.BgServiceInfo;
@@ -91,6 +92,8 @@ public class ServerAppsActivity extends AppCompatActivity implements
     int curAppLayoutInfoPosition;
     @State
     String layoutUrl;
+    @State
+    int refreshWaitTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,8 +113,19 @@ public class ServerAppsActivity extends AppCompatActivity implements
         super.onRestart();
         stopServerRefreshServices();
         stopRefresh = false;
-        init();
-        initLayout(false);
+        if (bgServiceInfoList != null) {
+            for (int i = 0; i < bgServiceInfoList.length; i++) {
+                if (bgServiceInfoList[i] != null) {
+                    startBgService(bgServiceInfoList[i]);
+                }
+            }
+            startRefreshing(refreshWaitTime);
+            BaseLayoutInfo rootLayoutInfo = BaseLayoutInfo.getRoot(layoutFilter.peek());
+            getData(curAppLayoutInfoPosition,
+                    rootLayoutInfo.getChildLayout(curAppLayoutInfoPosition).getUrl(),
+                    rootLayoutInfo,
+                    true);
+        }
     }
 
     @Override
@@ -167,15 +181,22 @@ public class ServerAppsActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+
         LayoutFilterBinder layoutFilterBinder = new LayoutFilterBinder();
         layoutFilterBinder.setBaseLayoutInfoStack(layoutFilter);
         outState.putBinder(getString(R.string.app_filter_bundle_key), layoutFilterBinder);
+
+        BgServiceInfoBinder bgServiceInfoBinder = new BgServiceInfoBinder();
+        bgServiceInfoBinder.setBgServiceInfoList(bgServiceInfoList);
+        outState.putBinder(getString(R.string.bg_serviceinfo_list_bundle_key), bgServiceInfoBinder);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+
         LayoutFilterBinder layoutFilterBinder = (LayoutFilterBinder)
                 savedInstanceState.getBinder(getString(R.string.app_filter_bundle_key));
         if (layoutFilterBinder != null) {
@@ -183,6 +204,14 @@ public class ServerAppsActivity extends AppCompatActivity implements
         }
         if (layoutFilter == null) {
             layoutFilter = new Stack<>();
+        }
+
+        BgServiceInfoBinder bgServiceInfoBinder = (BgServiceInfoBinder)
+                savedInstanceState.getBinder(getString(R.string.bg_serviceinfo_list_bundle_key));
+        if (bgServiceInfoBinder != null) {
+            if (bgServiceInfoList == null) {
+                bgServiceInfoList = bgServiceInfoBinder.getBgServiceInfoList();
+            }
         }
     }
 
@@ -204,7 +233,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
                 populateCurrentFrame(layoutInfo.getParentLayout().filteredLayout(layoutInfo.getKey()));
             }
         } else if (layoutInfo.getLayoutIndex() != -1) {
-            swipeRefreshLayout.setRefreshing(true);
+            startRefreshing(refreshWaitTime * 2);
             drawerLayout.closeDrawers();
             getData(layoutInfo.getLayoutIndex(),
                     layoutInfo.getUrl(),
@@ -246,6 +275,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
         startInstanceIDService();
         initToolbar();
         readIntent();
+        refreshWaitTime = getResources().getInteger(R.integer.data_refresh_timeout_ms);
     }
 
     private void initLayout(boolean refresh) {
@@ -384,6 +414,11 @@ public class ServerAppsActivity extends AppCompatActivity implements
         bgServiceInfo.setConnection(new BgServiceConnection(task,
                 bgServiceInfo,
                 currentAppLayoutInfo.getUrl()));
+
+        startBgService(bgServiceInfo);
+    }
+
+    private void startBgService(BgServiceInfo bgServiceInfo) {
         Intent intent = new Intent(this, ServerRefreshService.class);
         bindService(intent, bgServiceInfo.getConnection(), BIND_AUTO_CREATE);
         startService(intent);
@@ -411,7 +446,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     private void getLayout(BaseLayoutInfo layoutInfo, final boolean refresh) {
         this.layoutUrl = layoutInfo.getUrl();
-        swipeRefreshLayout.setRefreshing(true);
+        startRefreshing(refreshWaitTime);
         LayoutRestTask task = new LayoutRestTask();
         task.loadAppsLayout(this,
                 layoutInfo,
@@ -460,7 +495,7 @@ public class ServerAppsActivity extends AppCompatActivity implements
 
     private void initData(BaseLayoutInfo layoutInfo, boolean refresh) {
         if (layoutInfo.size() > 0) {
-            swipeRefreshLayout.setRefreshing(true);
+            startRefreshing(refreshWaitTime);
         }
         if (layoutInfo.size() > 0) {
             BaseLayoutInfo childLayout = layoutInfo.getChildLayout(0);
@@ -524,12 +559,12 @@ public class ServerAppsActivity extends AppCompatActivity implements
                         @Override
                         public void sendDataLoadResult(DataCallbackHolder dataCallbackHolder,
                                                        int dataLoadResult) {
+                            swipeRefreshLayout.setRefreshing(false);
+
                             BaseLayoutInfo currentAppLayoutInfo =
                                     dataCallbackHolder
                                             .getLayoutInfo()
                                             .getChildLayout(dataCallbackHolder.getIndex());
-
-                            swipeRefreshLayout.setRefreshing(false);
 
                             if (dataLoadResult == ServerDataRestTask.DATA_LOAD_FAILURE) {
                                 showAlert(getString(R.string.data_load_failure_alert_title),
@@ -590,6 +625,25 @@ public class ServerAppsActivity extends AppCompatActivity implements
                             + restUrl,
                     false);
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(refreshWaitTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (swipeRefreshLayout.isRefreshing()) {
+                    ServerAppsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     private void populateCurrentFrame(BaseLayoutInfo parentLayoutInfo) {
@@ -714,5 +768,27 @@ public class ServerAppsActivity extends AppCompatActivity implements
             }
         }
         return false;
+    }
+
+    private void startRefreshing(final int timeout) {
+        swipeRefreshLayout.setRefreshing(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(timeout);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (swipeRefreshLayout.isRefreshing()) {
+                    ServerAppsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 }
